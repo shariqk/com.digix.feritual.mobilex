@@ -50,10 +50,7 @@ export class FoodApiProvider {
     var queryJson = this.buildLocationMenuSearchJson(brand_ids, query);
     console.log(url, queryJson);
 
-    var headers = new HttpHeaders();
-    headers.set('Content-Type', 'application/json');
-
-    var result = this.http.post(url, { headers: headers })
+    var result = this.http.post(url, queryJson, { headers: this.getRequestHeaders() })
       .map(res => <LocationMenu>res);
 
     return result;
@@ -97,6 +94,7 @@ export class FoodApiProvider {
     headers = headers
       .set('x-app-id', this.appId)
       .set('x-app-key',this.appKey)
+      .set('Content-Type', 'application/json')
       .set('Accept', 'application/json');
 
     return headers;
