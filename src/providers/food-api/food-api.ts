@@ -5,7 +5,7 @@ import 'rxjs/Rx';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { FoodSearchResult, LocationSearchResult, LocationMenu } from './food-api.model';
+import { FoodSearchResult, LocationSearchResult, FoodLocationMenu } from './food-api.model';
 
 @Injectable()
 export class FoodApiProvider {
@@ -23,7 +23,7 @@ export class FoodApiProvider {
 
   public getLocations(lat : number, lng : number) : Observable<LocationSearchResult> {
     var url = this.baseUrlV2 + '/locations?distance=5mi&limit=50&ll=' + lat + ',' + lng;
-    console.log('getLocations', url);
+    //console.log('getLocations', url);
 
     var result = this.http.get(url, { headers: this.getRequestHeaders() })
       .map(res => <LocationSearchResult>res);
@@ -37,7 +37,7 @@ export class FoodApiProvider {
     for(var b of brand_ids) {
       url += "&brand_ids=" + b;
     }
-    console.log('searchForFood', url);
+    //console.log('searchForFood', url);
 
     var result = this.http.get(url, { headers: this.getRequestHeaders() })
       .map(res => <FoodSearchResult>res);
@@ -45,13 +45,13 @@ export class FoodApiProvider {
     return result;
   }
 
-  public searchLocationMenu(brand_ids : string[], query : string) : Observable<LocationMenu> {
+  public searchLocationMenu(brand_ids : string[], query : string) : Observable<FoodLocationMenu> {
     var url = this.baseUrlV1 + '/search';
     var queryJson = this.buildLocationMenuSearchJson(brand_ids, query);
-    console.log(url, queryJson);
+    //console.log(url, queryJson);
 
     var result = this.http.post(url, queryJson, { headers: this.getRequestHeaders() })
-      .map(res => <LocationMenu>res);
+      .map(res => <FoodLocationMenu>res);
 
     return result;
   }

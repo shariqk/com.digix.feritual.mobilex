@@ -37,10 +37,10 @@ export class FoodNutrient {
 }
 
 export class LocationSearchResult {
-  public locations : Location[]
+  public locations : FoodLocation[]
 }
 
-export class Location
+export class FoodLocation
 {
   public name : string;
   public brand_id : string;
@@ -66,12 +66,12 @@ export class Location
   //public LocationMenu[] hits { get; set; }
 }
 
-export class LocationMenu
+export class FoodLocationMenu
 {
-  public hits : LocationMenuItem[];
+  public hits : FoodLocationMenuItem[];
 }
 
-export class LocationMenuItem {
+export class FoodLocationMenuItem {
   public _index : string;
   public _type : string;
   public _id : string;

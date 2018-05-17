@@ -1,6 +1,6 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, AfterContentInit, Input} from '@angular/core';
 
-import { Location, LocationMenu, LocationMenuItem } from '../../providers/food-api/food-api.model';
+import { FoodLocation, FoodLocationMenu, FoodLocationMenuItem } from '../../providers/food-api/food-api.model';
 import { FoodApiProvider } from '../../providers/food-api/food-api';
 
 
@@ -8,22 +8,28 @@ import { FoodApiProvider } from '../../providers/food-api/food-api';
   selector: 'food-list',
   templateUrl: 'food-list.html'
 })
-export class FoodListComponent implements OnInit {
+export class FoodListComponent implements OnInit, AfterContentInit {
 
-  @Input() public location: Location;
-  @Input() public menu : LocationMenu;
+  //@Input('location') loc: any;
+  //@Input() menu : LocationMenu;
+  loc : FoodLocation;
+  menu : FoodLocationMenu;
 
   constructor() {
   }
 
+  public initialize(loc : FoodLocation, menu : FoodLocationMenu) {
+    this.loc = loc;
+  }
+
   ngOnInit() {
-    console.log('this.location', this.location.name);
+    //console.log('this.location', this.location);
 
   }
 
-  public initialize(loc : Location, menu : LocationMenu) {
-    this.location = loc;
-    this.menu = menu;
+  ngAfterContentInit() {
+    //console.log('this.location', this.location);
+
   }
 
 }

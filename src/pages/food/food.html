@@ -16,7 +16,13 @@
 <ion-content padding>
   <ion-searchbar showCancelButton="true" [(ngModel)]="searchTerm" (ionInput)="doLocationMenuSearch($event)" placeholder="name of food or cuisine (such as Burger)"></ion-searchbar>
 
+  <div #menucontainer>
+  </div>
+
+  <!--
   <div *ngIf="nearme!=null">
     <food-list *ngFor="let loc of nearme.locations" location="{{loc}}"></food-list>
   </div>
+-->
+
 </ion-content>
