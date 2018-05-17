@@ -8,6 +8,7 @@ import { FoodPage } from '../pages/food/food';
 import { ProfilePage } from '../pages/profile/profile';
 import { AnalyzePage } from '../pages/analyze/analyze';
 import { TabsPage } from '../pages/tabs/tabs';
+import { FoodListComponent } from '../components/food-list/food-list';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -19,7 +20,8 @@ import { FoodApiProvider } from '../providers/food-api/food-api';
     FoodPage,
     ProfilePage,
     AnalyzePage,
-    TabsPage
+    TabsPage,
+    FoodListComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,8 @@ import { FoodApiProvider } from '../providers/food-api/food-api';
     FoodPage,
     ProfilePage,
     AnalyzePage,
-    TabsPage
+    TabsPage,
+    FoodListComponent
   ],
   providers: [
     StatusBar,
