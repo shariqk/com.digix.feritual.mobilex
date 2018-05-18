@@ -1,9 +1,9 @@
 
 
-export class FoodSearchResult {
-  public branded : FoodItem[];
-  public self : FoodItem[];
-  public common : FoodItem[];
+export interface FoodSearchResult {
+  branded : FoodItem[];
+  self : FoodItem[];
+  common : FoodItem[];
 }
 
 export class FoodItem {

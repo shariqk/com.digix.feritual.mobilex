@@ -13,6 +13,7 @@ import { FoodListComponent } from '../components/food-list/food-list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { FoodApiProvider } from '../providers/food-api/food-api';
+import { EatstreetApiProvider } from '../providers/eatstreet-api/eatstreet-api';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { FoodApiProvider } from '../providers/food-api/food-api';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    FoodApiProvider
+    FoodApiProvider,
+    EatstreetApiProvider
   ]
 })
 export class AppModule {}
