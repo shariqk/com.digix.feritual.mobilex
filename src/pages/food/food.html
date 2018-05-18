@@ -19,10 +19,9 @@
   <div #menucontainer>
   </div>
 
-  <!--
-  <div *ngIf="nearme!=null">
-    <food-list *ngFor="let loc of nearme.locations" location="{{loc}}"></food-list>
+
+  <div *ngIf="this.results!=null">
+    <food-list *ngFor="let r of results" [location]="r.location" [menu]="r.menu"></food-list>
   </div>
--->
 
 </ion-content>

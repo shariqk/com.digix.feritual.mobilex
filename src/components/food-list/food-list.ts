@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterContentInit, Input} from '@angular/core';
+import { Component, OnChanges, Input} from '@angular/core';
 
 import { FoodLocation, FoodLocationMenu, FoodLocationMenuItem } from '../../providers/food-api/food-api.model';
 import { FoodApiProvider } from '../../providers/food-api/food-api';
@@ -8,12 +8,11 @@ import { FoodApiProvider } from '../../providers/food-api/food-api';
   selector: 'food-list',
   templateUrl: 'food-list.html'
 })
-export class FoodListComponent implements OnInit, AfterContentInit {
+export class FoodListComponent implements OnChanges {
 
-  //@Input('location') loc: any;
-  //@Input() menu : LocationMenu;
-  loc : FoodLocation;
-  menu : FoodLocationMenu;
+  @Input('location') location : FoodLocation;
+  @Input('menu') menu : FoodLocationMenu;
+
   topHitCount = 3;
   topHits : FoodLocationMenuItem[];
   avatarUrl = 'https://www.toornament.com/media/file/433393387804137561/logo_large?v=1477168110';
@@ -30,10 +29,11 @@ export class FoodListComponent implements OnInit, AfterContentInit {
     console.log('state: ', this.expandedView, 'title: ', this.expandViewTitle);
   }
 
-  public initialize(loc : FoodLocation, menu : FoodLocationMenu) {
-    this.loc = loc;
-    this.menu = menu;
 
+
+  ngOnChanges() {
+    //console.log('menu', this.menu);
+    //console.log('location', this.location);
     this.topHits=[];
     for(var i=0; i<this.topHitCount; i++) {
       if(i<this.menu.hits.length)
@@ -41,16 +41,9 @@ export class FoodListComponent implements OnInit, AfterContentInit {
         this.topHits.push(this.menu.hits[i]);
       }
     }
-  }
-
-  ngOnInit() {
-    //console.log('this.location', this.location);
 
   }
 
-  ngAfterContentInit() {
-    //console.log('this.location', this.location);
 
-  }
-
+  
 }

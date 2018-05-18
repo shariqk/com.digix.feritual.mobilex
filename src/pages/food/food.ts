@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 
 import { FoodApiProvider } from '../../providers/food-api/food-api';
 import { FoodListComponent } from '../../components/food-list/food-list'
-import { LocationSearchResult, FoodLocation } from '../../providers/food-api/food-api.model';
+import { LocationSearchResult, FoodLocation, FoodLocationMenu } from '../../providers/food-api/food-api.model';
 
 @IonicPage()
 @Component({
@@ -16,6 +16,7 @@ export class FoodPage {
 
   nearme : LocationSearchResult;
   searchTerm : string;
+  results : SearchResult[];
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -66,6 +67,7 @@ export class FoodPage {
   getNextLocationMenuAsync(ctx : LoaderContext) {
     let loc = ctx.next();
     if(loc == null) {
+      this.results  = ctx.results;
       return;
     }
 
@@ -76,9 +78,10 @@ export class FoodPage {
         //console.log('loc: ' + loc.name + ' menu.hits: ' + menu.hits.length);
 
         if(menu.hits.length>0) {
-          const c = this.componentFactoryResolver.resolveComponentFactory(FoodListComponent);
-          let f = this.menucontainer.createComponent(c);
-          f.instance.initialize(loc, menu);
+          ctx.addToSearchResult(menu);
+          //const c = this.componentFactoryResolver.resolveComponentFactory(FoodListComponent);
+          //let f = this.menucontainer.createComponent(c);
+          //f.instance.initialize(loc, menu);
         }
         this.getNextLocationMenuAsync(ctx);
 
@@ -108,11 +111,9 @@ export class FoodPage {
         .subscribe(data => {
           //console.log('results', data);
 
-          const c = this.componentFactoryResolver.resolveComponentFactory(FoodListComponent);
-          let f = this.menucontainer.createComponent(c);
-          //console.log(f);
-          //var f : any = c.componentType;
-          f.instance.initialize(loc, null);
+          //const c = this.componentFactoryResolver.resolveComponentFactory(FoodListComponent);
+          //let f = this.menucontainer.createComponent(c);
+          //f.instance.initialize(loc, null);
 
 
           //this.addcomponent(me.nearme.locations[counter]);
@@ -195,13 +196,14 @@ export class LoaderContext {
     this.searchTerm = searchTerm;
     this.counter = -1;
     this.processed = [];
+    this.results = [];
   }
 
 
   public next() : FoodLocation {
     while(this.counter<this.locations.length-1) {
       this.counter++;
-      if(this.counter > 5) {
+      if(this.counter > 20) {
         return null;
       }
       else {
@@ -224,11 +226,23 @@ export class LoaderContext {
     }
 
     return null;
+  }
 
+  addToSearchResult(menu : FoodLocationMenu) : void {
+    var result = new SearchResult();
+    result.location = this.locations[this.counter];
+    result.menu = menu;
+    this.results.push(result);
   }
 
   processed : string[];
   counter : number = -1;
   locations : FoodLocation[] = null;
   public searchTerm : string;
+  public results : SearchResult[];
+}
+
+export class SearchResult {
+  public location : FoodLocation;
+  public menu : FoodLocationMenu;
 }
