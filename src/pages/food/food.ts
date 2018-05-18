@@ -73,7 +73,7 @@ export class FoodPage {
     this.api.searchLocationMenu([loc.brand_id], ctx.searchTerm)
       .subscribe(menu => {
         //console.log('menu', menu);
-        console.log('loc: ' + loc.name + ' menu.hits: ' + menu.hits.length);
+        //console.log('loc: ' + loc.name + ' menu.hits: ' + menu.hits.length);
 
         if(menu.hits.length>0) {
           const c = this.componentFactoryResolver.resolveComponentFactory(FoodListComponent);
@@ -106,7 +106,7 @@ export class FoodPage {
 
       this.api.searchLocationMenu([loc.brand_id], this.searchTerm)
         .subscribe(data => {
-          console.log('results', data);
+          //console.log('results', data);
 
           const c = this.componentFactoryResolver.resolveComponentFactory(FoodListComponent);
           let f = this.menucontainer.createComponent(c);
@@ -176,7 +176,7 @@ export class FoodPage {
     this.api.getLocations(lat, lng)
       .subscribe(data => {
         this.nearme = data;
-        console.log('locations', data);
+        //console.log('locations', data);
         toast.dismiss();
       },
       error =>
@@ -201,15 +201,15 @@ export class LoaderContext {
   public next() : FoodLocation {
     while(this.counter<this.locations.length-1) {
       this.counter++;
-      if(this.counter > 20) {
+      if(this.counter > 5) {
         return null;
       }
       else {
         var skip = false;
         var loc = this.locations[this.counter];
-        console.log('processed', this.processed);
+        //console.log('processed', this.processed);
         for(var b in this.processed) {
-          if(b==loc.brand_id) {
+          if(b==loc.name) {
             console.log('skipping ' + loc.name);
             skip = true;
             break;
@@ -217,7 +217,7 @@ export class LoaderContext {
         }
 
         if(!skip) {
-          this.processed.push(loc.brand_id);
+          this.processed.push(loc.name);
           return this.locations[this.counter];
         }
       }
