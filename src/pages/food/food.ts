@@ -1,11 +1,12 @@
-import { Component, Injector, ViewChild, ViewContainerRef,
-  ComponentFactoryResolver, EmbeddedViewRef, ApplicationRef } from '@angular/core';
+import { Component , ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 import { FoodApiProvider } from '../../providers/food-api/food-api';
 import { FoodListComponent } from '../../components/food-list/food-list'
 import { LocationSearchResult, FoodLocation, FoodLocationMenu } from '../../providers/food-api/food-api.model';
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
+import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
+
 
 @IonicPage()
 @Component({
@@ -13,8 +14,6 @@ import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-ap
   templateUrl: 'food.html',
 })
 export class FoodPage {
-  @ViewChild('menucontainer', {read: ViewContainerRef}) menucontainer: ViewContainerRef;
-
   nearme : LocationSearchResult;
   searchTerm : string;
   results : SearchResult[];
@@ -22,9 +21,6 @@ export class FoodPage {
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private appRef: ApplicationRef,
-    private injector: Injector,
     private eatstreetApi : EatstreetApiProvider,
     public api : FoodApiProvider) {
   }
@@ -95,6 +91,17 @@ export class FoodPage {
       });
   }
 
+  getRestaurantMenu(restaurantApiKey : string) {
+    this.eatstreetApi.getRestaurantMenu(restaurantApiKey)
+      .subscribe(data => {
+        console.log('menu', data);
+      },
+      error =>
+      {
+        console.log(error);
+      });
+  }
+
   getEatstreetRestaurants(lat : number, lng : number) {
     let toast = this.toastCtrl.create({
         message: 'Locating restaurants near you',
@@ -104,8 +111,12 @@ export class FoodPage {
 
     this.eatstreetApi.getRestaurants(lat, lng)
       .subscribe(data => {
-
         console.log('restaurants', data);
+        var res : Restaurant[] = data.restaurants;
+        for(var r of res) {
+          this.getRestaurantMenu(r.apiKey);
+        }
+
         toast.dismiss();
       },
       error =>
