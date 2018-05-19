@@ -21,7 +21,7 @@ export class EatstreetApiProvider {
     var url = this.baseUrl + '/search?method=both'
       + '&latitude=' + lat
       + '&longitude=' + lng;
-    console.log('getRestaurants', url);
+    //console.log('getRestaurants', url);
 
     var result = this.http.get(url, { headers: this.getRequestHeaders() })
       .map(res => <RestaurantSearchResult>res);
@@ -29,12 +29,12 @@ export class EatstreetApiProvider {
     return result;
   }
 
-  public getRestaurantMenu(restaurantApiKey : string) : Observable<RestaurantMenuNode> {
+  public getRestaurantMenu(restaurantApiKey : string) : Observable<RestaurantMenuNode[]> {
     var url = this.baseUrl + '/' + restaurantApiKey + '/menu?includeCustomizations=false';
-    console.log('getRestaurantMenu', url);
+    //console.log('getRestaurantMenu', url);
 
     var result = this.http.get(url, { headers: this.getRequestHeaders() })
-      .map(res => <RestaurantMenuNode>res);
+      .map(res => <RestaurantMenuNode[]>res);
 
     return result;
   }

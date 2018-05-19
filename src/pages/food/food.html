@@ -21,7 +21,7 @@
 
 
   <div *ngIf="this.results!=null">
-    <food-list *ngFor="let r of results" [location]="r.location" [menu]="r.menu"></food-list>
+    <food-list *ngFor="let r of results" [menu]="r"></food-list>
   </div>
 
 </ion-content>

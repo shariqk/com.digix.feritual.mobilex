@@ -6,7 +6,7 @@ import { FoodListComponent } from '../../components/food-list/food-list'
 import { LocationSearchResult, FoodLocation, FoodLocationMenu } from '../../providers/food-api/food-api.model';
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
-import { FoodSearch } from './foodSearch';
+import { FoodSearch, FxLocation, FxLocationMenu } from './foodSearch';
 
 @IonicPage()
 @Component({
@@ -16,8 +16,10 @@ import { FoodSearch } from './foodSearch';
 export class FoodPage {
   nearme : LocationSearchResult;
   searchTerm : string;
-  results : SearchResult[];
-  foodSearch : FoodSearch;
+  results : FxLocationMenu[];
+  //foodSearch : FoodSearch;
+
+  locations : FxLocation[];
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -27,14 +29,9 @@ export class FoodPage {
   }
 
   ionViewDidLoad() {
-    if(this.foodSearch==null) {
+    if(this.locations==null) {
       this.initialize();
     }
-
-
-    //if(this.nearme == null) {
-    //  this.getLocations();
-    //}
   }
 
   async initialize() {
@@ -47,12 +44,24 @@ export class FoodPage {
     var lat = 40.034804;
     var lng = -75.301198;
 
-    this.foodSearch = new FoodSearch(this.api, this.eatstreetApi);
-    await this.foodSearch.initialize(lat, lng);
+    let search = new FoodSearch(this.api, this.eatstreetApi);
+    this.locations = await search.getLocations(lat, lng);
+    console.log(this.locations);
+
     toast.dismiss();
   }
 
+  async doLocationMenuSearch(event : any) {
+    if(this.searchTerm==null || this.searchTerm.length<4) {
+        return;
+    }
+    var search = new FoodSearch(this.api, this.eatstreetApi);
+    this.results = await search.search(this.locations, this.searchTerm);
+    console.log(this.results);
+  }
 
+
+  /*
   doSearch(event : any) {
     if(this.nearme==null || this.searchTerm==null || this.searchTerm.length<4) {
       return;
@@ -74,21 +83,10 @@ export class FoodPage {
         console.log(error);
       });
     }
+*/
 
-  doLocationMenuSearch(event : any) {
-    if(this.searchTerm==null || this.searchTerm.length<4) {
-        return;
-    }
-    this.foodSearch.search(this.searchTerm);
 
-    if(this.nearme==null || this.searchTerm==null || this.searchTerm.length<4) {
-        return;
-    }
-
-    let ctx = new LoaderContext(this.nearme.locations, this.searchTerm);
-    this.getNextLocationMenuAsync(ctx);
-  }
-
+  /*
   getNextLocationMenuAsync(ctx : LoaderContext) {
     let loc = ctx.next();
     if(loc == null) {
@@ -179,9 +177,10 @@ export class FoodPage {
         console.log(error);
       });
     }
+    */
 }
 
-
+/*
 export class LoaderContext {
   constructor(locations : FoodLocation[], searchTerm : string) {
     this.locations = locations;
@@ -238,3 +237,5 @@ export class SearchResult {
   public location : FoodLocation;
   public menu : FoodLocationMenu;
 }
+
+*/

@@ -6,8 +6,17 @@ food-list {
   }
 
   .item-name {
-    font-size: 10pt;
+    //font-size: 10pt;
     color:black;
+    width: 100%;
+    background: white;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .item-description {
+    font-size: 9pt;
+    //color:black;
     width: 100%;
     background: white;
     padding: 0px;

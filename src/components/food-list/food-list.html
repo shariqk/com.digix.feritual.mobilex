@@ -1,21 +1,22 @@
 
 <ion-card>
   <ion-card-header>
-    {{location.name}}
+    {{menu.location.name}}
   </ion-card-header>
 
   <ion-card-content>
     <div *ngIf="!expandedView">
       <ion-item *ngFor="let m of topHits">
-          <p class="item-name">{{m.fields.item_name}}</p>
-          <p class="item-detail">{{m.fields.nf_calories}} calories</p>
+          <p class="item-name">{{m.name}}</p>
+          <p class="item-detail">{{m.calories}} calories</p>
       </ion-item>
     </div>
 
     <div *ngIf="expandedView">
-      <ion-item *ngFor="let m of menu.hits">
-          <p class="item-name">{{m.fields.item_name}}</p>
-          <p class="item-detail">{{m.fields.nf_calories}} calories</p>
+      <ion-item *ngFor="let m of menu.items">
+          <p class="item-name">{{m.name}}</p>
+          <p class="item-description" text-wrap>{{m.description}}</p>
+          <p class="item-detail">{{m.calories}} calories</p>
       </ion-item>
     </div>
 

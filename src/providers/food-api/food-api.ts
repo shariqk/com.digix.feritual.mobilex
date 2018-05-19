@@ -13,7 +13,7 @@ export class FoodApiProvider {
   baseUrlV1 = "https://api.nutritionix.com/v1_1";
   baseUrlV2 = "https://trackapi.nutritionix.com/v2";
   offset = 0;
-  limit = 50;
+  limit = 10;
   distance = '5mi';
   appId = "b0090aa2";
   appKey = "76b86f9d5a5ff688ffa8eaf48df112ac";
@@ -22,7 +22,9 @@ export class FoodApiProvider {
   }
 
   public getLocations(lat : number, lng : number) : Observable<LocationSearchResult> {
-    var url = this.baseUrlV2 + '/locations?distance=5mi&limit=50&ll=' + lat + ',' + lng;
+    var url = this.baseUrlV2 + '/locations?limit=' + this.limit
+      + '&distance=' + this.distance
+      + '&ll=' + lat + ',' + lng;
     //console.log('getLocations', url);
 
     var result = this.http.get(url, { headers: this.getRequestHeaders() })
@@ -37,7 +39,7 @@ export class FoodApiProvider {
     for(var b of brand_ids) {
       url += "&brand_ids=" + b;
     }
-    //console.log('searchForFood', url);
+    console.log('searchForFood', url);
 
     var result = this.http.get(url, { headers: this.getRequestHeaders() })
       .map(res => <FoodSearchResult>res);
