@@ -7,8 +7,8 @@ import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
 
 
 export class FoodSearch {
-  lat = 40.034804;
-  lng = -75.301198;
+  provider_type_nx = 'nx';
+  provider_type_es = 'es';
 
   public constructor(
     public nxApi : FoodApiProvider,
@@ -18,16 +18,27 @@ export class FoodSearch {
   public locations : FxLocation[];
   public menus : FxLocationMenu[];
 
-  public initialize(lat : number, lng : number, callBackFunction : any) {
+  counter = 0;
+
+  public initialize(lat : number, lng : number) {
+    this.counter = 0;
     this.locations = [];
+    this.getEatstreetRestaurants(lat, lng);
+    this.getNxLocations(lat, lng);
   }
+
+  
 
   getEatstreetRestaurants(lat : number, lng : number) {
     this.eatstreetApi.getRestaurants(lat, lng)
       .subscribe(data => {
+        console.log('getEatstreetRestaurants.data', data);
+
         var res : Restaurant[] = data.restaurants;
         var list = this.fromEatstreetToNx(res);
-        this.locations.concat(list);
+        this.locations = this.locations.concat(list);
+        console.log(this.locations);
+        this.counter++;
       },
       error =>
       {
@@ -45,6 +56,7 @@ export class FoodSearch {
       fx.name = res.name;
       fx.lat = res.latitude;
       fx.lng = res.longitude;
+      fx.type = this.provider_type_es;
 
       list.push(fx);
     }
@@ -52,13 +64,19 @@ export class FoodSearch {
     return list;
   }
 
+  public isReady() : boolean {
+    return this.counter > 2;
+  }
 
   getNxLocations(lat : number, lng : number) {
     this.nxApi.getLocations(lat, lng)
       .subscribe(data => {
+        console.log('getNxLocations.data', data);
         var result : LocationSearchResult = data;
-        var locations = this.fromNxToFx(result.locations);
-        this.locations.concat(locations);
+        var list = this.fromNxToFx(result.locations);
+        this.locations = this.locations.concat(list);
+        console.log(this.locations);
+        this.counter++;
       },
       error =>
       {
@@ -75,6 +93,7 @@ export class FoodSearch {
         fx.name = loc.name;
         fx.lng = loc.lng;
         fx.lat = loc.lat;
+        fx.type = this.provider_type_nx;
 
         list.push(fx);
       }
@@ -90,6 +109,7 @@ export class FxLocation {
   public name : string;
   public lat : number;
   public lng : number;
+  public type : string;
 }
 
 export interface FxLocationMenu {

@@ -6,7 +6,7 @@ import { FoodListComponent } from '../../components/food-list/food-list'
 import { LocationSearchResult, FoodLocation, FoodLocationMenu } from '../../providers/food-api/food-api.model';
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
-
+import { FoodSearch } from './foodSearch';
 
 @IonicPage()
 @Component({
@@ -17,6 +17,7 @@ export class FoodPage {
   nearme : LocationSearchResult;
   searchTerm : string;
   results : SearchResult[];
+  foodSearch : FoodSearch;
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -26,9 +27,18 @@ export class FoodPage {
   }
 
   ionViewDidLoad() {
-    if(this.nearme == null) {
-      this.getLocations();
+    if(this.foodSearch==null) {
+      var lat = 40.034804;
+      var lng = -75.301198;
+
+      this.foodSearch = new FoodSearch(this.api, this.eatstreetApi);
+      this.foodSearch.initialize(lat, lng);
     }
+
+
+    //if(this.nearme == null) {
+    //  this.getLocations();
+    //}
   }
 
   doSearch(event : any) {
