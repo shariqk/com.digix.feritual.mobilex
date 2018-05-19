@@ -28,11 +28,7 @@ export class FoodPage {
 
   ionViewDidLoad() {
     if(this.foodSearch==null) {
-      var lat = 40.034804;
-      var lng = -75.301198;
-
-      this.foodSearch = new FoodSearch(this.api, this.eatstreetApi);
-      this.foodSearch.initialize(lat, lng);
+      this.initialize();
     }
 
 
@@ -40,6 +36,22 @@ export class FoodPage {
     //  this.getLocations();
     //}
   }
+
+  async initialize() {
+    let toast = this.toastCtrl.create({
+        message: 'Please wait...',
+        position: 'top'
+      });
+    toast.present();
+
+    var lat = 40.034804;
+    var lng = -75.301198;
+
+    this.foodSearch = new FoodSearch(this.api, this.eatstreetApi);
+    await this.foodSearch.initialize(lat, lng);
+    toast.dismiss();
+  }
+
 
   doSearch(event : any) {
     if(this.nearme==null || this.searchTerm==null || this.searchTerm.length<4) {
@@ -64,6 +76,11 @@ export class FoodPage {
     }
 
   doLocationMenuSearch(event : any) {
+    if(this.searchTerm==null || this.searchTerm.length<4) {
+        return;
+    }
+    this.foodSearch.search(this.searchTerm);
+
     if(this.nearme==null || this.searchTerm==null || this.searchTerm.length<4) {
         return;
     }
