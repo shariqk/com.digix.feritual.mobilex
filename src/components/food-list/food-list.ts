@@ -27,7 +27,7 @@ export class FoodListComponent implements OnChanges {
   switchExpandedView() {
     this.expandedView = !this.expandedView;
     this.expandViewTitle = this.expandedView ? 'Collapse' : 'Expand';
-    console.log('state: ', this.expandedView, 'title: ', this.expandViewTitle);
+    //console.log('state: ', this.expandedView, 'title: ', this.expandViewTitle);
   }
 
 

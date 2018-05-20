@@ -13,15 +13,11 @@
 </ion-header>
 
 
-<ion-content padding>
-  <ion-searchbar showCancelButton="true" [(ngModel)]="searchTerm" (ionInput)="doLocationMenuSearch($event)" placeholder="name of food or cuisine (such as Burger)"></ion-searchbar>
+<ion-content>
+    <ion-searchbar showCancelButton="true" [(ngModel)]="searchTerm" (ionInput)="doLocationMenuSearch($event)"
+      placeholder="{{placeholderText}}"></ion-searchbar>
 
-  <div #menucontainer>
-  </div>
-
-
-  <div *ngIf="this.results!=null">
-    <food-list *ngFor="let r of results" [menu]="r"></food-list>
-  </div>
-
+    <div *ngIf="this.results!=null">
+      <food-list *ngFor="let r of results" [menu]="r"></food-list>
+    </div>
 </ion-content>

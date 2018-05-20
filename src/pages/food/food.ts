@@ -17,6 +17,7 @@ export class FoodPage {
   nearme : LocationSearchResult;
   searchTerm : string;
   results : FxLocationMenu[];
+  placeholderText = 'name of food or cuisine (say Thai or Burger)';
   //foodSearch : FoodSearch;
 
   locations : FxLocation[];
@@ -46,6 +47,7 @@ export class FoodPage {
 
     let search = new FoodSearch(this.api, this.eatstreetApi);
     this.locations = await search.getLocations(lat, lng);
+    this.placeholderText = "Search for food in "+ this.locations.length + " places nearby";
     console.log(this.locations);
 
     toast.dismiss();
@@ -55,9 +57,17 @@ export class FoodPage {
     if(this.searchTerm==null || this.searchTerm.length<4) {
         return;
     }
+
+    let toast = this.toastCtrl.create({
+        message: 'Searching...',
+        position: 'top'
+      });
+    toast.present();
+
     var search = new FoodSearch(this.api, this.eatstreetApi);
     this.results = await search.search(this.locations, this.searchTerm);
-    console.log(this.results);
+    //console.log(this.results);
+    toast.dismiss();
   }
 
 

@@ -14,14 +14,14 @@
 
     <div *ngIf="expandedView">
       <ion-item *ngFor="let m of menu.items">
-          <p class="item-name">{{m.name}}</p>
+          <p class="item-name" text-wrap>{{m.name}}</p>
           <p class="item-description" text-wrap>{{m.description}}</p>
           <p class="item-detail">{{m.calories}} calories</p>
       </ion-item>
     </div>
 
-    <button ion-button color="primary" (click)="switchExpandedView()" clear small icon-start>
-      {{expandViewTitle}}
+    <button *ngIf="menu.items.length>topHitCount" ion-button color="primary" (click)="switchExpandedView()" clear small icon-start>
+      {{expandViewTitle}} ({{menu.items.length}})
     </button>
 
   </ion-card-content>
