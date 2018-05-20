@@ -31,7 +31,7 @@ export class FoodPage {
 
   ionViewDidLoad() {
     if(this.locations==null) {
-      this.initialize();
+      //this.initialize();
     }
   }
 

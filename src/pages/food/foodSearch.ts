@@ -42,6 +42,7 @@ export class FoodSearch {
 
   public getLocations = async function(lat : number, lng : number) : Promise<FxLocation[]> {
     try {
+      //alert('in gelocations');
       var locations : FxLocation[] = [];
       let esLocations = await this.getEatstreetRestaurants(this, lat, lng);
       locations = locations.concat(esLocations);

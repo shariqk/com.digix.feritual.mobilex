@@ -14,7 +14,10 @@
 
 
 <ion-content>
-    <ion-searchbar showCancelButton="true" [(ngModel)]="searchTerm" (ionInput)="doLocationMenuSearch($event)"
+  <button  *ngIf="locations==null" ion-button (click)="initialize()">Start</button>
+
+    <ion-searchbar *ngIf="locations!=null"
+      showCancelButton="true" [(ngModel)]="searchTerm" (ionInput)="doLocationMenuSearch($event)"
       placeholder="{{placeholderText}}"></ion-searchbar>
 
     <div *ngIf="this.results!=null">
