@@ -41,18 +41,25 @@ export class FoodSearch {
   */
 
   public getLocations = async function(lat : number, lng : number) : Promise<FxLocation[]> {
-    var locations : FxLocation[] = [];
-    let esLocations = await this.getEatstreetRestaurants(this, lat, lng);
-    locations = locations.concat(esLocations);
+    try {
+      var locations : FxLocation[] = [];
+      let esLocations = await this.getEatstreetRestaurants(this, lat, lng);
+      locations = locations.concat(esLocations);
 
-    let nxLocations = await this.getNxLocations(this, lat, lng);
-    locations = locations.concat(nxLocations);
+      let nxLocations = await this.getNxLocations(this, lat, lng);
+      locations = locations.concat(nxLocations);
+      console.log('locations', locations);
 
-    var obj = new DistanceCalculator();
-    obj.calculateDistance(lat, lng, locations);
-    obj.sortByDistance(locations);
+    //  var obj = new DistanceCalculator();
+    //  obj.calculateDistance(lat, lng, locations);
+    //  obj.sortByDistance(locations);
 
-    return locations;
+      return locations;
+
+    } catch (err) {
+      alert(err);
+    console.log(err);
+    }
   }
 
 
