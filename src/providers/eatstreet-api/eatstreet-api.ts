@@ -12,7 +12,7 @@ export class EatstreetApiProvider {
 
   baseUrl = 'https://api.eatstreet.com/publicapi/v1/restaurant';
   //search?latitude=40.034804&longitude=-75.301198&method=both&street-address=316+W.+Washington+Ave.+Madison,+WI';
-  apiKey = '__API_EXPLORER_AUTH_KEY__';// '9b094a118dbca429';
+  apiKey = '9b094a118dbca429'; //__API_EXPLORER_AUTH_KEY__';// '9b094a118dbca429';
 
   constructor(public http: HttpClient) {
   }
@@ -43,9 +43,9 @@ export class EatstreetApiProvider {
   public getRequestHeaders() : HttpHeaders {
     var headers = new HttpHeaders();
     headers = headers
-      .set('X-Access-Token', this.apiKey)
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json');
+      .set('X-Access-Token', this.apiKey);
+      //.set('Content-Type', 'application/json')
+      //.set('Accept', 'application/json');
 
     return headers;
   }

@@ -40,7 +40,48 @@ export class FoodSearch {
   }
   */
 
-  public getLocations = async function(lat : number, lng : number) : Promise<FxLocation[]> {
+  public getLocations = function(lat : number, lng : number) : Promise<FxLocation[]> {
+    let ctx = this;
+    return new Promise(function(resolve, reject) {
+      var locations : FxLocation[] = [];
+
+      ctx.getNxLocations(ctx, lat, lng)
+        .then(nxLocations => {
+          locations = locations.concat(nxLocations);
+          var obj = new DistanceCalculator();
+          obj.calculateDistance(lat, lng, locations);
+          locations = obj.sortByDistance(locations);
+          resolve(locations);
+        }).catch(err => {
+          console.log(err);
+          reject(err);
+        })
+      });
+    }
+          /*
+      ctx.getEatstreetRestaurants(ctx, lat, lng)
+        .then(esLocations => {
+          locations = locations.concat(esLocations);
+          ctx.getNxLocations(ctx, lat, lng)
+            .then(nxLocations => {
+              locations = locations.concat(nxLocations);
+              //console.log('esLocations', esLocations);
+              //console.log('nxLocations', nxLocations);
+              var obj = new DistanceCalculator();
+              obj.calculateDistance(lat, lng, locations);
+              locations = obj.sortByDistance(locations);
+
+              //console.log('locations', locations);
+              resolve(locations);
+            });
+          }).catch(err => {
+            console.log(err);
+            reject(err);
+          });
+      })
+*/
+
+    /*
     try {
       //alert('in gelocations');
       var locations : FxLocation[] = [];
@@ -59,9 +100,9 @@ export class FoodSearch {
 
     } catch (err) {
       alert(err);
-    console.log(err);
+      console.log(err);
     }
-  }
+    */
 
 
   public search = async function(locations: FxLocation[], query : string) : Promise<FxLocationMenu[]> {
@@ -255,8 +296,8 @@ export class DistanceCalculator
     }
   }
 
-  public sortByDistance(locations : FxLocation[]) :void {
-    locations.sort(function(a, b) {
+  public sortByDistance(locations : FxLocation[]) : FxLocation[] {
+    return locations.sort(function(a, b) {
       if (a.distance == b.distance)
        {
            return 0;

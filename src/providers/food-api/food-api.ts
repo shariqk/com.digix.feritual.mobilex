@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/Rx';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
+
 
 import { FoodSearchResult, LocationSearchResult, FoodLocationMenu } from './food-api.model';
 
@@ -19,6 +19,14 @@ export class FoodApiProvider {
   appKey = "76b86f9d5a5ff688ffa8eaf48df112ac";
 
   constructor(public http: HttpClient) {
+  }
+
+  public testHttp() : Observable<object> {
+    var url = 'https://comcricketwebapi.azurewebsites.net/api/messages';
+    var result = this.http.get(url)
+      .map(res => res);
+
+    return result;
   }
 
   public getLocations(lat : number, lng : number) : Observable<LocationSearchResult> {

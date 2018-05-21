@@ -45,12 +45,22 @@ export class FoodPage {
     var lat = 40.034804;
     var lng = -75.301198;
 
-    let search = new FoodSearch(this.api, this.eatstreetApi);
-    this.locations = await search.getLocations(lat, lng);
-    this.placeholderText = "Search for food in "+ this.locations.length + " places nearby";
-    console.log(this.locations);
+    //var test = this.api.getLocations(lat,lng).subscribe(result => alert(JSON.stringify(result)));
+    //var test2 = this.eatstreetApi.getRestaurants(lat,lng).subscribe(result => alert(JSON.stringify(result)));
 
-    toast.dismiss();
+    let search = new FoodSearch(this.api, this.eatstreetApi);
+    search.getLocations(lat, lng)
+      .then(locations => {
+        this.locations = locations;
+        this.placeholderText = "Search for food in "+ this.locations.length + " places nearby";
+        console.log(this.locations);
+        toast.dismiss();
+      }).catch(err => {
+        console.log(err);
+        alert('An error occured in getting locations: ' + JSON.stringify(err));
+        toast.dismiss();
+      });
+
   }
 
   async doLocationMenuSearch(event : any) {
