@@ -15,7 +15,11 @@
 
 <ion-content padding>
   <button ion-button (click)="takeAndDisplayImage()">Take Picture</button>
+  <button ion-button (click)="testVisionApi()">Test Vision Api</button>
 
   <img [src]="base64Image" *ngIf="base64Image!=null" />
 
+  <p [innerHtml]="analysis" class='item-analysis' *ngIf="analysis!=null">
+    
+  </p>
 </ion-content>

@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/Rx';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -43,9 +42,9 @@ export class EatstreetApiProvider {
   public getRequestHeaders() : HttpHeaders {
     var headers = new HttpHeaders();
     headers = headers
-      .set('X-Access-Token', this.apiKey);
-      //.set('Content-Type', 'application/json')
-      //.set('Accept', 'application/json');
+      .set('X-Access-Token', this.apiKey)
+      .set('Content-Type', 'application/json')
+      .set('Accept', 'application/json');
 
     return headers;
   }

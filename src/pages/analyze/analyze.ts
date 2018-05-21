@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { MsvisionApiProvider } from '../../providers/msvision-api/msvision-api';
+import { MSVisionApiResult } from '../../providers/msvision-api/msvision-api.model';
 
 
 @IonicPage()
@@ -14,18 +16,64 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 export class AnalyzePage {
 
   base64Image : string = null;
+  analysis : string = null;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public camera : Camera) {
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    public toastCtrl: ToastController,
+    public msvisionApi : MsvisionApiProvider,
+    public camera : Camera) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AnalyzePage');
+    //console.log('ionViewDidLoad AnalyzePage');
   }
 
-  takeAndDisplayImage() {
+  testVisionApi() {
+    //var testImageJson = '{"url":"http://www.caloriemama.ai/img/examples/Image6.jpeg"}';
+    var testImageUrl = 'http://www.caloriemama.ai/img/examples/Image6.jpeg';
+    this.base64Image = testImageUrl;
+
+    this.msvisionApi.analyzeImageUrl(testImageUrl)
+      .subscribe(
+          result => {
+            //alert(JSON.stringify(result));
+            this.analysis = JSON.stringify(result);
+          },
+          err => alert(JSON.stringify(err))
+      );
+  }
+
+  async takeAndDisplayImage() {
+    let toast = this.toastCtrl.create({
+        message: 'Analyzing image...',
+        position: 'top'
+      });
     this.takePicture()
-      .then(image => this.base64Image = image)
-      .catch(err => alert(JSON.stringify(err)));
+      .then(imageData => {
+        this.base64Image = 'data:image/jpeg;base64,' + imageData;
+
+        //var testImageJson = '{"url":"http://www.caloriemama.ai/img/examples/Image6.jpeg"}';
+        toast.present();
+
+        this.msvisionApi.analyze(imageData)
+          .subscribe(
+              result => {
+                //alert(JSON.stringify(result));
+                this.analysis = JSON.stringify(result);
+                toast.dismiss();
+              },
+              err => {
+                alert(JSON.stringify(err));
+                toast.dismiss();
+              }
+          );
+
+      })
+      .catch(err => {
+        toast.dismiss();
+        alert(JSON.stringify(err));
+      });
   }
 
 
@@ -45,7 +93,7 @@ export class AnalyzePage {
       }
 
       const options: CameraOptions = {
-        quality: 100,
+        quality: 50,
         destinationType: ctx.camera.DestinationType.DATA_URL,
         encodingType: ctx.camera.EncodingType.JPEG,
         mediaType: ctx.camera.MediaType.PICTURE
@@ -54,10 +102,7 @@ export class AnalyzePage {
       //console.log('camera', ctx.camera);
 
       ctx.camera.getPicture(options).then((imageData) => {
-         // imageData is either a base64 encoded string or a file URI
-         // If it's base64:
-         let base64Image = 'data:image/jpeg;base64,' + imageData;
-         resolve(base64Image)
+         resolve(imageData)
         },
         (err) => {
           console.log(err);
