@@ -109,6 +109,10 @@ export class FoodPage {
     this.results = null;
   }
 
+  addressCardClicked(event : any) {
+    alert('hello');
+  }
+
   getAddressFromLatLng(lat : number, lng : number) : Promise<string> {
     var ctx = this;
     return new Promise(function(resolve, reject) {
