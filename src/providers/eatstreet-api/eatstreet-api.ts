@@ -18,6 +18,7 @@ export class EatstreetApiProvider {
 
   public getRestaurants(lat : number, lng : number) : Observable<RestaurantSearchResult> {
     var url = this.baseUrl + '/search?method=both'
+      + '&pickup-radius=5'
       + '&latitude=' + lat
       + '&longitude=' + lng;
     //console.log('getRestaurants', url);

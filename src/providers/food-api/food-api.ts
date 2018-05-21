@@ -13,7 +13,7 @@ export class FoodApiProvider {
   baseUrlV1 = "https://api.nutritionix.com/v1_1";
   baseUrlV2 = "https://trackapi.nutritionix.com/v2";
   offset = 0;
-  limit = 10;
+  limit = 20;
   distance = '5mi';
   appId = "b0090aa2";
   appKey = "76b86f9d5a5ff688ffa8eaf48df112ac";

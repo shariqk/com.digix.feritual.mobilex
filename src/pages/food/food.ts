@@ -1,5 +1,6 @@
 import { Component , ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { FoodApiProvider } from '../../providers/food-api/food-api';
 import { FoodListComponent } from '../../components/food-list/food-list'
@@ -8,30 +9,38 @@ import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-ap
 import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
 import { FoodSearch, FxLocation, FxLocationMenu } from './foodSearch';
 
+import { GoogleApiProvider } from '../../providers/google-api/google-api';
+import { PlaceAddress } from '../../providers/google-api/google-api.model';
+
+
 @IonicPage()
 @Component({
   selector: 'page-food',
   templateUrl: 'food.html',
 })
 export class FoodPage {
-  nearme : LocationSearchResult;
+  //nearme : LocationSearchResult;
   searchTerm : string;
   results : FxLocationMenu[];
   placeholderText = 'name of food or cuisine (say Thai or Burger)';
   //foodSearch : FoodSearch;
 
+  latitude : number;
+  longitude : number;
   locations : FxLocation[];
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
+    private geolocation: Geolocation,
+    private googleApi : GoogleApiProvider,
     private eatstreetApi : EatstreetApiProvider,
     public api : FoodApiProvider) {
   }
 
   ionViewDidLoad() {
     if(this.locations==null) {
-      //this.initialize();
+      this.initialize();
     }
   }
 
@@ -42,26 +51,89 @@ export class FoodPage {
       });
     toast.present();
 
-    var lat = 40.034804;
-    var lng = -75.301198;
+    try {
+      let pos = await this.geolocation.getCurrentPosition({timeout: 20000, enableHighAccuracy: false});
+      this.latitude = pos.coords.latitude;
+      this.longitude = pos.coords.longitude;
+    }
+    catch {
+      this.latitude = 40.034804;
+      this.longitude = -75.301198;
+    }
+
+    try {
+
+      let address = await this.getAddressFromLatLng(this.latitude, this.longitude);
+      //this.currentAddress = address;
+      //console.log(this.currentAddress);
+
+      let search = new FoodSearch(this.api, this.eatstreetApi);
+      let locations = await search.getLocationsAsync(this.latitude, this.longitude);
+
+      this.locations = locations;
+      this.placeholderText = this.locations.length + " places near " + address;
+      //console.log(this.locations);
+    }
+    catch(err) {
+      alert('error in getting locations: ' + JSON.stringify(err));
+    }
+    finally {
+      toast.dismiss();
+    }
+
+//        search.getLocations(this.latitude, this.longitude)
+//          .then(locations => {
+//             this.locations = locations;
+//             this.placeholderText = "Search for food in "+ this.locations.length + " places nearby";
+//             console.log(this.locations);
+//             toast.dismiss();
+//           }).catch(err => {
+//             console.log(err);
+//             alert('An error occured in getting locations: ' + JSON.stringify(err));
+//             toast.dismiss();
+//           });
+//         }).catch((err) => {
+//           alert('An error occured in getting locations: ' + JSON.stringify(err));
+//           console.log('Error getting location', err);
+//        });
+
+
 
     //var test = this.api.getLocations(lat,lng).subscribe(result => alert(JSON.stringify(result)));
     //var test2 = this.eatstreetApi.getRestaurants(lat,lng).subscribe(result => alert(JSON.stringify(result)));
 
-    let search = new FoodSearch(this.api, this.eatstreetApi);
-    search.getLocations(lat, lng)
-      .then(locations => {
-        this.locations = locations;
-        this.placeholderText = "Search for food in "+ this.locations.length + " places nearby";
-        console.log(this.locations);
-        toast.dismiss();
-      }).catch(err => {
-        console.log(err);
-        alert('An error occured in getting locations: ' + JSON.stringify(err));
-        toast.dismiss();
-      });
 
   }
+
+  searchCleared() {
+    this.results = null;
+  }
+
+  getAddressFromLatLng(lat : number, lng : number) : Promise<string> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      ctx.googleApi.reverseGeocodeToPlace(lat, lng)
+        .subscribe(
+          places => {
+            let r = places.results;
+
+            for(let i=0; i<r.length; i++) {
+              for(let j=0; j<r[i].types.length;j++) {
+                if(r[i].types[j]=='street_address') {
+                  resolve(r[i].formatted_address);
+                }
+              }
+            }
+
+            // this is in case we don't find a formatted address
+            let mockup = 'lat: ' + lat + ', lng: ' + lng;
+            resolve(mockup);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
 
   async doLocationMenuSearch(event : any) {
     if(this.searchTerm==null || this.searchTerm.length<4) {

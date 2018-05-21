@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { FoodPage } from '../pages/food/food';
 import { ProfilePage } from '../pages/profile/profile';
@@ -16,6 +17,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { FoodApiProvider } from '../providers/food-api/food-api';
 import { EatstreetApiProvider } from '../providers/eatstreet-api/eatstreet-api';
 import { MsvisionApiProvider } from '../providers/msvision-api/msvision-api';
+import { GoogleApiProvider } from '../providers/google-api/google-api';
 
 @NgModule({
   declarations: [
@@ -46,8 +48,10 @@ import { MsvisionApiProvider } from '../providers/msvision-api/msvision-api';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FoodApiProvider,
     Camera,
+    Geolocation,
     EatstreetApiProvider,
-    MsvisionApiProvider
+    MsvisionApiProvider,
+    GoogleApiProvider
   ]
 })
 export class AppModule {}

@@ -40,6 +40,32 @@ export class FoodSearch {
   }
   */
 
+  public getLocationsAsync = async function(lat : number, lng : number) : Promise<FxLocation[]> {
+    try {
+      var locations : FxLocation[] = [];
+      try {
+        let esLocations = await this.getEatstreetRestaurants(this, lat, lng);
+        locations = locations.concat(esLocations);
+      }
+      catch {//ignore for now
+      }
+      
+      let nxLocations = await this.getNxLocations(this, lat, lng);
+      locations = locations.concat(nxLocations);
+      console.log('locations', locations);
+
+      var obj = new DistanceCalculator();
+      obj.calculateDistance(lat, lng, locations);
+      obj.sortByDistance(locations);
+
+      return locations;
+
+    } catch (err) {
+      alert(JSON.stringify(err));
+      console.log(err);
+    }
+  }
+
   public getLocations = function(lat : number, lng : number) : Promise<FxLocation[]> {
     let ctx = this;
     return new Promise(function(resolve, reject) {
@@ -109,9 +135,13 @@ export class FoodSearch {
     var ctx : FoodSearch = this;
     var results : FxLocationMenu[] = [];
     //console.log('locations-to-process', locations);
+    let processedList : string[] = [];
 
-    for(var i=0; i<locations.length-1; i++) {
-      var loc = locations[i];
+    for(var loc of locations) {
+      if(processedList.indexOf(loc.name)>=0) {
+        //console.log('skipping ', loc);
+        continue;
+      }
       var menu : FxLocationMenu = null;
       if(loc.type==this.provider_type_es) {
          menu = await ctx.searchEatstreetMenu(ctx, loc, query);
@@ -125,6 +155,8 @@ export class FoodSearch {
       {
         results.push(menu);
       }
+
+      processedList.push(loc.name);
     }
 
     return results;
@@ -194,10 +226,12 @@ export class FoodSearch {
     let m = new FxLocationMenu();
     m.location = loc;
     m.items = [];
+    query = query.toLowerCase();
 
     for(var category of menu) {
       for(var item of category.items) {
-        if(item.name.indexOf(query)>=0) {
+        let str = (item.name + ' ' + item.description).toLowerCase();
+        if(str.indexOf(query)>=0) {
           let i = new FxLocationMenuItem();
           i.calories = -1; // estimated
           i.name = item.name;
