@@ -5,7 +5,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 
-import { FoodSearchResult, LocationSearchResult, FoodLocationMenu } from './food-api.model';
+import { FoodSearchResult, LocationSearchResult, FoodLocationMenu, NuitrientSearchResult } from './food-api.model';
 
 @Injectable()
 export class FoodApiProvider {
@@ -62,6 +62,20 @@ export class FoodApiProvider {
 
     var result = this.http.post(url, queryJson, { headers: this.getRequestHeaders() })
       .map(res => <FoodLocationMenu>res);
+
+    return result;
+  }
+
+  public getNutrients(query : string) : Observable<NuitrientSearchResult> {
+    var url = this.baseUrlV2 + '/v2/natural/nutrients';
+
+    let queryJson = JSON.stringify({
+      query : query,
+      timezone: "US/Eastern"
+    });
+
+    var result = this.http.post(url, queryJson, { headers: this.getRequestHeaders() })
+      .map(res => <NuitrientSearchResult>res);
 
     return result;
   }

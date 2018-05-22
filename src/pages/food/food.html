@@ -1,17 +1,18 @@
 
+<!--
 <ion-header>
   <ion-navbar>
     <ion-title>Food</ion-title>
   </ion-navbar>
 </ion-header>
-
+-->
 
 <ion-content>
   <!--<button  *ngIf="locations==null" ion-button (click)="initialize()">Start</button>
 -->
     <ion-card (click)='addressCardClicked($event)'>
       <ion-card-content>
-        Try "New York"
+        {{currentLocation.address}}
       </ion-card-content>
     </ion-card>
 

@@ -1,5 +1,5 @@
 import { Component , ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { FoodApiProvider } from '../../providers/food-api/food-api';
@@ -10,8 +10,8 @@ import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
 import { FoodSearch, FxLocation, FxLocationMenu } from './foodSearch';
 
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
-import { PlaceAddress } from '../../providers/google-api/google-api.model';
-
+import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
+import { AddressPickerPage } from '../../pages/address-picker/address-picker';
 
 @IonicPage()
 @Component({
@@ -23,27 +23,27 @@ export class FoodPage {
   searchTerm : string;
   results : FxLocationMenu[];
   placeholderText = 'name of food or cuisine (say Thai or Burger)';
-  //foodSearch : FoodSearch;
-
-  latitude : number;
-  longitude : number;
+  currentLocation : GoogleLocation;
   locations : FxLocation[];
 
   constructor(public navCtrl: NavController,
+    public modalCtrl : ModalController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
     private geolocation: Geolocation,
     private googleApi : GoogleApiProvider,
     private eatstreetApi : EatstreetApiProvider,
     public api : FoodApiProvider) {
+
+      this.currentLocation = new GoogleLocation();
+      this.currentLocation.address = 'Tap here to get started';
   }
 
   ionViewDidLoad() {
-    if(this.locations==null) {
-      this.initialize();
-    }
+    
   }
 
+/*
   async initialize() {
     let toast = this.toastCtrl.create({
         message: 'Please wait...',
@@ -53,17 +53,17 @@ export class FoodPage {
 
     try {
       let pos = await this.geolocation.getCurrentPosition({timeout: 20000, enableHighAccuracy: false});
-      this.latitude = pos.coords.latitude;
-      this.longitude = pos.coords.longitude;
+      //this.latitude = pos.coords.latitude;
+      //this.longitude = pos.coords.longitude;
     }
     catch {
-      this.latitude = 40.034804;
-      this.longitude = -75.301198;
+      //this.latitude = 40.034804;
+      //this.longitude = -75.301198;
     }
 
     try {
 
-      let address = await this.getAddressFromLatLng(this.latitude, this.longitude);
+      this.currentAddress = await this.getAddressFromLatLng(this.latitude, this.longitude);
       //this.currentAddress = address;
       //console.log(this.currentAddress);
 
@@ -71,7 +71,7 @@ export class FoodPage {
       let locations = await search.getLocationsAsync(this.latitude, this.longitude);
 
       this.locations = locations;
-      this.placeholderText = this.locations.length + " places near " + address;
+      this.placeholderText = this.locations.length + " places near " + this.currentAddress;
       //console.log(this.locations);
     }
     catch(err) {
@@ -101,18 +101,58 @@ export class FoodPage {
 
     //var test = this.api.getLocations(lat,lng).subscribe(result => alert(JSON.stringify(result)));
     //var test2 = this.eatstreetApi.getRestaurants(lat,lng).subscribe(result => alert(JSON.stringify(result)));
-
-
   }
+*/
 
   searchCleared() {
     this.results = null;
   }
 
-  addressCardClicked(event : any) {
-    alert('hello');
+  async getLocations(loc : GoogleLocation)
+  {
+    let toast = this.toastCtrl.create({
+        message: 'Please wait...',
+        position: 'top'
+      });
+    toast.present();
+
+    try {
+      let search = new FoodSearch(this.api, this.eatstreetApi);
+      let locations = await search.getLocationsAsync(loc.lat, loc.lng);
+
+      this.currentLocation = loc;
+      this.locations = locations;
+      this.placeholderText = 'Search in ' + this.locations.length + ' places (e.g., Sushi or Burger)';
+      //console.log(this.locations);
+    }
+    catch(err) {
+      alert('error in getting locations: ' + JSON.stringify(err));
+    }
+    finally {
+      toast.dismiss();
+    }
+
   }
 
+  addressCardClicked(event : any) {
+    let dialog = this.modalCtrl.create(AddressPickerPage,
+      {
+        address: this.currentLocation.address
+      },
+      {
+        showBackdrop : true
+      });
+
+    dialog.onDidDismiss(loc => {
+      if(loc != null) {
+        this.getLocations(loc);
+      }
+    });
+
+    dialog.present();
+  }
+
+  /*
   getAddressFromLatLng(lat : number, lng : number) : Promise<string> {
     var ctx = this;
     return new Promise(function(resolve, reject) {
@@ -137,7 +177,7 @@ export class FoodPage {
         );
     });
   }
-
+  */
 
   async doLocationMenuSearch(event : any) {
     if(this.searchTerm==null || this.searchTerm.length<4) {

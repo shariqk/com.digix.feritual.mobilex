@@ -11,6 +11,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { AnalyzePage } from '../pages/analyze/analyze';
 import { TabsPage } from '../pages/tabs/tabs';
 import { FoodListComponent } from '../components/food-list/food-list';
+import { AddressPickerPage } from '../pages/address-picker/address-picker';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -26,6 +27,7 @@ import { GoogleApiProvider } from '../providers/google-api/google-api';
     ProfilePage,
     AnalyzePage,
     TabsPage,
+    AddressPickerPage,
     FoodListComponent
   ],
   imports: [
@@ -40,6 +42,7 @@ import { GoogleApiProvider } from '../providers/google-api/google-api';
     ProfilePage,
     AnalyzePage,
     TabsPage,
+    AddressPickerPage,
     FoodListComponent
   ],
   providers: [
