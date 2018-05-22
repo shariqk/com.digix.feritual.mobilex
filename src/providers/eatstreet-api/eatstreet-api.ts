@@ -9,46 +9,33 @@ import { RestaurantSearchResult, RestaurantMenuNode } from './eatstreet-api.mode
 @Injectable()
 export class EatstreetApiProvider {
 
-  baseUrl = 'https://api.eatstreet.com/publicapi/v1/restaurant';
-  //search?latitude=40.034804&longitude=-75.301198&method=both&street-address=316+W.+Washington+Ave.+Madison,+WI';
-  apiKey = '9b094a118dbca429'; //__API_EXPLORER_AUTH_KEY__';// '9b094a118dbca429';
+  baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/eatstreet';
 
   constructor(public http: HttpClient) {
   }
 
   public getRestaurants(lat : number, lng : number) : Observable<RestaurantSearchResult> {
-    var url = this.baseUrl + '/search?method=both'
-      + '&pickup-radius=5'
-      + '&latitude=' + lat
-      + '&longitude=' + lng;
+    var url = this.baseUrl + '/restaurants?'
+      + '&lat=' + lat
+      + '&lng=' + lng;
     //console.log('getRestaurants', url);
 
-    var result = this.http.get(url, { headers: this.getRequestHeaders() })
+    var result = this.http.get(url)
       .map(res => <RestaurantSearchResult>res);
 
     return result;
   }
 
   public getRestaurantMenu(restaurantApiKey : string) : Observable<RestaurantMenuNode[]> {
-    var url = this.baseUrl + '/' + restaurantApiKey + '/menu?includeCustomizations=false';
+    var url = this.baseUrl + '/menu?apiKey=' + restaurantApiKey;
     //console.log('getRestaurantMenu', url);
 
-    var result = this.http.get(url, { headers: this.getRequestHeaders() })
+    var result = this.http.get(url)
       .map(res => <RestaurantMenuNode[]>res);
 
     return result;
   }
 
-
-  public getRequestHeaders() : HttpHeaders {
-    var headers = new HttpHeaders();
-    headers = headers
-      .set('X-Access-Token', this.apiKey)
-      .set('Content-Type', 'application/json')
-      .set('Accept', 'application/json');
-
-    return headers;
-  }
 
 
 }
