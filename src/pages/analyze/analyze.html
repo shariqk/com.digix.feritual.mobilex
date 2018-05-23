@@ -57,7 +57,7 @@
 
   <img [src]="base64Image" *ngIf="base64Image!=null" />
 
-  <p [innerHtml]="toJSONString(analysis)" class='item-analysis' *ngIf="analysis!=null">
+  <pre [innerHtml]="toJSONString(analysis)" *ngIf="analysis!=null">
 
-  </p>
+  </pre>
 </ion-content>

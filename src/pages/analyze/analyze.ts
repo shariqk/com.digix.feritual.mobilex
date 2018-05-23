@@ -96,6 +96,8 @@ export class AnalyzePage {
   async takeAndDisplayImage() {
     let imageData = await this.takePicture();
     if(imageData == null) { return; }
+    this.base64Image = 'data:image/jpeg;base64,' + imageData;
+
 
     let toast = this.toastCtrl.create({
         message: 'Analyzing image...',

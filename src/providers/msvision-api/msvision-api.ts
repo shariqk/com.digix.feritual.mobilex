@@ -27,7 +27,7 @@ export class MsvisionApiProvider {
     });
   }
 
-  public analyzeImageUrl(imageUrl : string) : Observable<MSVisionApiResult> {
+  private analyzeImageUrl(imageUrl : string) : Observable<MSVisionApiResult> {
     var url = 'https://eastus.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Tags,Categories,Description&language=en';
 
     var postData = '{"url":"' + imageUrl + '"}';
