@@ -1,20 +1,58 @@
 
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>analyze</ion-title>
-  </ion-navbar>
+  <ion-toolbar>
+    <ion-title>Analyze</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="takeAndDisplayImage()">
+        <ion-icon large name="camera"></ion-icon>
+      </button>
+
+      <button ion-button icon-only (click)="testVisionApi()">
+        <ion-icon large name="restaurant"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
 
 </ion-header>
 
 
 <ion-content padding>
-  <button ion-button (click)="takeAndDisplayImage()">Take Picture</button>
-  <button ion-button (click)="testVisionApi()">Test Vision Api</button>
+  <div *ngIf="analysis!=null">
+    <h3>{{analysis.description.captions[0].text}}</h3>
 
-  <img [src]="base64Image" style="width:50%;" *ngIf="base64Image!=null" />
+    <ion-row *ngFor="let r of analysis.categories">
+      <ion-col>
+        {{r.name}}
+      </ion-col>
+      <ion-col>
+        {{r.score}}
+      </ion-col>
+    </ion-row>
 
-  <p [innerHtml]="analysis" class='item-analysis' *ngIf="analysis!=null">
+    <ion-row *ngFor="let t of analysis.tags">
+      <ion-col>
+        {{t.name}}
+      </ion-col>
+      <ion-col>
+        {{t.confidence}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        Tags
+      </ion-col>
+      <ion-col>
+        <p [innerHtml]="formatTags(analysis.description.tags)"></p>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <img [src]="base64Image" *ngIf="base64Image!=null" />
+
+  <p [innerHtml]="toJSONString(analysis)" class='item-analysis' *ngIf="analysis!=null">
 
   </p>
 </ion-content>

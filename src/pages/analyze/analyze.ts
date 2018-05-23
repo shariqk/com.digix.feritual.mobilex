@@ -16,7 +16,8 @@ import { MSVisionApiResult } from '../../providers/msvision-api/msvision-api.mod
 export class AnalyzePage {
 
   base64Image : string = null;
-  analysis : string = null;
+  analysis : MSVisionApiResult = null;
+
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -38,10 +39,22 @@ export class AnalyzePage {
       .subscribe(
           result => {
             //alert(JSON.stringify(result));
-            this.analysis = JSON.stringify(result);
+            this.analysis = result;// JSON.stringify(result);
           },
           err => alert(JSON.stringify(err))
       );
+  }
+
+  toJSONString(obj : object) {
+    return obj!=null ? JSON.stringify(obj) : "";
+  }
+
+  formatTags(tags : string[]) : string {
+    let str = '';
+    for(var t of tags) {
+      str += (str.length > 0 ? ', ' : '') + t
+    }
+    return str;
   }
 
   async takeAndDisplayImage() {
@@ -59,8 +72,7 @@ export class AnalyzePage {
         this.msvisionApi.analyze(imageData)
           .subscribe(
               result => {
-                //alert(JSON.stringify(result));
-                this.analysis = JSON.stringify(result);
+                this.analysis = result;
                 toast.dismiss();
               },
               err => {
