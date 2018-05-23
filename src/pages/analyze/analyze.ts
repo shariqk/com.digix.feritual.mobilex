@@ -5,6 +5,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { MsvisionApiProvider } from '../../providers/msvision-api/msvision-api';
 import { MSVisionApiResult } from '../../providers/msvision-api/msvision-api.model';
 import { FoodApiProvider } from '../../providers/food-api/food-api';
+import { NuitrientSearchResult } from '../../providers/food-api/food-api.model';
 
 @IonicPage()
 @Component({
@@ -17,7 +18,7 @@ export class AnalyzePage {
 
   base64Image : string = null;
   analysis : MSVisionApiResult = null;
-
+  nxInfo : NuitrientSearchResult
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -52,8 +53,9 @@ export class AnalyzePage {
       this.analysis = result;
 
       var tags = this.formatTags(result.description.tags);
-      var nxInfo = await this.nxApi.getNutrientsAsync(tags);
-      console.log(nxInfo);
+      this.nxInfo = await this.nxApi.getNutrientsAsync(tags);
+
+      //console.log(nxInfo);
 
     }
     catch(err) {
@@ -63,17 +65,6 @@ export class AnalyzePage {
       toast.dismiss();
     }
 
-    /*
-    this.msvisionApi.analyzeImageUrl(testImageUrl)
-      .subscribe(
-          result => {
-            //alert(JSON.stringify(result));
-            this.analysis = result;// JSON.stringify(result);
-            toast.dismiss();
-          },
-          err =>{ alert(JSON.stringify(err)); toast.dismiss(); }
-      );
-    */
   }
 
   formatPercentage(num : number) {
@@ -110,8 +101,7 @@ export class AnalyzePage {
       this.analysis = result;
 
       var tags = this.formatTags(result.description.tags);
-      var nxInfo = await this.nxApi.getNutrientsAsync(tags);
-      console.log(nxInfo);
+      this.nxInfo = await this.nxApi.getNutrientsAsync(tags);
 
     }
     catch (err) {
