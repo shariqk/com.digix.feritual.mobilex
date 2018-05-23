@@ -66,8 +66,21 @@ export class FoodApiProvider {
     return result;
   }
 
-  public getNutrients(query : string) : Observable<NuitrientSearchResult> {
-    var url = this.baseUrlV2 + '/v2/natural/nutrients';
+  public getNutrientsAsync(query : string) : Promise<NuitrientSearchResult> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      ctx.getNutrients(query)
+        .subscribe(
+          result => {
+            resolve(result);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  private getNutrients(query : string) : Observable<NuitrientSearchResult> {
+    var url = this.baseUrlV2 + '/natural/nutrients';
 
     let queryJson = JSON.stringify({
       query : query,

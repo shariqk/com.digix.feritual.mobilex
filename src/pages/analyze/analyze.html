@@ -19,33 +19,38 @@
 
 
 <ion-content padding>
+  <div *ngIf="analysis==null" text-center>
+    Click on the  <ion-icon name="camera"></ion-icon> camera icon to capture an image
+    and start the analysis
+  </div>
+
   <div *ngIf="analysis!=null">
-    <h3>{{analysis.description.captions[0].text}}</h3>
+    <h4>{{analysis.description.captions[0].text}}</h4>
 
     <ion-row *ngFor="let r of analysis.categories">
       <ion-col>
-        {{r.name}}
+        {{r.name}}:
       </ion-col>
-      <ion-col>
-        {{r.score}}
+      <ion-col col-8>
+        {{formatPercentage(r.score)}}
       </ion-col>
     </ion-row>
 
     <ion-row *ngFor="let t of analysis.tags">
       <ion-col>
-        {{t.name}}
+        {{t.name}}:
       </ion-col>
-      <ion-col>
-        {{t.confidence}}
+      <ion-col col-8>
+        {{formatPercentage(t.confidence)}}
       </ion-col>
     </ion-row>
 
     <ion-row>
       <ion-col>
-        Tags
+        tags:
       </ion-col>
-      <ion-col>
-        <p [innerHtml]="formatTags(analysis.description.tags)"></p>
+      <ion-col col-8>
+        {{formatTags(analysis.description.tags)}}
       </ion-col>
     </ion-row>
   </div>

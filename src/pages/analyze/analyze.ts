@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { MsvisionApiProvider } from '../../providers/msvision-api/msvision-api';
 import { MSVisionApiResult } from '../../providers/msvision-api/msvision-api.model';
-
+import { FoodApiProvider } from '../../providers/food-api/food-api';
 
 @IonicPage()
 @Component({
@@ -21,6 +21,7 @@ export class AnalyzePage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    public nxApi : FoodApiProvider,
     public toastCtrl: ToastController,
     public msvisionApi : MsvisionApiProvider,
     public camera : Camera) {
@@ -30,19 +31,53 @@ export class AnalyzePage {
     //console.log('ionViewDidLoad AnalyzePage');
   }
 
-  testVisionApi() {
+  async testVisionApi() {
+    let toast = this.toastCtrl.create({
+        message: 'Analyzing image...',
+        position: 'top'
+      });
+
+    var num = Math.floor(Math.random() * 6);
+    if(num<1 || num>6) {
+      num = 1;
+    }
+
     //var testImageJson = '{"url":"http://www.caloriemama.ai/img/examples/Image6.jpeg"}';
-    var testImageUrl = 'http://www.caloriemama.ai/img/examples/Image6.jpeg';
+    var testImageUrl = 'http://www.caloriemama.ai/img/examples/Image' + num + '.jpeg';
     this.base64Image = testImageUrl;
 
+    toast.present();
+    try {
+      var result = await this.msvisionApi.analyzeImageUrlAsync(testImageUrl);
+      this.analysis = result;
+
+      var tags = this.formatTags(result.description.tags);
+      var nxInfo = await this.nxApi.getNutrientsAsync(tags);
+      console.log(nxInfo);
+
+    }
+    catch(err) {
+      alert(JSON.stringify(err));
+    }
+    finally {
+      toast.dismiss();
+    }
+
+    /*
     this.msvisionApi.analyzeImageUrl(testImageUrl)
       .subscribe(
           result => {
             //alert(JSON.stringify(result));
             this.analysis = result;// JSON.stringify(result);
+            toast.dismiss();
           },
-          err => alert(JSON.stringify(err))
+          err =>{ alert(JSON.stringify(err)); toast.dismiss(); }
       );
+    */
+  }
+
+  formatPercentage(num : number) {
+    return Math.floor(num * 100) + '%';
   }
 
   toJSONString(obj : object) {
@@ -54,10 +89,41 @@ export class AnalyzePage {
     for(var t of tags) {
       str += (str.length > 0 ? ', ' : '') + t
     }
+    //console.log('tags: ', str);
     return str;
   }
 
   async takeAndDisplayImage() {
+    let imageData = await this.takePicture();
+    if(imageData == null) { return; }
+
+    let toast = this.toastCtrl.create({
+        message: 'Analyzing image...',
+        position: 'top'
+      });
+    toast.present();
+
+    try {
+      var result = await this.msvisionApi.analyzeAsync(imageData);
+      this.analysis = result;
+
+      var tags = this.formatTags(result.description.tags);
+      var nxInfo = await this.nxApi.getNutrientsAsync(tags);
+      console.log(nxInfo);
+
+    }
+    catch (err) {
+      alert(JSON.stringify(err));
+    }
+    finally {
+      toast.dismiss();
+    }
+
+
+  }
+
+  async takeAndDisplayImage2() {
+    var ctx = this;
     let toast = this.toastCtrl.create({
         message: 'Analyzing image...',
         position: 'top'
