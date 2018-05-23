@@ -1,4 +1,10 @@
 
+export class FxLocationType {
+  public static provider_type_nx = 'nx';
+  public static provider_type_es = 'es';
+
+}
+
 export class FxLocation {
   public id : string;
   public name : string;

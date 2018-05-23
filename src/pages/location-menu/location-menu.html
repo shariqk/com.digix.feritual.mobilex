@@ -2,12 +2,18 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{loc.name}}</ion-title>
+    <ion-title *ngIf="menu!=null">{{menu.location.name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+  <div *ngIf="menu!=null">
+    <ion-item *ngFor="let m of menu.items">
+        <p class="item-name" text-wrap>{{m.name}}</p>
+        <p class="item-description" text-wrap>{{m.description}}</p>
+        <p class="item-detail">{{m.calories}} calories</p>
+    </ion-item>
+  </div>
 </ion-content>

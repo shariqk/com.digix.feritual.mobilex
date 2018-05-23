@@ -5,11 +5,9 @@ import { FoodListComponent } from '../../components/food-list/food-list'
 import { LocationSearchResult, FoodLocation, FoodLocationMenu, FoodSearchResult } from '../../providers/food-api/food-api.model';
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 import { Restaurant, RestaurantMenuNode } from '../../providers/eatstreet-api/eatstreet-api.model';
-import { FxLocation, FxLocationMenu } from '../../providers/models/fxlocation';
+import { FxLocation, FxLocationMenu, FxLocationMenuItem, FxLocationType } from '../../providers/models/fxlocation';
 
 export class FoodSearch {
-  provider_type_nx = 'nx';
-  provider_type_es = 'es';
   results : FxLocationMenu[];
 
   public constructor(
@@ -143,11 +141,11 @@ export class FoodSearch {
         continue;
       }
       var menu : FxLocationMenu = null;
-      if(loc.type==this.provider_type_es) {
+      if(loc.type==FxLocationType.provider_type_es) {
          menu = await ctx.searchEatstreetMenu(ctx, loc, query);
          //console.log('menu', menu);
       }
-      else if(loc.type==this.provider_type_nx) {
+      else if(loc.type==FxLocationType.provider_type_nx) {
           menu = await this.searchNxLocationMenu(ctx, loc, query);
       }
 
@@ -210,7 +208,7 @@ export class FoodSearch {
       fx.name = res.name;
       fx.lat = res.latitude;
       fx.lng = res.longitude;
-      fx.type = this.provider_type_es;
+      fx.type = FxLocationType.provider_type_es;
 
       list.push(fx);
     }
@@ -308,7 +306,7 @@ export class FoodSearch {
         fx.name = loc.name;
         fx.lng = loc.lng;
         fx.lat = loc.lat;
-        fx.type = this.provider_type_nx;
+        fx.type = FxLocationType.provider_type_nx;
 
         list.push(fx);
       }

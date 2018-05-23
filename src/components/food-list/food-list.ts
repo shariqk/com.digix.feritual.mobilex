@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, ToastController, ModalController }
 
 import { FoodLocation, FoodLocationMenu, FoodLocationMenuItem } from '../../providers/food-api/food-api.model';
 import { FoodApiProvider } from '../../providers/food-api/food-api';
-import { FxLocationMenu, FxLocationMenuItem } from '../../pages/food/foodSearch';
+import { FxLocationMenu, FxLocationMenuItem } from '../../providers/models/fxlocation';
 
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 

@@ -7,7 +7,9 @@ import { FoodListComponent } from '../../components/food-list/food-list'
 import { LocationSearchResult, FoodLocation, FoodLocationMenu } from '../../providers/food-api/food-api.model';
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
-import { FoodSearch, FxLocation, FxLocationMenu } from './foodSearch';
+import { FoodSearch } from './foodSearch';
+import { FxLocation, FxLocationMenu } from '../../providers/models/fxlocation';
+
 
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
@@ -40,7 +42,7 @@ export class FoodPage {
   }
 
   ionViewDidLoad() {
-    
+
   }
 
 /*

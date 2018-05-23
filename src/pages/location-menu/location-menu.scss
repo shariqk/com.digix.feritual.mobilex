@@ -1,3 +1,33 @@
 page-location-menu {
 
+    .item-avatar {
+        width:64px;
+        height: 64px;
+    }
+
+    .item-name {
+      //font-size: 10pt;
+      color:black;
+      width: 100%;
+      background: white;
+      padding: 0px;
+      margin: 0px;
+    }
+
+    .item-description {
+      font-size: 9pt;
+      //color:black;
+      width: 100%;
+      background: white;
+      padding: 0px;
+      margin: 0px;
+    }
+
+
+    .item-detail {
+      font-size: 8pt;
+      width: 100%;
+      background: white;
+      position: absolute;
+    }
 }
