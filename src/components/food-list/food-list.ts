@@ -1,8 +1,11 @@
 import { Component, OnChanges, Input} from '@angular/core';
+import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
 
 import { FoodLocation, FoodLocationMenu, FoodLocationMenuItem } from '../../providers/food-api/food-api.model';
 import { FoodApiProvider } from '../../providers/food-api/food-api';
 import { FxLocationMenu, FxLocationMenuItem } from '../../pages/food/foodSearch';
+
+import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 
 @Component({
   selector: 'food-list',
@@ -21,7 +24,9 @@ export class FoodListComponent implements OnChanges {
   expandedView = false;
   expandViewTitle = 'Expand';
 
-  constructor() {
+  constructor(
+    public navParams : NavParams,
+    public navCtrl : NavController) {
   }
 
   switchExpandedView() {
@@ -30,7 +35,13 @@ export class FoodListComponent implements OnChanges {
     //console.log('state: ', this.expandedView, 'title: ', this.expandViewTitle);
   }
 
-
+  navigateToLocationMenu()
+  {
+    this.navCtrl.push(LocationMenuPage,
+      {
+        location : this.menu.location
+      });
+  }
 
   ngOnChanges() {
     //console.log('menu', this.menu);

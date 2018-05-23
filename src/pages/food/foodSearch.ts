@@ -5,7 +5,7 @@ import { FoodListComponent } from '../../components/food-list/food-list'
 import { LocationSearchResult, FoodLocation, FoodLocationMenu, FoodSearchResult } from '../../providers/food-api/food-api.model';
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 import { Restaurant, RestaurantMenuNode } from '../../providers/eatstreet-api/eatstreet-api.model';
-
+import { FxLocation, FxLocationMenu } from '../../providers/models/fxlocation';
 
 export class FoodSearch {
   provider_type_nx = 'nx';
@@ -49,7 +49,7 @@ export class FoodSearch {
       }
       catch {//ignore for now
       }
-      
+
       let nxLocations = await this.getNxLocations(this, lat, lng);
       locations = locations.concat(nxLocations);
       console.log('locations', locations);
@@ -374,24 +374,4 @@ export class DistanceCalculator
   }
 
 
-}
-
-export class FxLocation {
-  public id : string;
-  public name : string;
-  public lat : number;
-  public lng : number;
-  public type : string;
-  public distance : number;
-}
-
-export class FxLocationMenu {
-  public location : FxLocation;
-  public items : FxLocationMenuItem[];
-}
-
-export class FxLocationMenuItem {
-  public name : string;
-  public description : string;
-  public calories : number;
 }
