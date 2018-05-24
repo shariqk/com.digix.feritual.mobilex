@@ -1,24 +1,61 @@
 
 <ion-card>
   <ion-card-header (click)="navigateToLocationMenu()">
-    {{menu.location.name}}
+    <ion-row>
+      <ion-col col-3>
+        <img style='padding:5px;' [src]="menu.location.logoUrl">
+      </ion-col>
+      <ion-col>
+        <ion-row>
+          <ion-col class="loc-title">
+            {{menu.location.name}}
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
   </ion-card-header>
 
   <ion-card-content>
     <div *ngIf="!expandedView">
+      <ion-row *ngFor="let m of topHits">
+        <ion-col col-2>
+          <img [src]="m.photoUrl">
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-col>
+              <p class="item-name" text-wrap>{{m.name}}</p>
+              <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
+              <p *ngIf="m.calories!=null" class="item-detail">{{m.calories}} calories</p>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+      <!--
       <ion-item *ngFor="let m of topHits">
           <p class="item-name" text-wrap>{{m.name}}</p>
           <p class="item-description" text-wrap>{{m.description}}</p>
           <p class="item-detail">{{m.calories}} calories</p>
       </ion-item>
+    -->
     </div>
 
     <div *ngIf="expandedView">
-      <ion-item *ngFor="let m of menu.items">
-          <p class="item-name" text-wrap>{{m.name}}</p>
-          <p class="item-description" text-wrap>{{m.description}}</p>
-          <p class="item-detail">{{m.calories}} calories</p>
-      </ion-item>
+      <ion-row *ngFor="let m of menu.items">
+        <ion-col col-2>
+          <img [src]="m.photoUrl">
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-col>
+              <p class="item-name" text-wrap>{{m.name}}</p>
+              <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
+              <p *ngIf="m.calories!=null" class="item-detail">{{m.calories}} calories</p>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
     </div>
 
     <button *ngIf="menu.items.length>topHitCount" ion-button color="primary" (click)="switchExpandedView()" clear small icon-start>

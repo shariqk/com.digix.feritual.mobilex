@@ -20,10 +20,11 @@ export class GoogleApiProvider {
   public getLocationFromLatLng(lat : number, lng : number) : Promise<GoogleLocation> {
     var ctx = this;
     return new Promise(function(resolve, reject) {
-      let url : string = this.baseUrl + '/json?latlng=' + lat+','+lng
-        + '&key=' + this.apiKey;
-
-      var result = this.http.get(url)
+      let url : string = ctx.baseUrl + '/json?latlng=' + lat+','+lng
+        + '&key=' + ctx.apiKey;
+      //console.log(url);
+      
+      var result = ctx.http.get(url)
         .map(res => <PlaceAddress>res)
         .subscribe(
           places => {

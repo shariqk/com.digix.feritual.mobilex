@@ -9,7 +9,7 @@ import { FoodSearchResult } from '../../providers/food-api/food-api.model';
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 import { RestaurantMenuNode } from '../../providers/eatstreet-api/eatstreet-api.model';
 
-import { FxLocation, FxLocationMenu, FxLocationMenuItem, FxLocationType } from '../../providers/models/fxlocation';
+import { FxLocation, FxLocationMenu, FxLocationMenuItem, FxLocationType, FxIcons } from '../../providers/models/fxlocation';
 import { FoodItem } from '../../providers/food-api/food-api.model';
 
 @IonicPage()
@@ -44,14 +44,14 @@ export class LocationMenuPage {
     let m = new FxLocationMenu();
     m.location = loc;
     m.items = [];
-
     for(var category of menu) {
       for(var item of category.items) {
           let i = new FxLocationMenuItem();
           i.calories = -1; // estimated
           i.name = item.name;
           i.description = item.description;
-          //console.log('item', i);
+          i.photoUrl = FxIcons.getIcon(i.name);
+          console.log('item', i);
 
           m.items.push(i);
       }
@@ -75,12 +75,13 @@ export class LocationMenuPage {
       //console.log('processing: ' + i);
       i.calories = item.nf_calories;
       i.name = item.food_name;
-      i.photoUrl = item.photo.thumb;
+      i.photoUrl = (item.photo.thumb == null) ? FxIcons.generic_icon_url : item.photo.thumb;
+      //console.log(i);
 
       m.items.push(i);
     }
 
-    console.log('resolving to m: ' + m);
+    //console.log('resolving to m: ' + m);
     return m;
   }
 

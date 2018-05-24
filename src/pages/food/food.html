@@ -1,7 +1,7 @@
 
 <ion-content>
     <ion-card (click)='addressCardClicked($event)'>
-      <ion-card-content>
+      <ion-card-content text-nowrap>
         {{currentLocation.address}}
       </ion-card-content>
     </ion-card>
@@ -20,10 +20,10 @@
 
     <div *ngIf="this.locations!=null && this.results==null">
         <ion-row *ngFor="let loc of locations" (click)="navigateToLocationMenu(loc)">
-          <ion-col col-2>
-            <img [src]="loc.logoUrl">
+          <ion-col col-3>
+            <img style='padding:5px;' [src]="loc.logoUrl">
           </ion-col>
-          <ion-col col-10>
+          <ion-col>
             <ion-row>
               <ion-col class="loc-title">
                 {{loc.name}}
