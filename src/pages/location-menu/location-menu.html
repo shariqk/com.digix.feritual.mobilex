@@ -10,10 +10,19 @@
 
 <ion-content padding>
   <div *ngIf="menu!=null">
-    <ion-item *ngFor="let m of menu.items">
-        <p class="item-name" text-wrap>{{m.name}}</p>
-        <p class="item-description" text-wrap>{{m.description}}</p>
-        <p class="item-detail">{{m.calories}} calories</p>
-    </ion-item>
+    <ion-row *ngFor="let m of menu.items">
+      <ion-col col-2>
+        <img [src]="m.logoUrl">
+      </ion-col>
+      <ion-col>
+        <ion-row>
+          <ion-col>
+            <p class="item-name" text-wrap>{{m.name}}</p>
+            <p class="item-description" text-wrap>{{m.description}}</p>
+            <p class="item-detail">{{m.calories}} calories</p>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
   </div>
 </ion-content>

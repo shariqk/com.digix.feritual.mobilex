@@ -13,6 +13,7 @@ export class FxLocation {
   public type : string;
   public distance : number;
   public logoUrl : string;
+  public description : string;
 }
 
 export class FxLocationMenu {
@@ -24,4 +25,5 @@ export class FxLocationMenuItem {
   public name : string;
   public description : string;
   public calories : number;
+  public photoUrl : string;
 }

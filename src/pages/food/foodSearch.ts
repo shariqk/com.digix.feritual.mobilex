@@ -304,7 +304,8 @@ export class FoodSearch {
         fx.lat = loc.lat;
         fx.type = FxLocationType.provider_type_nx;
         fx.logoUrl = 'https://www.shareicon.net/data/256x256/2017/06/21/887479_heart_512x512.png';
-
+        fx.description = loc.guide;
+        
         list.push(fx);
       }
 

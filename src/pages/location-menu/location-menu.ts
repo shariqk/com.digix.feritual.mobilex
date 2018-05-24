@@ -75,12 +75,12 @@ export class LocationMenuPage {
       //console.log('processing: ' + i);
       i.calories = item.nf_calories;
       i.name = item.food_name;
-      //i.description = item.;
+      i.photoUrl = item.photo.thumb;
 
       m.items.push(i);
     }
 
-    //console.log('resolving to m: ' + m);
+    console.log('resolving to m: ' + m);
     return m;
   }
 

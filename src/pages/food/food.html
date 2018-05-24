@@ -31,6 +31,7 @@
             </ion-row>
             <ion-row>
               <ion-col class="loc-details">
+                <p *ngIf="loc.description!=null" [innerHtml]="loc.description"></p>
                 {{formatDistance(loc.distance)}}
               </ion-col>
             </ion-row>
