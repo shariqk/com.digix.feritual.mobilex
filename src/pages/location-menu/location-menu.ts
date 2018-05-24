@@ -39,7 +39,7 @@ export class LocationMenuPage {
     m.location = loc;
     m.items = [];
 
-    for(var item of menu.branded) {
+    for(var item of menu.items()) {
       let i = new FxLocationMenuItem();
       //console.log('processing: ' + i);
       i.calories = item.nf_calories;

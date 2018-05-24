@@ -1,9 +1,18 @@
 
 
-export interface FoodSearchResult {
-  branded : FoodItem[];
-  self : FoodItem[];
-  common : FoodItem[];
+export class FoodSearchResult {
+  public branded : FoodItem[];
+  public self : FoodItem[];
+  public common : FoodItem[];
+
+  public items() : FoodItem[] {
+    var list :FoodItem[] = [];
+    if(this.branded!=null) { list = list.concat(this.branded); }
+    if(this.common!=null) { list = list.concat(this.common); }
+    if(this.self!=null) { list = list.concat(this.self); }
+
+    return list;
+  }
 }
 
 export class FoodItem {
