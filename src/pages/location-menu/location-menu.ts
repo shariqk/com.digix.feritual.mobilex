@@ -35,7 +35,7 @@ export class LocationMenuPage {
       this.menu = this.fromNxToFxMenu(loc, nxMenu);
     }
     else if(loc.type==FxLocationType.provider_type_es) {
-      let esMenu = await this.esApi.getRestaurantMenu(loc.id);
+      let esMenu = await this.esApi.getRestaurantMenuAsync(loc.id);
       this.menu = this.fromEsToFxMenu(loc, esMenu);
     }
   }
