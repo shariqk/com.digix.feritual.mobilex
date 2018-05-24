@@ -12,6 +12,7 @@ export class FxLocation {
   public lng : number;
   public type : string;
   public distance : number;
+  public logoUrl : string;
 }
 
 export class FxLocationMenu {

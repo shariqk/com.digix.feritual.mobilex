@@ -41,16 +41,11 @@ export class FoodSearch {
   public getLocationsAsync = async function(lat : number, lng : number) : Promise<FxLocation[]> {
     try {
       var locations : FxLocation[] = [];
-      try {
-        let esLocations = await this.getEatstreetRestaurants(this, lat, lng);
-        locations = locations.concat(esLocations);
-      }
-      catch {//ignore for now
-      }
+      let esLocations = await this.getEatstreetRestaurants(this, lat, lng);
+      locations = locations.concat(esLocations);
 
       let nxLocations = await this.getNxLocations(this, lat, lng);
       locations = locations.concat(nxLocations);
-      console.log('locations', locations);
 
       var obj = new DistanceCalculator();
       obj.calculateDistance(lat, lng, locations);
@@ -209,6 +204,7 @@ export class FoodSearch {
       fx.lat = res.latitude;
       fx.lng = res.longitude;
       fx.type = FxLocationType.provider_type_es;
+      fx.logoUrl = res.logoUrl;
 
       list.push(fx);
     }
@@ -282,7 +278,7 @@ export class FoodSearch {
     return new Promise(function(resolve, reject) {
       ctx.nxApi.getLocations(lat, lng)
         .subscribe(data => {
-          //console.log('getNxLocations.data', data);
+          console.log('getNxLocations.data', data);
           var result : LocationSearchResult = data;
           var list = ctx.fromNxToFx(result.locations);
           //ctx.locations = ctx.locations.concat(list);
@@ -307,6 +303,7 @@ export class FoodSearch {
         fx.lng = loc.lng;
         fx.lat = loc.lat;
         fx.type = FxLocationType.provider_type_nx;
+        fx.logoUrl = 'https://www.shareicon.net/data/256x256/2017/06/21/887479_heart_512x512.png';
 
         list.push(fx);
       }

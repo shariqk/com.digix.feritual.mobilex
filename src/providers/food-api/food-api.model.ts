@@ -64,15 +64,12 @@ export class FoodLocation
   public phone : string;
   public guide : string;
 
-  //public string[] guide { get; set; }
   public id : string;
   public lat : number;
   public lng : number;
 
   public distance_km : number;
   public distance : number;
-
-  //public LocationMenu[] hits { get; set; }
 }
 
 export class FoodLocationMenu

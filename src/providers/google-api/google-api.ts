@@ -16,40 +16,33 @@ export class GoogleApiProvider {
   apiKey = 'AIzaSyAr4n5frpt323W9RRzxjpEgxhQbDUzVzV0';
   baseUrl = 'https://maps.googleapis.com/maps/api/geocode';
 
-  private reverseGeocodeToPlace(lat : number, lng : number) : Observable<PlaceAddress> {
-      //let url : string = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + lat+','+lng
+
+  public getLocationFromLatLng(lat : number, lng : number) : Promise<GoogleLocation> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
       let url : string = this.baseUrl + '/json?latlng=' + lat+','+lng
         + '&key=' + this.apiKey;
-      //console.log('sending', '[' + new Date().toString() + '] ' + url);
 
       var result = this.http.get(url)
-        .map(res => <PlaceAddress>res);
-
-      return result;
-    }
-
-    public getLocationFromLatLng(lat : number, lng : number) : Promise<GoogleLocation> {
-      var ctx = this;
-      return new Promise(function(resolve, reject) {
-        ctx.reverseGeocodeToPlace(lat, lng)
-          .subscribe(
-            places => {
-              if(places.status.toLowerCase()=='ok' && places.results.length>0) {
-                var r = places.results[0];
-                let loc = new GoogleLocation();
-                loc.address = r.formatted_address;
-                loc.lat = lat;
-                loc.lng = lng;
-                resolve(loc)
-              }
-              else {
-                resolve(null);
-              }
-            },
-            error => reject(error)
-          );
-      });
-    }
+        .map(res => <PlaceAddress>res)
+        .subscribe(
+          places => {
+            if(places.status.toLowerCase()=='ok' && places.results.length>0) {
+              var r = places.results[0];
+              let loc = new GoogleLocation();
+              loc.address = r.formatted_address;
+              loc.lat = lat;
+              loc.lng = lng;
+              resolve(loc)
+            }
+            else {
+              resolve(null);
+            }
+          },
+          error => { console.log('getLocationFromLatLng', error); reject(error); }
+        );
+    });
+  }
 
 
   public getLatLng(address : string) : Observable<LatLngSearchResult> {

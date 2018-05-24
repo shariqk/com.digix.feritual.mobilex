@@ -79,6 +79,7 @@ export class AddressPickerPage {
       }
     }
     catch (err) {
+      console.log('addressSelected', err);
       alert(JSON.stringify(err));
     }
     finally {
@@ -88,9 +89,9 @@ export class AddressPickerPage {
 
   async determineLocation() : Promise<GoogleLocation> {
     var pos = await this.geolocation.getCurrentPosition({timeout: 20000, enableHighAccuracy: false});
-    console.log('current position', pos);
+    //console.log('current position', pos);
     let loc = await this.googleApi.getLocationFromLatLng(pos.coords.latitude, pos.coords.longitude);
-    console.log('current position', loc);
+    //console.log('current position', loc);
 
     return loc;
   }
