@@ -5,11 +5,9 @@ import { FoodListComponent } from '../../components/food-list/food-list'
 import { LocationSearchResult, FoodLocation, FoodLocationMenu, FoodSearchResult } from '../../providers/food-api/food-api.model';
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 import { Restaurant, RestaurantMenuNode } from '../../providers/eatstreet-api/eatstreet-api.model';
-
+import { FxLocation, FxLocationMenu, FxLocationMenuItem, FxLocationType, FxIcons } from '../../providers/models/fxlocation';
 
 export class FoodSearch {
-  provider_type_nx = 'nx';
-  provider_type_es = 'es';
   results : FxLocationMenu[];
 
   public constructor(
@@ -17,42 +15,16 @@ export class FoodSearch {
     public eatstreetApi : EatstreetApiProvider)
   {  }
 
-  //public locations : FxLocation[];
-  //public menus : FxLocationMenu[];
-  //public isReady = false;
 
-  /*
-  public initialize = function(lat : number, lng : number) : Promise<FoodSearch> {
-    let ctx = this;
-    return new Promise(function(resolve, reject) {
-      ctx.locations = [];
-      ctx.getEatstreetRestaurants(ctx, lat, lng)
-        .then(function() {
-          ctx.getNxLocations(ctx, lat, lng)
-        })
-        .then(function() {
-          ctx.isReady = true;
-          console.log('ctx', ctx);
-          resolve(ctx);
-        })
-        .catch(err => reject(err));
-    });
-  }
-  */
 
   public getLocationsAsync = async function(lat : number, lng : number) : Promise<FxLocation[]> {
     try {
       var locations : FxLocation[] = [];
-      try {
-        let esLocations = await this.getEatstreetRestaurants(this, lat, lng);
-        locations = locations.concat(esLocations);
-      }
-      catch {//ignore for now
-      }
-      
+      let esLocations = await this.getEatstreetRestaurants(this, lat, lng);
+      locations = locations.concat(esLocations);
+
       let nxLocations = await this.getNxLocations(this, lat, lng);
       locations = locations.concat(nxLocations);
-      console.log('locations', locations);
 
       var obj = new DistanceCalculator();
       obj.calculateDistance(lat, lng, locations);
@@ -84,51 +56,6 @@ export class FoodSearch {
         })
       });
     }
-          /*
-      ctx.getEatstreetRestaurants(ctx, lat, lng)
-        .then(esLocations => {
-          locations = locations.concat(esLocations);
-          ctx.getNxLocations(ctx, lat, lng)
-            .then(nxLocations => {
-              locations = locations.concat(nxLocations);
-              //console.log('esLocations', esLocations);
-              //console.log('nxLocations', nxLocations);
-              var obj = new DistanceCalculator();
-              obj.calculateDistance(lat, lng, locations);
-              locations = obj.sortByDistance(locations);
-
-              //console.log('locations', locations);
-              resolve(locations);
-            });
-          }).catch(err => {
-            console.log(err);
-            reject(err);
-          });
-      })
-*/
-
-    /*
-    try {
-      //alert('in gelocations');
-      var locations : FxLocation[] = [];
-      let esLocations = await this.getEatstreetRestaurants(this, lat, lng);
-      locations = locations.concat(esLocations);
-
-      let nxLocations = await this.getNxLocations(this, lat, lng);
-      locations = locations.concat(nxLocations);
-      console.log('locations', locations);
-
-    //  var obj = new DistanceCalculator();
-    //  obj.calculateDistance(lat, lng, locations);
-    //  obj.sortByDistance(locations);
-
-      return locations;
-
-    } catch (err) {
-      alert(err);
-      console.log(err);
-    }
-    */
 
 
   public search = async function(locations: FxLocation[], query : string) : Promise<FxLocationMenu[]> {
@@ -143,11 +70,11 @@ export class FoodSearch {
         continue;
       }
       var menu : FxLocationMenu = null;
-      if(loc.type==this.provider_type_es) {
+      if(loc.type==FxLocationType.provider_type_es) {
          menu = await ctx.searchEatstreetMenu(ctx, loc, query);
          //console.log('menu', menu);
       }
-      else if(loc.type==this.provider_type_nx) {
+      else if(loc.type==FxLocationType.provider_type_nx) {
           menu = await this.searchNxLocationMenu(ctx, loc, query);
       }
 
@@ -210,7 +137,8 @@ export class FoodSearch {
       fx.name = res.name;
       fx.lat = res.latitude;
       fx.lng = res.longitude;
-      fx.type = this.provider_type_es;
+      fx.type = FxLocationType.provider_type_es;
+      fx.logoUrl = res.logoUrl;
 
       list.push(fx);
     }
@@ -236,6 +164,8 @@ export class FoodSearch {
           i.calories = -1; // estimated
           i.name = item.name;
           i.description = item.description;
+          i.photoUrl = FxIcons.generic_icon_url;
+
           //console.log('item', i);
 
           m.items.push(i);
@@ -272,6 +202,7 @@ export class FoodSearch {
       i.calories = item.fields.nf_calories;
       i.name = item.fields.item_name;
       i.description = item.fields.item_description;
+      i.photoUrl = FxIcons.generic_icon_url;
 
       m.items.push(i);
     }
@@ -284,7 +215,7 @@ export class FoodSearch {
     return new Promise(function(resolve, reject) {
       ctx.nxApi.getLocations(lat, lng)
         .subscribe(data => {
-          //console.log('getNxLocations.data', data);
+          console.log('getNxLocations.data', data);
           var result : LocationSearchResult = data;
           var list = ctx.fromNxToFx(result.locations);
           //ctx.locations = ctx.locations.concat(list);
@@ -308,7 +239,9 @@ export class FoodSearch {
         fx.name = loc.name;
         fx.lng = loc.lng;
         fx.lat = loc.lat;
-        fx.type = this.provider_type_nx;
+        fx.type = FxLocationType.provider_type_nx;
+        fx.logoUrl = FxIcons.getIcon(fx.name); // 'https://www.shareicon.net/data/256x256/2017/06/21/887479_heart_512x512.png';
+        //fx.description = loc.guide;
 
         list.push(fx);
       }
@@ -374,24 +307,4 @@ export class DistanceCalculator
   }
 
 
-}
-
-export class FxLocation {
-  public id : string;
-  public name : string;
-  public lat : number;
-  public lng : number;
-  public type : string;
-  public distance : number;
-}
-
-export class FxLocationMenu {
-  public location : FxLocation;
-  public items : FxLocationMenuItem[];
-}
-
-export class FxLocationMenuItem {
-  public name : string;
-  public description : string;
-  public calories : number;
 }

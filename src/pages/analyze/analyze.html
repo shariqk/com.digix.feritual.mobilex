@@ -1,20 +1,62 @@
 
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>analyze</ion-title>
-  </ion-navbar>
+  <ion-toolbar>
+    <ion-title>Analyze</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="takeAndDisplayImage()">
+        <ion-icon large name="camera"></ion-icon>
+      </button>
+
+      <button ion-button icon-only (click)="testVisionApi()">
+        <ion-icon large name="restaurant"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
 
 </ion-header>
 
 
 <ion-content padding>
-  <button ion-button (click)="takeAndDisplayImage()">Take Picture</button>
-  <button ion-button (click)="testVisionApi()">Test Vision Api</button>
+  <div *ngIf="analysis==null" text-center>
+    Click on the  <ion-icon name="camera"></ion-icon> camera icon to capture an image
+    and start the analysis
+  </div>
 
-  <img [src]="base64Image" style="width:50%;" *ngIf="base64Image!=null" />
+  <div *ngIf="analysis!=null">
+    <h4>{{analysis.description.captions[0].text}}</h4>
 
-  <p [innerHtml]="analysis" class='item-analysis' *ngIf="analysis!=null">
+    <ion-row *ngFor="let r of analysis.categories">
+      <ion-col>
+        {{r.name}}:
+      </ion-col>
+      <ion-col col-8>
+        {{formatPercentage(r.score)}}
+      </ion-col>
+    </ion-row>
 
-  </p>
+    <ion-row *ngFor="let t of analysis.tags">
+      <ion-col>
+        {{t.name}}:
+      </ion-col>
+      <ion-col col-8>
+        {{formatPercentage(t.confidence)}}
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        tags:
+      </ion-col>
+      <ion-col col-8>
+        {{formatTags(analysis.description.tags)}}
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <img [src]="base64Image" *ngIf="base64Image!=null" />
+
+  <p [innerHtml]="toJSONString(analysis)" class='item-analysis' *ngIf="analysis!=null"></p>
+  <p [innerHtml]="toJSONString(nxInfo)" class='item-analysis' *ngIf="nxInfo!=null"></p>
 </ion-content>

@@ -1,9 +1,18 @@
 
 
-export interface FoodSearchResult {
-  branded : FoodItem[];
-  self : FoodItem[];
-  common : FoodItem[];
+export class FoodSearchResult {
+  public branded : FoodItem[];
+  public self : FoodItem[];
+  public common : FoodItem[];
+
+  public items() : FoodItem[] {
+    var list :FoodItem[] = [];
+    if(this.branded!=null) { list = list.concat(this.branded); }
+    if(this.common!=null) { list = list.concat(this.common); }
+    if(this.self!=null) { list = list.concat(this.self); }
+
+    return list;
+  }
 }
 
 export class FoodItem {
@@ -55,15 +64,12 @@ export class FoodLocation
   public phone : string;
   public guide : string;
 
-  //public string[] guide { get; set; }
   public id : string;
   public lat : number;
   public lng : number;
 
   public distance_km : number;
   public distance : number;
-
-  //public LocationMenu[] hits { get; set; }
 }
 
 export class FoodLocationMenu
@@ -120,4 +126,74 @@ export class LocationMenuItemFields {
   public allergen_contains_tree_nuts : boolean;
   public allergen_contains_peanuts : boolean;
   public allergen_contains_gluten : boolean;
+}
+
+export interface NuitrientSearchResult {
+    foods: Food[];
+}
+
+export interface Food {
+    food_name:             string;
+    brand_name:            null;
+    serving_qty:           number;
+    serving_unit:          string;
+    serving_weight_grams:  number;
+    nf_calories:           number;
+    nf_total_fat:          number;
+    nf_saturated_fat:      number;
+    nf_cholesterol:        number;
+    nf_sodium:             number;
+    nf_total_carbohydrate: number;
+    nf_dietary_fiber:      number;
+    nf_sugars:             number;
+    nf_protein:            number;
+    nf_potassium:          number;
+    nf_p:                  number;
+    full_nutrients:        FullNutrient[];
+    nix_brand_name:        null;
+    nix_brand_id:          null;
+    nix_item_name:         null;
+    nix_item_id:           null;
+    upc:                   null;
+    consumed_at:           string;
+    metadata:              Metadata;
+    source:                number;
+    ndb_no:                number;
+    tags:                  Tags;
+    alt_measures:          AltMeasure[];
+    lat:                   null;
+    lng:                   null;
+    meal_type:             number;
+    photo:                 Photo;
+    sub_recipe:            null;
+}
+
+export interface AltMeasure {
+    serving_weight: number;
+    measure:        string;
+    seq:            number | null;
+    qty:            number;
+}
+
+export interface FullNutrient {
+    attr_id: number;
+    value:   number;
+}
+
+export interface Metadata {
+    is_raw_food: boolean;
+}
+
+export interface Photo {
+    thumb:            string;
+    highres:          string;
+    is_user_uploaded: boolean;
+}
+
+export interface Tags {
+    item:       string;
+    measure:    null;
+    quantity:   string;
+    food_group: number;
+    tag_id:     number;
 }

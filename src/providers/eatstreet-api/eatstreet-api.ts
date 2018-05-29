@@ -36,6 +36,17 @@ export class EatstreetApiProvider {
     return result;
   }
 
-
+  public getRestaurantMenuAsync(restaurantApiKey : string) : Promise<RestaurantMenuNode[]> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      ctx.getRestaurantMenu(restaurantApiKey)
+        .subscribe(
+          result => {
+            resolve(result);
+          },
+          error => reject(error)
+        );
+    });
+  }
 
 }

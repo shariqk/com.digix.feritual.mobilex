@@ -5,7 +5,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 
-import { FoodSearchResult, LocationSearchResult, FoodLocationMenu } from './food-api.model';
+import { FoodSearchResult, LocationSearchResult, FoodLocationMenu, NuitrientSearchResult } from './food-api.model';
 
 @Injectable()
 export class FoodApiProvider {
@@ -41,13 +41,37 @@ export class FoodApiProvider {
     return result;
   }
 
-  public searchForFood(brand_ids : string[], query : string) : Observable<FoodSearchResult> {
+  public searchForFoodV2(brand_ids : string[], query : string) : Observable<FoodSearchResult> {
     var url = this.baseUrlV2 + '/search/instant?detailed=1&branded=1&branded_type=1' +
       '&query=' + query;
     for(var b of brand_ids) {
       url += "&brand_ids=" + b;
     }
     console.log('searchForFood', url);
+
+    var result = this.http.get(url, { headers: this.getRequestHeaders() })
+      .map(res => <FoodSearchResult>res);
+
+    return result;
+  }
+
+  public getRestaurantMenuV2Async(restaurant_name : string) : Promise<FoodSearchResult> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      ctx.getRestaurantMenuV2(restaurant_name)
+        .subscribe(
+          result => {
+            resolve(result);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  private getRestaurantMenuV2(restaurant_name : string) : Observable<FoodSearchResult> {
+    var url = this.baseUrlV2 + '/search/instant?detailed=1&branded=1&branded_type=1' +
+      '&query=' + restaurant_name;
+    console.log('getRestaurantMenuV2', url);
 
     var result = this.http.get(url, { headers: this.getRequestHeaders() })
       .map(res => <FoodSearchResult>res);
@@ -62,6 +86,33 @@ export class FoodApiProvider {
 
     var result = this.http.post(url, queryJson, { headers: this.getRequestHeaders() })
       .map(res => <FoodLocationMenu>res);
+
+    return result;
+  }
+
+  public getNutrientsAsync(query : string) : Promise<NuitrientSearchResult> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      ctx.getNutrients(query)
+        .subscribe(
+          result => {
+            resolve(result);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  private getNutrients(query : string) : Observable<NuitrientSearchResult> {
+    var url = this.baseUrlV2 + '/natural/nutrients';
+
+    let queryJson = JSON.stringify({
+      query : query,
+      timezone: "US/Eastern"
+    });
+
+    var result = this.http.post(url, queryJson, { headers: this.getRequestHeaders() })
+      .map(res => <NuitrientSearchResult>res);
 
     return result;
   }

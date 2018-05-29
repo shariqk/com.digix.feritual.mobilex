@@ -1,17 +1,8 @@
 
-<ion-header>
-  <ion-navbar>
-    <ion-title>Food</ion-title>
-  </ion-navbar>
-</ion-header>
-
-
 <ion-content>
-  <!--<button  *ngIf="locations==null" ion-button (click)="initialize()">Start</button>
--->
     <ion-card (click)='addressCardClicked($event)'>
-      <ion-card-content>
-        Try "New York"
+      <ion-card-content text-nowrap>
+        {{currentLocation.address}}
       </ion-card-content>
     </ion-card>
 
@@ -25,5 +16,26 @@
 
     <div *ngIf="this.results!=null">
       <food-list *ngFor="let r of results" [menu]="r"></food-list>
+    </div>
+
+    <div *ngIf="this.locations!=null && this.results==null">
+        <ion-row *ngFor="let loc of locations" (click)="navigateToLocationMenu(loc)">
+          <ion-col col-3>
+            <img style='padding:5px;' [src]="loc.logoUrl">
+          </ion-col>
+          <ion-col>
+            <ion-row>
+              <ion-col class="loc-title">
+                {{loc.name}}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="loc-details">
+                <p *ngIf="loc.description!=null" [innerHtml]="loc.description"></p>
+                {{formatDistance(loc.distance)}}
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
     </div>
 </ion-content>

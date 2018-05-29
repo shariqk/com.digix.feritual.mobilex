@@ -14,12 +14,25 @@ export class MsvisionApiProvider {
   constructor(public http: HttpClient) {
   }
 
-  public analyzeImageUrl(imageUrl : string) : Observable<MSVisionApiResult> {
+  public analyzeImageUrlAsync(imageUrl : string) : Promise<MSVisionApiResult> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      ctx.analyzeImageUrl(imageUrl)
+        .subscribe(
+          result => {
+            resolve(result);
+          },
+          error => reject(error)
+        );
+    });
+  }
+
+  private analyzeImageUrl(imageUrl : string) : Observable<MSVisionApiResult> {
     var url = 'https://eastus.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Tags,Categories,Description&language=en';
 
     var postData = '{"url":"' + imageUrl + '"}';
     //var postData = '{"url":"http://www.caloriemama.ai/img/examples/Image6.jpeg"}';
-    
+
     var headers = new HttpHeaders();
     headers = headers
       .set('Ocp-Apim-Subscription-Key', this.subcriptionKey)
@@ -30,6 +43,19 @@ export class MsvisionApiProvider {
       .map(res => <MSVisionApiResult>res);
 
     return result;
+  }
+
+  public analyzeAsync(query : string) : Promise<MSVisionApiResult> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      ctx.analyze(query)
+        .subscribe(
+          result => {
+            resolve(result);
+          },
+          error => reject(error)
+        );
+    });
   }
 
   public analyze(base64Image : string) : Observable<MSVisionApiResult> {
