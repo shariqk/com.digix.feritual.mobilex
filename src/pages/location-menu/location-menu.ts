@@ -9,8 +9,12 @@ import { FoodSearchResult } from '../../providers/food-api/food-api.model';
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 import { RestaurantMenuNode } from '../../providers/eatstreet-api/eatstreet-api.model';
 
-import { FxLocation, FxLocationMenu, FxLocationMenuItem, FxLocationType, FxIcons } from '../../providers/models/fxlocation';
+//import { FxLocation, FxLocationMenu, FxLocationMenuItem, FxLocationType, FxIcons } from '../../providers/models/fxlocation';
 import { FoodItem } from '../../providers/food-api/food-api.model';
+
+import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
+import { FxLocation, FxLocationMenu, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
+
 
 @IonicPage()
 @Component({
@@ -20,15 +24,17 @@ import { FoodItem } from '../../providers/food-api/food-api.model';
 export class LocationMenuPage {
 
   menu : FxLocationMenu;
+  location : FxLocation;
 
   constructor(public navCtrl: NavController,
-    public nxApi : FoodApiProvider,
-    public esApi : EatstreetApiProvider,
+    //public nxApi : FoodApiProvider,
+    private ferApi : FeritualApiProvider,
+    //public esApi : EatstreetApiProvider,
     public navParams: NavParams) {
-
   }
 
   async initialize(loc : FxLocation) {
+    /*
     if(loc.type==FxLocationType.provider_type_nx)
     {
       let nxMenu = await this.nxApi.getRestaurantMenuV2Async(loc.name);
@@ -38,8 +44,15 @@ export class LocationMenuPage {
       let esMenu = await this.esApi.getRestaurantMenuAsync(loc.id);
       this.menu = this.fromEsToFxMenu(loc, esMenu);
     }
+    */
+
+    let menus = await this.ferApi.getLocationMenuAsync(loc.id, loc.type);
+    this.menu = menus[0];
+    this.location = loc;
+    //console.log('location.menu', this.menu);
   }
 
+  /*
   fromEsToFxMenu(loc: FxLocation, menu: RestaurantMenuNode[]) : FxLocationMenu {
     let m = new FxLocationMenu();
     m.location = loc;
@@ -84,6 +97,7 @@ export class LocationMenuPage {
     //console.log('resolving to m: ' + m);
     return m;
   }
+  */
 
   ionViewDidLoad() {
     if(this.menu==null) {

@@ -2,7 +2,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title *ngIf="menu!=null">{{menu.location.name}}</ion-title>
+    <ion-title *ngIf="menu!=null">{{location.name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -10,19 +10,27 @@
 
 <ion-content padding>
   <div *ngIf="menu!=null">
-    <ion-row *ngFor="let m of menu.items">
-      <ion-col col-2>
-        <img [src]="m.photoUrl">
-      </ion-col>
-      <ion-col>
-        <ion-row>
-          <ion-col>
-            <p class="item-name" text-wrap>{{m.name}}</p>
-            <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
-            <p *ngIf="m.calories!=null" class="item-detail">{{m.calories}} calories</p>
-          </ion-col>
-        </ion-row>
-      </ion-col>
-    </ion-row>
+    <div *ngFor="let c of menu.categories">
+      <ion-row>
+        <ion-col>
+          <h4>{{c.name}}</h4>
+        </ion-col>
+      </ion-row>
+
+      <ion-row *ngFor="let m of c.items">
+        <ion-col col-2>
+          <img [src]="m.photoUrl">
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-col>
+              <p class="item-name" text-wrap>{{m.name}}</p>
+              <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
+              <p *ngIf="m.calories!=null" class="item-detail">{{m.calories}} calories</p>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
   </div>
 </ion-content>

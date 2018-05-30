@@ -20,6 +20,7 @@ import { FoodApiProvider } from '../providers/food-api/food-api';
 import { EatstreetApiProvider } from '../providers/eatstreet-api/eatstreet-api';
 import { MsvisionApiProvider } from '../providers/msvision-api/msvision-api';
 import { GoogleApiProvider } from '../providers/google-api/google-api';
+import { FeritualApiProvider } from '../providers/feritual-api/feritual-api';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { GoogleApiProvider } from '../providers/google-api/google-api';
     Geolocation,
     EatstreetApiProvider,
     MsvisionApiProvider,
-    GoogleApiProvider
+    GoogleApiProvider,
+    FeritualApiProvider
   ]
 })
 export class AppModule {}

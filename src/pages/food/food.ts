@@ -8,8 +8,11 @@ import { LocationSearchResult, FoodLocation, FoodLocationMenu } from '../../prov
 import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
 import { FoodSearch } from './foodSearch';
-import { FxLocation, FxLocationMenu } from '../../providers/models/fxlocation';
+//import { FxLocation, FxLocationMenu } from '../../providers/models/fxlocation';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
+
+import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
+import { FxLocation, FxLocationMenu } from '../../providers/feritual-api/feritual-api.model';
 
 
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
@@ -28,6 +31,7 @@ export class FoodPage {
   placeholderText = 'name of food or cuisine (say Thai or Burger)';
   currentLocation : GoogleLocation;
   locations : FxLocation[];
+  radius = 5;
 
   constructor(public navCtrl: NavController,
     public modalCtrl : ModalController,
@@ -35,6 +39,7 @@ export class FoodPage {
     public toastCtrl: ToastController,
     private geolocation: Geolocation,
     private googleApi : GoogleApiProvider,
+    private ferApi : FeritualApiProvider,
     private eatstreetApi : EatstreetApiProvider,
     public api : FoodApiProvider) {
 
@@ -71,8 +76,10 @@ export class FoodPage {
     toast.present();
 
     try {
-      let search = new FoodSearch(this.api, this.eatstreetApi);
-      let locations = await search.getLocationsAsync(loc.lat, loc.lng);
+      //let search = new FoodSearch(this.api, this.eatstreetApi);
+      //let locations = await search.getLocationsAsync(loc.lat, loc.lng);
+
+      let locations = await this.ferApi.getLocationsAsync(loc.lat, loc.lng, this.radius);
 
       this.currentLocation = loc;
       this.locations = locations;
@@ -119,8 +126,19 @@ export class FoodPage {
       });
     toast.present();
 
-    var search = new FoodSearch(this.api, this.eatstreetApi);
-    this.results = await search.search(this.locations, this.searchTerm);
+    try {
+      this.results = await this.ferApi.searchLocationMenuAsync(this.locations, this.searchTerm);
+    }
+    catch(err) {
+      alert('error in getting locations: ' + JSON.stringify(err));
+    }
+    finally {
+      toast.dismiss();
+    }
+
+
+    //var search = new FoodSearch(this.api, this.eatstreetApi);
+    //this.results = await search.search(this.locations, this.searchTerm);
     //console.log(this.results);
     toast.dismiss();
   }
