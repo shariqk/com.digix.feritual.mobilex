@@ -12,8 +12,8 @@ import { FoodSearch } from './foodSearch';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
-import { FxLocation, FxLocationMenu } from '../../providers/feritual-api/feritual-api.model';
-
+import { FxLocation, FxLocationMenu, FxIcons } from '../../providers/feritual-api/feritual-api.model';
+import { DistanceCalculator } from '../../providers/feritual-api/feritual-helper';
 
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
@@ -80,6 +80,17 @@ export class FoodPage {
       //let locations = await search.getLocationsAsync(loc.lat, loc.lng);
 
       let locations = await this.ferApi.getLocationsAsync(loc.lat, loc.lng, this.radius);
+      //console.log(this.locations);
+
+      var obj = new DistanceCalculator();
+      obj.calculateDistance(loc.lat, loc.lng, locations);
+      obj.sortByDistance(locations);
+
+      for(var l of locations) {
+        if(l.logoUrl==null) {
+          l.logoUrl =  FxIcons.getIcon(l.name); // 'https://www.shareicon.net/data/256x256/2017/06/21/887479_heart_512x512.png';
+        }
+      }
 
       this.currentLocation = loc;
       this.locations = locations;
@@ -115,6 +126,16 @@ export class FoodPage {
   }
 
 
+  getLocationFromId(locations : FxLocation[], id : string) : FxLocation {
+    for(var loc of locations)
+    {
+      if(loc.id==id) {
+        return loc;
+      }
+    }
+    return null;
+  }
+
   async doLocationMenuSearch(event : any) {
     if(this.searchTerm==null || this.searchTerm.length<4) {
         return;
@@ -127,7 +148,14 @@ export class FoodPage {
     toast.present();
 
     try {
-      this.results = await this.ferApi.searchLocationMenuAsync(this.locations, this.searchTerm);
+      let results =  await this.ferApi.searchLocationMenuAsync(this.locations, this.searchTerm);
+
+      for(var menu of results) {
+        var loc = this.getLocationFromId(this.locations, menu.locationId);
+        menu.location = loc;
+      }
+
+      this.results = results;
     }
     catch(err) {
       alert('error in getting locations: ' + JSON.stringify(err));
@@ -140,7 +168,7 @@ export class FoodPage {
     //var search = new FoodSearch(this.api, this.eatstreetApi);
     //this.results = await search.search(this.locations, this.searchTerm);
     //console.log(this.results);
-    toast.dismiss();
+    //toast.dismiss();
   }
 
 }

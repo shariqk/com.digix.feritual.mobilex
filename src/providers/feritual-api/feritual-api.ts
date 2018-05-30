@@ -8,8 +8,8 @@ import { FxLocation, FxLocationMenu } from './feritual-api.model';
 
 @Injectable()
 export class FeritualApiProvider {
-  //baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
-  baseUrl = 'http://localhost:56893/api/feritual';
+  baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
+  //baseUrl = 'http://localhost:56893/api/feritual';
 
   constructor(public http: HttpClient) {
   }
@@ -40,13 +40,13 @@ export class FeritualApiProvider {
       //https://comdigixferitualwebapi.azurewebsites.net/api/feritual/menu?id=23909fa74bd804fb144247b91fbcb2f3e04f50a61623f62f&provider=es
       let url : string = ctx.baseUrl + '/menu?id=' + locationId
         + '&provider=' + provider;
-      console.log('getLocationMenuAsync', url);
+      //console.log('getLocationMenuAsync', url);
 
       ctx.http.get(url)
         .map(res => <FxLocationMenu>res)
         .subscribe(
           menu => {
-            console.log('menu', menu);
+            //console.log('menu', menu);
             resolve(menu)
           },
           error => { console.log('getLocationMenuAsync', error); reject(error); }
@@ -58,7 +58,7 @@ export class FeritualApiProvider {
     var ctx = this;
     return new Promise(function(resolve, reject) {
       let url : string = ctx.baseUrl + '/search';
-      console.log('searchLocationMenuAsync', url);
+      //console.log('searchLocationMenuAsync', url);
 
       var locations = [];
       for(let loc of fxLocations) {
@@ -77,13 +77,14 @@ export class FeritualApiProvider {
       headers = headers.set('Content-Type', 'application/json');
         //.set('Accept', 'application/json');
 
-      console.log('searchLocationMenuAsync.options', options);
+      //console.log('searchLocationMenuAsync.options', options);
 
-      ctx.http.post(url, JSON.stringify(options), { headers: headers })
+      ctx.http.post(url, JSON.stringify(options))
         .map(res => <FxLocationMenu[]>res)
         .subscribe(
-          menu => {
-            resolve(menu)
+          results => {
+            //console.log('results', results);
+            resolve(results)
           },
           error => { console.log('searchLocationMenuAsync', error); reject(error); }
         );

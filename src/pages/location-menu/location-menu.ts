@@ -14,6 +14,7 @@ import { FoodItem } from '../../providers/food-api/food-api.model';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { FxLocation, FxLocationMenu, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
+import { MenuHelper } from '../../providers/feritual-api/feritual-helper';
 
 
 @IonicPage()
@@ -27,77 +28,32 @@ export class LocationMenuPage {
   location : FxLocation;
 
   constructor(public navCtrl: NavController,
-    //public nxApi : FoodApiProvider,
     private ferApi : FeritualApiProvider,
-    //public esApi : EatstreetApiProvider,
+    private loadingCtrl : LoadingController,
     public navParams: NavParams) {
   }
 
   async initialize(loc : FxLocation) {
-    /*
-    if(loc.type==FxLocationType.provider_type_nx)
-    {
-      let nxMenu = await this.nxApi.getRestaurantMenuV2Async(loc.name);
-      this.menu = this.fromNxToFxMenu(loc, nxMenu);
-    }
-    else if(loc.type==FxLocationType.provider_type_es) {
-      let esMenu = await this.esApi.getRestaurantMenuAsync(loc.id);
-      this.menu = this.fromEsToFxMenu(loc, esMenu);
-    }
-    */
+    let loading = this.loadingCtrl.create({
+       content: 'Please wait...'
+     });
+    loading.present();
 
-    let menus = await this.ferApi.getLocationMenuAsync(loc.id, loc.type);
-    this.menu = menus[0];
-    this.location = loc;
-    //console.log('location.menu', this.menu);
+    try {
+      let menus = await this.ferApi.getLocationMenuAsync(loc.id, loc.type);
+      let menu = menus[0];
+      MenuHelper.fixMenuPhotoUrl(menu);
+      this.menu = menu;
+      this.location = loc;
+    }
+    catch(err) {
+      alert('Error in loading menu:' + JSON.stringify(err));
+    }
+    finally {
+      loading.dismiss();
+    }
   }
 
-  /*
-  fromEsToFxMenu(loc: FxLocation, menu: RestaurantMenuNode[]) : FxLocationMenu {
-    let m = new FxLocationMenu();
-    m.location = loc;
-    m.items = [];
-    for(var category of menu) {
-      for(var item of category.items) {
-          let i = new FxLocationMenuItem();
-          i.calories = -1; // estimated
-          i.name = item.name;
-          i.description = item.description;
-          i.photoUrl = FxIcons.getIcon(i.name);
-          console.log('item', i);
-
-          m.items.push(i);
-      }
-    }
-
-    return m;
-  }
-
-  fromNxToFxMenu(loc : FxLocation, menu : FoodSearchResult) : FxLocationMenu {
-    let m = new FxLocationMenu();
-    m.location = loc;
-    m.items = [];
-
-    var list : FoodItem[] = [];
-    if(menu.branded!=null) { list = list.concat(menu.branded); }
-    if(menu.common!=null) { list = list.concat(menu.common); }
-    if(menu.self!=null) { list = list.concat(menu.self); }
-
-    for(var item of list) {
-      let i = new FxLocationMenuItem();
-      //console.log('processing: ' + i);
-      i.calories = item.nf_calories;
-      i.name = item.food_name;
-      i.photoUrl = (item.photo.thumb == null) ? FxIcons.generic_icon_url : item.photo.thumb;
-      //console.log(i);
-
-      m.items.push(i);
-    }
-
-    //console.log('resolving to m: ' + m);
-    return m;
-  }
-  */
 
   ionViewDidLoad() {
     if(this.menu==null) {

@@ -23,7 +23,7 @@ export class GoogleApiProvider {
       let url : string = ctx.baseUrl + '/json?latlng=' + lat+','+lng
         + '&key=' + ctx.apiKey;
       //console.log(url);
-      
+
       var result = ctx.http.get(url)
         .map(res => <PlaceAddress>res)
         .subscribe(
@@ -49,7 +49,7 @@ export class GoogleApiProvider {
   public getLatLng(address : string) : Observable<LatLngSearchResult> {
     let url : string = this.baseUrl + '/json?address=' + address.replace(' ','+')
       + '&key=' + this.apiKey;
-    console.log('getLatLng', url);
+    //console.log('getLatLng', url);
 
     var result = this.http.get(url)
       .map(res => <LatLngSearchResult>res);

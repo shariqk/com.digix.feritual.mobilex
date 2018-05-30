@@ -16,7 +16,83 @@
   </ion-card-header>
 
   <ion-card-content>
+
+    <!-- collapsed view -->
     <div *ngIf="!expandedView">
+      <ion-row *ngFor="let m of topHits" align-items-start>
+        <ion-col col-2>
+          <img [src]="m.photoUrl">
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-col>
+              <p class="item-name" text-wrap>{{m.name}}</p>
+              <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
+              <p *ngIf="m.calories!=null" class="item-detail">{{m.calories}} calories</p>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <!-- Expanded View -->
+    <div *ngIf="expandedView">
+      <div *ngFor="let c of menu.categories">
+        <ion-row>
+          <ion-col>
+            <h4>{{c.name}}</h4>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let m of c.items" align-items-start>
+          <ion-col col-2>
+            <img [src]="m.photoUrl">
+          </ion-col>
+          <ion-col>
+            <ion-row>
+              <ion-col>
+                <p class="item-name" text-wrap>{{m.name}}</p>
+                <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
+                <p *ngIf="m.calories!=null" class="item-detail">{{m.calories}} calories</p>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+
+    <button *ngIf="totalHitsCount>topHitCount" ion-button color="primary" (click)="switchExpandedView()" clear small icon-start>
+      {{expandViewTitle}} ({{totalHitsCount}})
+    </button>
+
+
+    <!--
+
+    <div *ngIf="!expandedView">
+      <div *ngFor="let c of menu.categories">
+        <ion-row>
+          <ion-col>
+            <h4>{{c.name}}</h4>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let m of c.items">
+          <ion-col col-2>
+            <img [src]="m.photoUrl">
+          </ion-col>
+          <ion-col>
+            <ion-row>
+              <ion-col>
+                <p class="item-name" text-wrap>{{m.name}}</p>
+                <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
+                <p *ngIf="m.calories!=null" class="item-detail">{{m.calories}} calories</p>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </div>
+
+
       <ion-row *ngFor="let m of topHits">
         <ion-col col-2>
           <img [src]="m.photoUrl">
@@ -32,16 +108,38 @@
         </ion-col>
       </ion-row>
 
-      <!--
       <ion-item *ngFor="let m of topHits">
           <p class="item-name" text-wrap>{{m.name}}</p>
           <p class="item-description" text-wrap>{{m.description}}</p>
           <p class="item-detail">{{m.calories}} calories</p>
       </ion-item>
-    -->
     </div>
 
+
     <div *ngIf="expandedView">
+      <div *ngFor="let c of menu.categories">
+        <ion-row>
+          <ion-col>
+            <h4>{{c.name}}</h4>
+          </ion-col>
+        </ion-row>
+
+        <ion-row *ngFor="let m of c.items">
+          <ion-col col-2>
+            <img [src]="m.photoUrl">
+          </ion-col>
+          <ion-col>
+            <ion-row>
+              <ion-col>
+                <p class="item-name" text-wrap>{{m.name}}</p>
+                <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
+                <p *ngIf="m.calories!=null" class="item-detail">{{m.calories}} calories</p>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </div>
+
       <ion-row *ngFor="let m of menu.items">
         <ion-col col-2>
           <img [src]="m.photoUrl">
@@ -58,9 +156,7 @@
       </ion-row>
     </div>
 
-    <button *ngIf="menu.items.length>topHitCount" ion-button color="primary" (click)="switchExpandedView()" clear small icon-start>
-      {{expandViewTitle}} ({{menu.items.length}})
-    </button>
+  -->
 
   </ion-card-content>
 </ion-card>

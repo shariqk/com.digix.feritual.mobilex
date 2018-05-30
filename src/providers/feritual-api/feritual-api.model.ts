@@ -14,8 +14,6 @@ export class FxLocation {
   public distance : number;
   public logoUrl : string;
   public description : string;
-
-
 }
 
 export class FxIcons {
@@ -156,7 +154,7 @@ export class FxIcons {
     },
     {
       key: 'generic',
-      url: 'https://www.shareicon.net/data/256x256/2017/06/21/887479_heart_512x512.png'
+      url: 'assets/heart-512x512.png'
     }
   ];
 }
@@ -164,6 +162,10 @@ export class FxIcons {
 
 export class FxLocationMenu {
   public location : FxLocation;
+  public locationId : string;
+  public provider : string;
+
+
   //public items : FxLocationMenuItem[];
   public categories : FxLocationMenuCategory[];
 }

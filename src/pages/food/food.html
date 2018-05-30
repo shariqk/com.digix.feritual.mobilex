@@ -19,7 +19,7 @@
     </div>
 
     <div *ngIf="this.locations!=null && this.results==null">
-        <ion-row *ngFor="let loc of locations" (click)="navigateToLocationMenu(loc)">
+        <ion-row *ngFor="let loc of locations" (click)="navigateToLocationMenu(loc)" align-items-start>
           <ion-col col-3>
             <img style='padding:5px;' [src]="loc.logoUrl">
           </ion-col>

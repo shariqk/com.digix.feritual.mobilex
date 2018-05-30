@@ -3,8 +3,9 @@ import { IonicPage, NavController, NavParams, ToastController, ModalController }
 
 import { FoodLocation, FoodLocationMenu, FoodLocationMenuItem } from '../../providers/food-api/food-api.model';
 import { FoodApiProvider } from '../../providers/food-api/food-api';
-import { FxLocationMenu, FxLocationMenuItem } from '../../providers/models/fxlocation';
-
+//import { FxLocationMenu, FxLocationMenuItem } from '../../providers/models/fxlocation';
+import { FxLocationMenu, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
+import { MenuHelper } from '../../providers/feritual-api/feritual-helper';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 
 @Component({
@@ -18,8 +19,8 @@ export class FoodListComponent implements OnChanges {
   @Input('menu') menu : FxLocationMenu;
 
   topHitCount = 3;
+  totalHitsCount = 0;
   topHits : FxLocationMenuItem[];
-  avatarUrl = 'https://www.toornament.com/media/file/433393387804137561/logo_large?v=1477168110';
 
   expandedView = false;
   expandViewTitle = 'Expand';
@@ -44,16 +45,26 @@ export class FoodListComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    //console.log('menu', this.menu);
-    //console.log('location', this.location);
     this.topHits=[];
+    for(let c of this.menu.categories) {
+      for(let i of c.items) {
+        MenuHelper.fixMenuItemPhotoUrl(i);
+        this.totalHitsCount++;
+        if(this.topHits.length<this.topHitCount) {
+          this.topHits.push(i);
+        }
+      }
+    }
+    //console.log('topHits', this.topHits);
+
+    /*
     for(var i=0; i<this.topHitCount; i++) {
       if(i<this.menu.items.length)
       {
         this.topHits.push(this.menu.items[i]);
       }
     }
-
+    */
   }
 
 
