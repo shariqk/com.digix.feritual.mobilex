@@ -8,7 +8,8 @@ import { FxLocation, FxLocationMenu } from './feritual-api.model';
 
 @Injectable()
 export class FeritualApiProvider {
-  baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
+  //baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
+  baseUrl = 'http://localhost:56893/api/feritual';
 
   constructor(public http: HttpClient) {
   }
@@ -73,9 +74,8 @@ export class FeritualApiProvider {
       };
 
       var headers = new HttpHeaders();
-      headers = headers
-        .set('Content-Type', 'application/json')
-        .set('Accept', 'application/json');
+      headers = headers.set('Content-Type', 'application/json');
+        //.set('Accept', 'application/json');
 
       console.log('searchLocationMenuAsync.options', options);
 
