@@ -181,4 +181,16 @@ export class FxLocationMenuItem {
   public details : string;
   public calories : number;
   public photoUrl : string;
+
+
+  public allergen_contains_milk : boolean;
+  public allergen_contains_soybeans : boolean;
+  public allergen_contains_wheat : boolean;
+  public allergen_contains_eggs : boolean;
+  public allergen_contains_shellfish : boolean;
+  public allergen_contains_fish : boolean;
+  public allergen_contains_tree_nuts : boolean;
+  public allergen_contains_peanuts : boolean;
+  public allergen_contains_gluten : boolean;
+
 }
