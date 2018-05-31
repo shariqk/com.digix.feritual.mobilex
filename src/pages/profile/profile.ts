@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { UserProfile, UserProfileAllergies } from '../../providers/feritual-api/userprofile.model';
-
+import { UserProfile, UserProfileAllergies } from '../../providers/userprofile-api/userprofile.model';
+import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 
 @IonicPage()
 @Component({
@@ -11,13 +11,24 @@ import { UserProfile, UserProfileAllergies } from '../../providers/feritual-api/
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
-
-  profile  = new UserProfile();
+  profile : UserProfile;
   inEditMode : boolean;
 
   constructor(public navCtrl: NavController,
     public http : HttpClient,
+    private profileApi : UserprofileApiProvider,
     public navParams: NavParams) {
+  }
+
+  async initialize() {
+    let profile = await this.profileApi.loadUserProfile();
+    if(profile==null) {
+      //console.log('creating new profile');
+      profile = new UserProfile();
+      await this.profileApi.saveUserProfile(profile);
+    }
+    this.profile = profile;
+    //console.log('profile', this.profile);
   }
 
   reorderItems(indexes) {
@@ -30,15 +41,27 @@ export class ProfilePage {
     //console.log('c', c);
   }
 
-  ionViewDidLoad() {
-    console.log(this.profile);
-    /*
-    var url = 'assets/mocks/mcdonalds.json';
+  async cancelEdit() {
+    this.profile = await this.profileApi.loadUserProfile(); // read back from storage
+    this.inEditMode = false;
+  }
 
-    var result = this.http.get(url)
-      .map(res => <object>res)
-      .subscribe(json => console.log(json));
-    */
+  editProfile() {
+    this.inEditMode = true;
+  }
+
+  async saveProfile() {
+    await this.profileApi.saveUserProfile(this.profile);
+    this.inEditMode = false;
+  }
+
+
+
+
+  ionViewDidLoad() {
+    if(this.profile==null) {
+      this.initialize();
+    }
   }
 
 }

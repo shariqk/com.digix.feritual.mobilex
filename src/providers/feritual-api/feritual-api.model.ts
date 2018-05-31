@@ -182,7 +182,10 @@ export class FxLocationMenuItem {
   public calories : number;
   public photoUrl : string;
 
+  public allergic : boolean;
+  public allergic_reason : string;
 
+  /*
   public allergen_contains_milk : boolean;
   public allergen_contains_soybeans : boolean;
   public allergen_contains_wheat : boolean;
@@ -192,5 +195,6 @@ export class FxLocationMenuItem {
   public allergen_contains_tree_nuts : boolean;
   public allergen_contains_peanuts : boolean;
   public allergen_contains_gluten : boolean;
-
+  */
+  
 }

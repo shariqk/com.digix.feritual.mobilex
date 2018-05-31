@@ -1,5 +1,5 @@
 import { FxLocation, FxLocationMenu, FxLocationMenuItem } from './feritual-api.model';
-
+import { UserProfile } from '../userprofile-api/userprofile.model';
 
 export class MenuHelper
 {
@@ -16,6 +16,25 @@ export class MenuHelper
       }
     }
   }
+
+  public static applyAllergies(menu : FxLocationMenu, profile : UserProfile)
+  {
+    let allergies = profile.allergies;
+
+    for(var c of menu.categories) {
+      for(var item of c.items) {
+        let str = item.name + ' ' + item.description + ' ' + item.details;
+        str = str.toLowerCase();
+        for(let a of profile.allergies.Items) {
+          if(a.value && str.indexOf(a.key)>=0) {
+            item.allergic = true;
+          }
+        }
+        MenuHelper.fixMenuItemPhotoUrl(item);
+      }
+    }
+  }
+
 }
 
 export class DistanceCalculator

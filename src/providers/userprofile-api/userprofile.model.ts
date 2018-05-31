@@ -1,15 +1,11 @@
 
 export class UserProfile {
-
   public name : string;
   public email : string;
   public id : string;
 
   public allergies = new UserProfileAllergies();
   public cuisine = new CuisinePreferences();
-
-
-
 }
 
 export interface KeyValueItem {
@@ -31,7 +27,7 @@ export class UserProfileAllergies {
     }
 
     //console.log(this);
-    //return this;
+    return this;
   }
 
   public static keys : string[] = [

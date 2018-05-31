@@ -5,6 +5,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Geolocation } from '@ionic-native/geolocation';
+import { IonicStorageModule } from '@ionic/storage';
 
 import { FoodPage } from '../pages/food/food';
 import { ProfilePage } from '../pages/profile/profile';
@@ -21,6 +22,7 @@ import { EatstreetApiProvider } from '../providers/eatstreet-api/eatstreet-api';
 import { MsvisionApiProvider } from '../providers/msvision-api/msvision-api';
 import { GoogleApiProvider } from '../providers/google-api/google-api';
 import { FeritualApiProvider } from '../providers/feritual-api/feritual-api';
+import { UserprofileApiProvider } from '../providers/userprofile-api/userprofile-api';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,12 @@ import { FeritualApiProvider } from '../providers/feritual-api/feritual-api';
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot({
+      name: '__com_digix_feritual_mobileX',
+      driverOrder: ['indexeddb', 'sqlite', 'websql']
+    })
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -59,7 +66,8 @@ import { FeritualApiProvider } from '../providers/feritual-api/feritual-api';
     EatstreetApiProvider,
     MsvisionApiProvider,
     GoogleApiProvider,
-    FeritualApiProvider
+    FeritualApiProvider,
+    UserprofileApiProvider
   ]
 })
 export class AppModule {}
