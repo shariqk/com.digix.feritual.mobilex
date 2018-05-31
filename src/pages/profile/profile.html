@@ -6,13 +6,49 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>profile</ion-title>
-  </ion-navbar>
+  <ion-toolbar>
+    <ion-title>Profile</ion-title>
+    <ion-buttons end>
+      <button *ngIf="!inEditMode" ion-button icon-only (click)="inEditMode=!inEditMode">
+        <ion-icon large name="create"></ion-icon>
+      </button>
 
+      <button *ngIf="inEditMode" ion-button icon-only (click)="inEditMode=!inEditMode">
+        <ion-icon large name="checkmark-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 
 <ion-content padding>
+
+  <ion-row>
+
+    <ion-col>
+      <h4>Allergies</h4>
+
+      <ion-list *ngIf="profile!=null">
+        <ion-item class='item-name' *ngFor="let a of profile.allergies.Items">
+          <ion-label>{{a.key}}</ion-label>
+          <ion-checkbox *ngIf="inEditMode" [(ngModel)]="a.value"></ion-checkbox>
+        </ion-item>
+      </ion-list>
+    </ion-col>
+
+    <ion-col>
+      <h4>Preferences</h4>
+      <ion-list [reorder]="inEditMode" (ionItemReorder)="reorderItems($event)">
+          <ion-item class='item-name' *ngFor="let c of profile.cuisine.Items">
+            {{c.key}}
+          </ion-item>
+      </ion-list>
+    </ion-col>
+
+  </ion-row>
+
+
+
+
 
 </ion-content>

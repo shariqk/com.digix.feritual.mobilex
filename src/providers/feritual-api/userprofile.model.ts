@@ -12,11 +12,27 @@ export class UserProfile {
 
 }
 
+export interface KeyValueItem {
+ key : string;
+ value : any;
+}
+
+
+
 export class UserProfileAllergies {
-   //interface Item {
-    //key : string;
-    //value : string;
-  //}
+  Items : KeyValueItem[] = [];
+
+  constructor() {
+    for(let key of UserProfileAllergies.keys) {
+      this.Items.push({
+        key: key,
+        value: false
+      });
+    }
+
+    //console.log(this);
+    //return this;
+  }
 
   public static keys : string[] = [
     'milk',
@@ -30,15 +46,34 @@ export class UserProfileAllergies {
     'gluten'
   ];
 
-  values = [];
-  public set(key: string, value : boolean) {
-    for(let i=this.values.length; i>=0; i++) {
-      if()
+  /*
+  public set(key: string, value : boolean)
+  {
+    var item = this._get(key);
+    if(item==null) {
+      this.items.push({
+        key: key,
+        value: value
+      });
     }
-
-    for(let k of UserProfileAllergies.keys) {
-
+    else {
+      item.value = value;
     }
+  }
+
+  public get(key: string) : boolean
+  {
+    var item = this._get(key);
+    return item == null ? false : item.value;
+  }
+
+  _get(key: string) : KeyValueItem {
+    for(let item of this.items) {
+      if(item.key == key) {
+        return item;
+      }
+    }
+    return null;
   }
 
   milk : boolean = false;
@@ -50,17 +85,35 @@ export class UserProfileAllergies {
   wheat  : boolean = false;
   soybeans : boolean = false;
   gluten : boolean = false;
-
+  */
 }
 
 export class CuisinePreferences {
-  italian : number = 5;
-  chinese : number = 5;
-  pizza : number = 5;
-  indian : number = 5;
-  sushi : number = 5;
-  mediterranean : number = 5;
-  america : number = 5;
-  french : number = 5;
+  Items : KeyValueItem[] = [];
+
+  constructor() {
+    for(let key of CuisinePreferences.keys) {
+      this.Items.push({
+        key: key,
+        value: 5
+      });
+    }
+
+    //console.log(this);
+    //return this;
+  }
+
+  public static keys : string[] = [
+    'italian',
+    'chinese',
+    'pizza',
+    'indian',
+    'sushi',
+    'mediterranean',
+    'american',
+    'french',
+    'thai'
+  ];
+
 
 }
