@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>com.digix.feritual.mobilex</name>
-    <description>An awesome Ionic/Cordova app.</description>
-    <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
+<widget id="com.digix.feritual.mobilex" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Feritual</name>
+    <description>Food and Energy Rituals: Health and Wellness benefits</description>
+    <author email="hi@ionicframework" href="http://ionicframework.com/">Feritual Team</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -81,8 +81,8 @@
     </platform>
     <engine name="browser" spec="^4.1.0" />
     <plugin name="cordova-plugin-camera" spec="^4.0.3">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value="your usage message" />
-        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="your usage message" />
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="For analytics and food" />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="For analytics and food" />
     </plugin>
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">

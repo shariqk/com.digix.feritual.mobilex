@@ -1,18 +1,46 @@
 
 export class UserProfile {
 
-  name : string;
-  email : string;
-  id : string;
+  public name : string;
+  public email : string;
+  public id : string;
 
-  allergies : UserProfileAllergies = new UserProfileAllergies();
-  cuisine : CuisinePreferences = new CuisinePreferences();
+  public allergies = new UserProfileAllergies();
+  public cuisine = new CuisinePreferences();
 
 
 
 }
 
 export class UserProfileAllergies {
+   //interface Item {
+    //key : string;
+    //value : string;
+  //}
+
+  public static keys : string[] = [
+    'milk',
+    'eggs',
+    'fish',
+    'shellfish',
+    'treenuts',
+    'peanuts',
+    'wheat',
+    'soybeans',
+    'gluten'
+  ];
+
+  values = [];
+  public set(key: string, value : boolean) {
+    for(let i=this.values.length; i>=0; i++) {
+      if()
+    }
+
+    for(let k of UserProfileAllergies.keys) {
+
+    }
+  }
+
   milk : boolean = false;
   eggs : boolean = false;
   fish : boolean = false;
