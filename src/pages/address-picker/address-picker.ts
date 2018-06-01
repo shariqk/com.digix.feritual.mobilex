@@ -67,6 +67,7 @@ export class AddressPickerPage {
         alert('Could not determine current location');
       }
       else {
+        this.saveRecentAddress(loc.address);
         this.viewCtrl.dismiss(loc);
       }
     }
@@ -91,8 +92,7 @@ export class AddressPickerPage {
         alert('"' + address + '" is not a valid address');
       }
       else {
-        this.profile.recentAddressList.push(loc.address);
-        await this.profileApi.saveUserProfile(this.profile)
+        this.saveRecentAddress(loc.address);
 
         this.viewCtrl.dismiss(loc);
       }
@@ -113,6 +113,17 @@ export class AddressPickerPage {
     //console.log('current position', loc);
 
     return loc;
+  }
+
+  async saveRecentAddress(address : string) {
+    if(this.profile.recentAddressList==null)
+    {
+      this.profile.recentAddressList = [];
+    }
+    this.profile.recentAddressList.push(address);
+    await this.profileApi.saveUserProfile(this.profile)
+
+
   }
 
 

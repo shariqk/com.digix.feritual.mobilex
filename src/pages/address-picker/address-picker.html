@@ -24,9 +24,9 @@
   </ion-item>
 
   <div *ngIf="profile!=null">
-    <ion-item no-lines *ngFor="let a of profile.recentAddressList" (click)="addressSelected(a)">
+    <ion-item no-lines *ngFor="let a of profile.recentAddressList">
       <ion-icon name="locate" color="primary" item-start></ion-icon>
-      <p class='item-address' text-wrap>{{a}}</p>
+      <p (click)="addressSelected(a)" class='item-address' text-wrap>{{a}}</p>
 
       <button item-end ion-button icon-only (click)="removeRecentAddress(a)">
         <ion-icon name="close-circle"></ion-icon>

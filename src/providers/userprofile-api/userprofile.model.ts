@@ -4,17 +4,9 @@ export class UserProfile {
   public email : string;
   public id : string;
 
-  public allergies : UserProfileAllergies;
-  public cuisine : CuisinePreferences;
-  public recentAddressList : string[];
-
-  public ensure() : UserProfile {
-    if(this.allergies==null) this.allergies = new UserProfileAllergies();
-    if(this.cuisine==null) this.cuisine = new CuisinePreferences();
-    if(this.recentAddressList==null) this.recentAddressList = [];
-
-    return this;
-  }
+  public allergies = new UserProfileAllergies();
+  public cuisine = new CuisinePreferences();
+  public recentAddressList : string[] = [];
 }
 
 export interface KeyValueItem {

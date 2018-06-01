@@ -19,14 +19,12 @@ export class UserprofileApiProvider {
         this.storage.get(this._profileStorageKeyName)
           .then((json) => {
             if(json == null || json=='') {
-              let profile = new UserProfile().ensure();
-              resolve(profile);
+              resolve(null);
             }
             else {
               //console.log('loaded', json);
-              var profile = <UserProfile>JSON.parse(json);
-              //profile = profile.ensure();
-              resolve(profile);
+              let token = JSON.parse(json);
+              resolve(token);
             }
           });
         });
