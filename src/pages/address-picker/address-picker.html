@@ -1,12 +1,8 @@
 
 <ion-header>
-
-  <ion-navbar>
-    <button *ngIf="canEditTeam && !inEditMode" ion-button icon-only (click)="inEditMode=true">
-      Edit
-    </button>
-  </ion-navbar>
-
+  <ion-toolbar>
+    <ion-title>Select a Location</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 
@@ -28,17 +24,22 @@
       <ion-icon name="locate" color="primary" item-start></ion-icon>
       <p (click)="addressSelected(a)" class='item-address' text-wrap>{{a}}</p>
 
-      <button item-end ion-button icon-only (click)="removeRecentAddress(a)">
+      <button item-end ion-button icon-only clear (click)="removeRecentAddress(a)">
         <ion-icon name="close-circle"></ion-icon>
       </button>
     </ion-item>
   </div>
 
-  <button ion-button colors="primary" (click)="searchClicked()">
-    Search
-  </button>
-  <button ion-button colors="primary" (click)="cancelClicked()">
-    Cancel
-  </button>
+  <ion-row>
+    <ion-col>
+      <button ion-button class="button" colors="primary" round outline (click)="searchClicked()">
+        Search
+      </button>
+      <button ion-button class="button" colors="primary" round outline (click)="cancelClicked()">
+        Cancel
+      </button>
+    </ion-col>
+  </ion-row>
+
 
 </ion-content>

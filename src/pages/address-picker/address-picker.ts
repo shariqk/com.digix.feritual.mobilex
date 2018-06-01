@@ -42,7 +42,10 @@ export class AddressPickerPage {
   }
 
   searchClicked() {
-    this.addressSelected(this.searchAddress);
+    if(this.searchAddress !=null && this.searchAddress != '')
+    {
+      this.addressSelected(this.searchAddress);
+    }
   }
 
   async removeRecentAddress(address : string) {
@@ -120,10 +123,12 @@ export class AddressPickerPage {
     {
       this.profile.recentAddressList = [];
     }
-    this.profile.recentAddressList.push(address);
-    await this.profileApi.saveUserProfile(this.profile)
 
+    if(this.profile.recentAddressList.indexOf(address)<0) {
+      this.profile.recentAddressList.push(address);
+      await this.profileApi.saveUserProfile(this.profile)
 
+    }
   }
 
 
