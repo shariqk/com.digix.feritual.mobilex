@@ -1,3 +1,4 @@
+/*
 import { Observable } from 'rxjs/Observable';
 
 import { FoodApiProvider } from '../../providers/food-api/food-api';
@@ -308,3 +309,4 @@ export class DistanceCalculator
 
 
 }
+*/

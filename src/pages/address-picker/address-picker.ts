@@ -5,6 +5,9 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { GoogleLocation } from '../../providers/google-api/google-api.model';
 
+import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
+import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
+
 @IonicPage()
 @Component({
   selector: 'page-address-picker',
@@ -12,30 +15,43 @@ import { GoogleLocation } from '../../providers/google-api/google-api.model';
 })
 export class AddressPickerPage {
 
-  recentAddressList : string[];
+  profile : UserProfile;
   searchAddress : string;
 
   constructor(public navCtrl: NavController,
     public loadingCtrl : LoadingController,
     public viewCtrl : ViewController,
     private geolocation: Geolocation,
+    private profileApi : UserprofileApiProvider,
     public googleApi : GoogleApiProvider,
     public navParams: NavParams) {
-
+      this.initialize();
+    /*
     this.recentAddressList = [
       "645 Morris Ave, Bryn Mawr, PA 19010",
       "2300 Byberry Road, Bensalem, PA 19020",
       "New York, NY",
       "San Francisco, CA"
     ];
+    */
   }
 
-  doLocationSearch(event : any) {
-
+  async initialize() {
+    let profile = await this.profileApi.loadUserProfile();
+    this.profile = profile;
   }
 
   searchClicked() {
     this.addressSelected(this.searchAddress);
+  }
+
+  async removeRecentAddress(address : string) {
+    let list = this.profile.recentAddressList;
+    let index = list.indexOf(address);
+    if (index > -1) {
+      list.splice(index, 1);
+      await this.profileApi.saveUserProfile(this.profile);
+    }
   }
 
   async nearbySelected() {
@@ -75,11 +91,14 @@ export class AddressPickerPage {
         alert('"' + address + '" is not a valid address');
       }
       else {
+        this.profile.recentAddressList.push(loc.address);
+        await this.profileApi.saveUserProfile(this.profile)
+
         this.viewCtrl.dismiss(loc);
       }
     }
     catch (err) {
-      console.log('addressSelected', err);
+      //console.log('addressSelected', err);
       alert(JSON.stringify(err));
     }
     finally {
@@ -94,37 +113,6 @@ export class AddressPickerPage {
     //console.log('current position', loc);
 
     return loc;
-  }
-
-  determineLocation2() : Promise<GoogleLocation> {
-    let ctx = this;
-    return new Promise(function(resolve, reject) {
-      ctx.geolocation.getCurrentPosition({timeout: 20000, enableHighAccuracy: false})
-        .then(res => {
-          console.log('current position', res);
-          let loc = ctx.googleApi.getLocationFromLatLng(res.coords.latitude, res.coords.longitude);
-          /*
-          ctx.googleApi.getLocationFromLatLng(res.coords.latitude, res.coords.longitude)
-            .then(loc => {
-              console.log('current location', loc);
-
-              resolve(loc);
-            },
-            error =>
-            {
-              console.log(error);
-
-              //alert('Could not get current address from lat, lng');
-              reject(error);
-            }); */
-        })
-        .catch(
-          (err) => {
-            console.log(err);
-            //alert('Could not read current location');
-            reject(err);
-          });
-    });
   }
 
 

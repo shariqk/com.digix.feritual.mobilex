@@ -1,4 +1,4 @@
-
+/*
 export class FxLocationType {
   public static provider_type_nx = 'nx';
   public static provider_type_es = 'es';
@@ -174,3 +174,5 @@ export class FxLocationMenuItem {
   public calories : number;
   public photoUrl : string;
 }
+
+*/

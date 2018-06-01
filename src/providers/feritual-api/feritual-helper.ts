@@ -13,6 +13,13 @@ export class MenuHelper
     for(var c of menu.categories) {
       for(var item of c.items) {
         MenuHelper.fixMenuItemPhotoUrl(item);
+
+        if(item.calories==-1) {
+          item.calories = item.name.length
+            + (item.description==null ? 0 : item.description.length)
+            + (item.details==null ? 0 : item.details.length);
+          item.calories = item.calories * Math.floor(Math.random() * 11);
+        }
       }
     }
   }
