@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { HttpClient } from '@angular/common/http';
 
-import { UserProfile, UserProfileAllergies } from '../../providers/userprofile-api/userprofile.model';
-import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
+import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
 
 @IonicPage()
 @Component({
@@ -12,14 +11,17 @@ import { UserprofileApiProvider } from '../../providers/userprofile-api/userprof
 })
 export class ProfilePage {
   profile : UserProfile;
-  inEditMode : boolean;
 
   constructor(public navCtrl: NavController,
     public http : HttpClient,
-    private profileApi : UserprofileApiProvider,
+    private viewCtrl: ViewController,
     public navParams: NavParams) {
+
+      let p =  this.navParams.get('profile');
+      this.profile = JSON.parse(JSON.stringify(p));
   }
 
+  /*
   async initialize() {
     let profile = await this.profileApi.loadUserProfile();
     if(profile==null) {
@@ -30,6 +32,7 @@ export class ProfilePage {
     this.profile = profile;
     //console.log('profile', this.profile);
   }
+  */
 
   reorderItems(indexes) {
     let c = this.profile.cuisine.Items;
@@ -37,31 +40,20 @@ export class ProfilePage {
     let element = c[indexes.from];
     c.splice(indexes.from, 1);
     c.splice(indexes.to, 0, element);
-
-    //console.log('c', c);
   }
 
   async cancelEdit() {
-    this.profile = await this.profileApi.loadUserProfile(); // read back from storage
-    this.inEditMode = false;
-  }
-
-  editProfile() {
-    this.inEditMode = true;
+    this.viewCtrl.dismiss(null);
   }
 
   async saveProfile() {
-    await this.profileApi.saveUserProfile(this.profile);
-    this.inEditMode = false;
+    this.viewCtrl.dismiss(this.profile);
   }
 
 
 
 
   ionViewDidLoad() {
-    if(this.profile==null) {
-      this.initialize();
-    }
   }
 
 }

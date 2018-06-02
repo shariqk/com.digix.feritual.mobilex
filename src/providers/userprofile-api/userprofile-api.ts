@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Storage, StorageConfig } from '@ionic/storage';
+import { Storage } from '@ionic/storage';
 
 import { UserProfile } from './userprofile.model';
 
@@ -19,7 +19,7 @@ export class UserprofileApiProvider {
         this.storage.get(this._profileStorageKeyName)
           .then((json) => {
             if(json == null || json=='') {
-              resolve(null);
+              resolve(new UserProfile());
             }
             else {
               //console.log('loaded', json);

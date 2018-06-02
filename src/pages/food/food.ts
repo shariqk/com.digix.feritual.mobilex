@@ -10,10 +10,13 @@ import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
 //import { FoodSearch } from './foodSearch';
 //import { FxLocation, FxLocationMenu } from '../../providers/models/fxlocation';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
+import { ProfilePage } from '../../pages/profile/profile';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { FxLocation, FxLocationMenu, FxIcons } from '../../providers/feritual-api/feritual-api.model';
 import { DistanceCalculator } from '../../providers/feritual-api/feritual-helper';
+import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
+import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
@@ -32,19 +35,24 @@ export class FoodPage {
   currentLocation : GoogleLocation;
   locations : FxLocation[];
   radius = 5;
+  profile : UserProfile;
 
   constructor(public navCtrl: NavController,
     public modalCtrl : ModalController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
+    private profileApi : UserprofileApiProvider,
     private geolocation: Geolocation,
     private googleApi : GoogleApiProvider,
-    private ferApi : FeritualApiProvider,
-    private eatstreetApi : EatstreetApiProvider,
-    public api : FoodApiProvider) {
+    private ferApi : FeritualApiProvider) {
 
-      this.currentLocation = new GoogleLocation();
-      this.currentLocation.address = 'Tap here to get started';
+        this.initialize();
+  }
+
+  async initialize() {
+    this.currentLocation = new GoogleLocation();
+    this.currentLocation.address = 'Tap here to get started';
+    this.profile = await this.profileApi.loadUserProfile();
   }
 
   ionViewDidLoad() {
@@ -104,6 +112,25 @@ export class FoodPage {
       toast.dismiss();
     }
 
+  }
+
+  editUserProfile() {
+    let dialog = this.modalCtrl.create(ProfilePage,
+      {
+        profile: this.profile
+      },
+      {
+        showBackdrop : true
+      });
+
+    dialog.onDidDismiss(async profile =>  {
+      if(profile != null) {
+        await this.profileApi.saveUserProfile(profile);
+        this.profile = profile;
+      }
+    });
+
+    dialog.present();
   }
 
   addressCardClicked(event : any) {

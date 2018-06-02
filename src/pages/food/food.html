@@ -1,10 +1,23 @@
 
-<ion-content>
+<ion-header>
+
+  <ion-toolbar>
     <ion-card (click)='addressCardClicked($event)'>
       <ion-card-content text-nowrap>
         {{currentLocation.address}}
       </ion-card-content>
     </ion-card>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="editUserProfile()">
+        <ion-icon large name="settings"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+
+
+</ion-header>
+<ion-content>
 
 
     <ion-searchbar *ngIf="locations!=null"
@@ -38,4 +51,41 @@
           </ion-col>
         </ion-row>
     </div>
+
+
+    <div *ngIf="this.locations==null && this.results==null">
+      <ion-row>
+        <ion-col text-center>
+          <img src="assets/imgs/icon.png" width="40%">
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <p style="font-size:14pt;" text-center>
+            Welcome to Feritual, the<br/>
+            <b>F</b>ood, <b>E</b>nergy and <b>R</b>ituals App
+          </p>
+          <p style="margin:10px;">
+            Click on top of the screen to select a location anywhere in United States.
+          </p>
+          <p style="margin:10px;">
+            You can then search for food (along with all their nuitritional information)
+            in all the nearby locations or checkout the entire menu.
+          </p>
+          <p style="margin:10px;">
+            To be adventouras and test out some kewl features, click on the Analyze tab,
+            take a picture (by tapping on the camera icon) and let us what we can determine
+            about the image you took.
+          </p>
+          <p style="margin:10px;">
+            Tap the Settings icon (right top) to set your preferences.
+          </p>
+        </ion-col>
+      </ion-row>
+
+      <p>
+
+      </p>
+    </div>
+
 </ion-content>
