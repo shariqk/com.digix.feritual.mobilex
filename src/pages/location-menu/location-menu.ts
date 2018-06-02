@@ -33,14 +33,14 @@ export class LocationMenuPage {
     public navParams: NavParams) {
   }
 
-  async initialize(loc : FxLocation) {
+  async initialize(loc : FxLocation, refresh : boolean) {
     let loading = this.loadingCtrl.create({
        content: 'Please wait...'
      });
     loading.present();
 
     try {
-      let menus = await this.ferApi.getLocationMenuAsync(loc.id, loc.type);
+      let menus = await this.ferApi.getLocationMenuAsync(loc.id, loc.type, refresh);
       let menu = menus[0];
       MenuHelper.fixMenuPhotoUrl(menu);
       this.menu = menu;
@@ -54,12 +54,22 @@ export class LocationMenuPage {
     }
   }
 
+  async refreshData(refresher: any) {
+    try {
+      let loc = this.navParams.get('location');
+      let refresh = (refresher != null);
+      await this.initialize(loc, refresh);
+    }
+    finally {
+      if(refresher != null) {
+        refresher.complete();
+      }
+    }
+  }
 
   ionViewDidLoad() {
     if(this.menu==null) {
-      var loc = this.navParams.get('location');
-      this.initialize(loc);
-
+      this.refreshData(null);
     }
 
   }

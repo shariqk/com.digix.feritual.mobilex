@@ -19,7 +19,7 @@
     Near By
   </ion-item>
 
-  <div *ngIf="profile!=null">
+  <div *ngIf="profile!=null && profile.recentAddressList!=null">
     <ion-item no-lines *ngFor="let a of profile.recentAddressList">
       <ion-icon name="locate" color="primary" item-start></ion-icon>
       <p (click)="addressSelected(a)" class='item-address' text-wrap>{{a}}</p>

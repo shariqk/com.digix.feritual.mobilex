@@ -9,6 +9,10 @@
 
 
 <ion-content padding>
+  <ion-refresher (ionRefresh)="refreshData($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <div *ngIf="menu!=null">
     <div *ngFor="let c of menu.categories">
       <ion-row>

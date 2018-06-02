@@ -38,6 +38,10 @@ export class AddressPickerPage {
 
   async initialize() {
     let profile = await this.profileApi.loadUserProfile();
+    if(profile.recentAddressList==null) {
+      profile.recentAddressList = [];
+       await this.profileApi.saveUserProfile(profile);
+    }
     this.profile = profile;
   }
 

@@ -34,13 +34,17 @@ export class FeritualApiProvider {
   }
 
 
-  public getLocationMenuAsync(locationId : string, provider : string) : Promise<FxLocationMenu> {
+  public getLocationMenuAsync(locationId : string, provider : string, refresh : boolean) : Promise<FxLocationMenu> {
     var ctx = this;
     return new Promise(function(resolve, reject) {
       //https://comdigixferitualwebapi.azurewebsites.net/api/feritual/menu?id=23909fa74bd804fb144247b91fbcb2f3e04f50a61623f62f&provider=es
       let url : string = ctx.baseUrl + '/menu?id=' + locationId
         + '&provider=' + provider;
-      //console.log('getLocationMenuAsync', url);
+      if(refresh) {
+        url += '&refresh=1';
+      }
+
+      console.log('getLocationMenuAsync', url);
 
       ctx.http.get(url)
         .map(res => <FxLocationMenu>res)
