@@ -146,6 +146,7 @@ export class AddressPickerPage {
       ctx.googleApi.getLatLng(address)
         .subscribe(data => {
           if(data.status.toLowerCase()=='ok') {
+            console.log("getLatLng('"+ address+ "')", data);
             var g = new GoogleLocation();
 
             for(var r of data.results) {
