@@ -21,6 +21,8 @@ import { UserprofileApiProvider } from '../../providers/userprofile-api/userprof
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
 import { AddressPickerPage } from '../../pages/address-picker/address-picker';
+import { MenuHelper } from '../../providers/feritual-api/feritual-helper';
+
 
 @IonicPage()
 @Component({
@@ -181,6 +183,7 @@ export class FoodPage {
       for(var menu of results) {
         var loc = this.getLocationFromId(this.locations, menu.locationId);
         menu.location = loc;
+        MenuHelper.fixMenuPhotoUrl(menu);
       }
 
       this.results = results;
