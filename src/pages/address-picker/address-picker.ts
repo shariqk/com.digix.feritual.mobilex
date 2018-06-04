@@ -17,7 +17,7 @@ export class AddressPickerPage {
 
   profile : UserProfile;
   searchAddress : string;
-  suggestedAddress : string[];// = ['JFK', 'PHL', 'Bryn Mawr'];
+  suggestedAddress : string[];
   editingAddress = false;
 
   constructor(public navCtrl: NavController,
@@ -28,14 +28,6 @@ export class AddressPickerPage {
     public googleApi : GoogleApiProvider,
     public navParams: NavParams) {
       this.initialize();
-    /*
-    this.recentAddressList = [
-      "645 Morris Ave, Bryn Mawr, PA 19010",
-      "2300 Byberry Road, Bensalem, PA 19020",
-      "New York, NY",
-      "San Francisco, CA"
-    ];
-    */
   }
 
   async initialize() {
