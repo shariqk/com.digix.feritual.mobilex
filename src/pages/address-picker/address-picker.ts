@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController, LoadingController}
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
-import { GoogleLocation } from '../../providers/google-api/google-api.model';
+import { GoogleLocation, AutocompleteResult } from '../../providers/google-api/google-api.model';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
@@ -17,6 +17,8 @@ export class AddressPickerPage {
 
   profile : UserProfile;
   searchAddress : string;
+  suggestedAddress : string[];// = ['JFK', 'PHL', 'Bryn Mawr'];
+  editingAddress = false;
 
   constructor(public navCtrl: NavController,
     public loadingCtrl : LoadingController,
@@ -44,6 +46,22 @@ export class AddressPickerPage {
     }
     this.profile = profile;
   }
+
+  async lookupAddress() {
+    if(this.searchAddress.length<3) {
+      this.suggestedAddress = [];
+      return;
+    }
+
+    let places : string[] = [];
+    let result = await this.googleApi.getAutocompleteAddressAsync(this.searchAddress);
+    for(let p of result.predictions) {
+      places.push(p.description);
+    }
+    this.suggestedAddress = places;
+  }
+
+
 
   searchClicked() {
     if(this.searchAddress !=null && this.searchAddress != '')

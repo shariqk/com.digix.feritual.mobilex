@@ -51,3 +51,16 @@ export interface Viewport {
     northeast: Location;
     southwest: Location;
 }
+
+
+export interface AutocompleteResult {
+  predictions : AutocompletePrediction[];
+  status : string;
+}
+
+export interface AutocompletePrediction {
+  description : string;
+  id : string;
+  place_id : string;
+  types : string[];
+}

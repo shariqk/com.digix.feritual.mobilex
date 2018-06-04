@@ -2,17 +2,31 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Select a Location</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="cancelClicked()">
+        <ion-icon large name="close-circle"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-toolbar>
-</ion-header>
 
+  </ion-header>
 
 <ion-content>
-  <ion-searchbar
-    [(ngModel)]="searchAddress"
-    (ion-input)="doLocationMenuSearch($event)"
-    (ionClear)="searchCleared()"
-    placeholder='Try "San Francisco or PHL or JFK"'>
-  </ion-searchbar>
+
+  <div class="autocomplete">
+
+    <ion-searchbar
+      (ionFocus)="editingAddress=true"
+      [(ngModel)]="searchAddress"
+      (ionInput)="lookupAddress()"
+      placeholder='Try "San Francisco or PHL or JFK"'>
+    </ion-searchbar>
+    <ion-list *ngIf="editingAddress">
+    		<ion-item *ngFor="let a of suggestedAddress" (click)="searchAddress=a; searchClicked()">
+    			{{a}}
+    		</ion-item>
+    	</ion-list>
+  </div>
 
   <ion-item (click)="nearbySelected()" class='item-address'>
     <ion-icon color="primary" name="navigate" item-start></ion-icon>
@@ -30,6 +44,7 @@
     </ion-item>
   </div>
 
+  <!--
   <ion-row>
     <ion-col>
       <button ion-button class="button" colors="primary" round outline (click)="searchClicked()">
@@ -40,6 +55,6 @@
       </button>
     </ion-col>
   </ion-row>
-
+-->
 
 </ion-content>

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { PlaceAddress, LatLngSearchResult, GoogleLocation } from './google-api.model';
+import { PlaceAddress, LatLngSearchResult, GoogleLocation, AutocompleteResult} from './google-api.model';
 
 @Injectable()
 export class GoogleApiProvider {
@@ -16,6 +16,23 @@ export class GoogleApiProvider {
   apiKey = 'AIzaSyAr4n5frpt323W9RRzxjpEgxhQbDUzVzV0';
   baseUrl = 'https://maps.googleapis.com/maps/api/geocode';
 
+  public getAutocompleteAddressAsync(input : string) : Promise<AutocompleteResult> {
+    //https://maps.googleapis.com/maps/api/place/autocomplete/json?input=PHL&types=address&key=AIzaSyAr4n5frpt323W9RRzxjpEgxhQbDUzVzV0
+    let ctx = this;
+    return new Promise(function(resolve, reject) {
+      let url = 'http://comdigixferitualwebapi.azurewebsites.net/api/feritual/addressprediction?input=' + input;
+
+      let result = ctx.http.get(url)
+        .map(res => <AutocompleteResult>res)
+        .subscribe(
+          result => {
+            resolve(result)
+          },
+          error => { console.log('getAutocompleteAddressAsync', error); reject(error); }
+        );
+    });
+
+  }
 
   public getLocationFromLatLng(lat : number, lng : number) : Promise<GoogleLocation> {
     var ctx = this;
@@ -39,6 +56,24 @@ export class GoogleApiProvider {
             else {
               resolve(null);
             }
+          },
+          error => { console.log('getLocationFromLatLng', error); reject(error); }
+        );
+    });
+  }
+
+
+  public getLatLngAsync(address : string) : Promise<LatLngSearchResult> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      let url : string = ctx.baseUrl + '/json?address=' + address.replace(' ','+')
+        + '&key=' + ctx.apiKey;
+
+      let result = ctx.http.get(url)
+        .map(res => <LatLngSearchResult>res)
+        .subscribe(
+          loc => {
+            resolve(loc)
           },
           error => { console.log('getLocationFromLatLng', error); reject(error); }
         );
