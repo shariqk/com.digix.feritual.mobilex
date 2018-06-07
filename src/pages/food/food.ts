@@ -1,5 +1,5 @@
 import { Component , ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController, ModalController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import { FoodApiProvider } from '../../providers/food-api/food-api';
@@ -43,6 +43,7 @@ export class FoodPage {
     public modalCtrl : ModalController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
     private profileApi : UserprofileApiProvider,
     private geolocation: Geolocation,
     private googleApi : GoogleApiProvider,
@@ -171,11 +172,11 @@ export class FoodPage {
         return;
     }
 
-    let toast = this.toastCtrl.create({
-        message: 'Searching...',
-        position: 'top'
-      });
-    toast.present();
+    let loading = this.loadingCtrl.create({
+       content: 'Searching...',
+     });
+    loading.present();
+
 
     try {
       let results =  await this.ferApi.searchLocationMenuAsync(this.locations, this.searchTerm);
@@ -192,7 +193,7 @@ export class FoodPage {
       alert('error in getting locations: ' + JSON.stringify(err));
     }
     finally {
-      toast.dismiss();
+      loading.dismiss();
     }
 
 

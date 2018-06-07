@@ -35,7 +35,8 @@ export class LocationMenuPage {
 
   async initialize(loc : FxLocation, refresh : boolean) {
     let loading = this.loadingCtrl.create({
-       content: 'Please wait...'
+       content: 'Please wait...',
+       spinner: 'spiral'
      });
     loading.present();
 
