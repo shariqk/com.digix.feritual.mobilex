@@ -33,6 +33,25 @@ export class FeritualApiProvider {
     });
   }
 
+  public searchForRecipes(query : string, from : number, to : number) : Promise<FxLocation[]> {
+    //https://comdigixferitualwebapi.azurewebsites.net/api/feritual/searchrecipe?query=chicken
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      let url : string = ctx.baseUrl + '/searchrecipe?query=' + query
+        + '&from=' + from
+        + '&to=' + to;
+      //console.log('getLocationsAsync', url);
+
+      ctx.http.get(url)
+        .map(res => <FxLocation[]>res)
+        .subscribe(
+          locations => {
+            resolve(locations)
+          },
+          error => { console.log('getLocationsAsync', error); reject(error); }
+        );
+    });
+  }
 
   public getLocationMenuAsync(locationId : string, provider : string, refresh : boolean) : Promise<FxLocationMenu> {
     var ctx = this;
