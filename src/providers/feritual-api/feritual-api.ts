@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { FxLocation, FxLocationMenu } from './feritual-api.model';
+import { FxLocation, FxLocationMenu, RecipeSearchResult } from './feritual-api.model';
 
 @Injectable()
 export class FeritualApiProvider {
@@ -33,7 +33,7 @@ export class FeritualApiProvider {
     });
   }
 
-  public searchForRecipes(query : string, from : number, to : number) : Promise<FxLocation[]> {
+  public searchForRecipes(query : string, from : number, to : number) : Promise<RecipeSearchResult> {
     //https://comdigixferitualwebapi.azurewebsites.net/api/feritual/searchrecipe?query=chicken
     var ctx = this;
     return new Promise(function(resolve, reject) {
@@ -43,12 +43,12 @@ export class FeritualApiProvider {
       //console.log('getLocationsAsync', url);
 
       ctx.http.get(url)
-        .map(res => <FxLocation[]>res)
+        .map(res => <RecipeSearchResult>res)
         .subscribe(
           locations => {
             resolve(locations)
           },
-          error => { console.log('getLocationsAsync', error); reject(error); }
+          error => { console.log('searchForRecipes', error); reject(error); }
         );
     });
   }

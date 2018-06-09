@@ -196,5 +196,65 @@ export class FxLocationMenuItem {
   public allergen_contains_peanuts : boolean;
   public allergen_contains_gluten : boolean;
   */
-  
+
+}
+
+
+
+export interface RecipeSearchResult {
+    q:     string;
+    from:  number;
+    to:    number;
+    more:  boolean;
+    count: number;
+    hits:  Hit[];
+}
+
+export interface Hit {
+    recipe:     Recipe;
+    bookmarked: boolean;
+    bought:     boolean;
+}
+
+export interface Recipe {
+    uri:             string;
+    label:           string;
+    image:           string;
+    source:          string;
+    url:             string;
+    shareAs:         string;
+    yield:           number;
+    dietLabels:      string[];
+    healthLabels:    string[];
+    cautions:        any[];
+    ingredientLines: string[];
+    ingredients:     Ingredient[];
+    calories:        number;
+    totalWeight:     number;
+    totalTime:       number;
+    totalNutrients:  { [key: string]: Total };
+    totalDaily:      { [key: string]: Total };
+    digest:          Digest[];
+}
+
+export interface Digest {
+    label:        string;
+    tag:          string;
+    schemaOrgTag: null | string;
+    total:        number;
+    hasRdi:       boolean;
+    daily:        number;
+    unit:         string;
+    sub:          Digest[] | null;
+}
+
+export interface Ingredient {
+    text:   string;
+    weight: number;
+}
+
+export interface Total {
+    label:    string;
+    quantity: number;
+    unit:     string;
 }

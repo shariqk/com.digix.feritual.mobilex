@@ -7,12 +7,42 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>RecipesPage</ion-title>
+    <ion-title>Recipes</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+
+  <ion-searchbar
+    [(ngModel)]="searchTerm"
+    (search)="doRecipeSearch($event)"
+    (ionClear)="searchCleared()"
+    placeholder="{{placeholderText}}">
+  </ion-searchbar>
+
+  <div *ngIf="this.hits!=null">
+      <ion-row *ngFor="let h of hits" (click)="navigateToRecipe(h.recipe)" align-items-start>
+        <ion-col col-3>
+          <img style='padding:5px;' [src]="h.recipe.image">
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-col class="r-title">
+              {{h.recipe.label}}
+              <br/>
+              <span class="r-details">Source: {{h.recipe.source}}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="r-details">
+              <li><span [innerHtml]="getDetails(h.recipe)"></span><br/>
+              <li><span [innerHtml]="h.recipe.healthLabels"></span><br/>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+  </div>
 
 </ion-content>

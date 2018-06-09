@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 
-/**
- * Generated class for the RecipesPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
+import { Hit, Recipe } from '../../providers/feritual-api/feritual-api.model';
 
 @IonicPage()
 @Component({
@@ -15,11 +11,52 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class RecipesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  searchTerm : string;
+  placeholderText : string = 'Type an ingredient to search for';
+  hits : Hit[];
+
+  constructor(public navCtrl: NavController,
+    private loadingCtrl : LoadingController,
+    private ferApi : FeritualApiProvider,
+    public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad RecipesPage');
+    //console.log('ionViewDidLoad RecipesPage');
+  }
+
+  getDetails(r : Recipe) : string {
+    let str = 'Serves ' + r.yield
+          + ', ' + Math.floor(r.calories) + ' calories';
+    return str;
+  }
+
+  navigateToRecipe(r : Recipe) {
+    window.open(r.url);
+
+  }
+
+  async doRecipeSearch(event : any) {
+    let loading = this.loadingCtrl.create({
+       content: 'Please wait...'
+     });
+    loading.present();
+
+    try {
+      let result = await this.ferApi.searchForRecipes(this.searchTerm, 0, 10);
+      console.log('recipes', result);
+      this.hits = result.hits;
+    }
+    catch(err) {
+      alert('Error in loading menu:' + JSON.stringify(err));
+    }
+    finally {
+      loading.dismiss();
+    }
+  }
+
+  searchCleared() {
+    this.hits = null;
   }
 
 }
