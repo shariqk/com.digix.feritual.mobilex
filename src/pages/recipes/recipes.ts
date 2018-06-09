@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController  } from 'ionic-angular';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { Hit, Recipe } from '../../providers/feritual-api/feritual-api.model';
@@ -18,6 +19,7 @@ export class RecipesPage {
   constructor(public navCtrl: NavController,
     private loadingCtrl : LoadingController,
     private ferApi : FeritualApiProvider,
+    private browser: InAppBrowser,
     public navParams: NavParams) {
   }
 
@@ -32,8 +34,7 @@ export class RecipesPage {
   }
 
   navigateToRecipe(r : Recipe) {
-    window.open(r.url);
-
+    this.browser.create(r.url);
   }
 
   async doRecipeSearch(event : any) {
@@ -43,7 +44,7 @@ export class RecipesPage {
     loading.present();
 
     try {
-      let result = await this.ferApi.searchForRecipes(this.searchTerm, 0, 10);
+      let result = await this.ferApi.searchForRecipes(this.searchTerm, 0, 50);
       console.log('recipes', result);
       this.hits = result.hits;
     }

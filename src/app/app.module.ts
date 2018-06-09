@@ -6,6 +6,7 @@ import { MyApp } from './app.component';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { FoodPage } from '../pages/food/food';
 import { ProfilePage } from '../pages/profile/profile';
@@ -65,6 +66,7 @@ import { UserprofileApiProvider } from '../providers/userprofile-api/userprofile
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FoodApiProvider,
     Camera,
+    InAppBrowser,
     Geolocation,
     EatstreetApiProvider,
     MsvisionApiProvider,
