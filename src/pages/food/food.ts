@@ -6,7 +6,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { FoodListComponent } from '../../components/food-list/food-list'
 //import { LocationSearchResult, FoodLocation, FoodLocationMenu } from '../../providers/food-api/food-api.model';
 //import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
-import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
+//import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
 //import { FoodSearch } from './foodSearch';
 //import { FxLocation, FxLocationMenu } from '../../providers/models/fxlocation';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';

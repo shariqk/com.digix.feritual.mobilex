@@ -4,6 +4,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { Hit, Recipe } from '../../providers/feritual-api/feritual-api.model';
+import { RecipeDetailPage } from '../recipe-detail/recipe-detail';
 
 @IonicPage()
 @Component({
@@ -34,7 +35,10 @@ export class RecipesPage {
   }
 
   navigateToRecipe(r : Recipe) {
-    this.browser.create(r.url);
+    this.navCtrl.push(RecipeDetailPage,
+      {
+        recipe : r
+      });
   }
 
   async doRecipeSearch(event : any) {
@@ -44,7 +48,7 @@ export class RecipesPage {
     loading.present();
 
     try {
-      let result = await this.ferApi.searchForRecipes(this.searchTerm, 0, 50);
+      let result = await this.ferApi.searchForRecipes(this.searchTerm, 0, 100);
       console.log('recipes', result);
       this.hits = result.hits;
     }

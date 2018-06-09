@@ -16,6 +16,7 @@ import { FoodListComponent } from '../components/food-list/food-list';
 import { AddressPickerPage } from '../pages/address-picker/address-picker';
 import { LocationMenuPage } from '../pages/location-menu/location-menu';
 import { RecipesPage } from '../pages/recipes/recipes';
+import { RecipeDetailPage } from '../pages/recipe-detail/recipe-detail';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -36,6 +37,7 @@ import { UserprofileApiProvider } from '../providers/userprofile-api/userprofile
     AddressPickerPage,
     LocationMenuPage,
     RecipesPage,
+    RecipeDetailPage,
     FoodListComponent
   ],
   imports: [
@@ -57,6 +59,7 @@ import { UserprofileApiProvider } from '../providers/userprofile-api/userprofile
     TabsPage,
     AddressPickerPage,
     RecipesPage,
+    RecipeDetailPage,
     LocationMenuPage,
     FoodListComponent
   ],
