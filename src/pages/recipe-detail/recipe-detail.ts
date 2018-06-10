@@ -21,6 +21,10 @@ export class RecipeDetailPage {
     console.log('recipe', this.recipe);
   }
 
+  favoriteToggle(r : Recipe) {
+    alert('Favorites funtionality is not written yet but you get the concept');
+  }
+
   navigateToRecipe(r : Recipe) {
     this.browser.create(r.url);
   }
