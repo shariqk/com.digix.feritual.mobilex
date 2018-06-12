@@ -2,7 +2,20 @@ page-recipe-detail {
   li {
     font-size: 9pt;
     color: black;
-    padding: 1px;
+//    padding: 1px;
+
+
+  list-style-type: disc;
+  list-style-position: outside;
+  text-indent: -1em;
+  padding-left: 1em;
+
+//    display: table-row;
+  }
+
+
+  ol > li::before {
+//      display: table-cell; /* aha! */
   }
 
 }

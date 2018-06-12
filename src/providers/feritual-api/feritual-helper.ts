@@ -1,5 +1,42 @@
-import { FxLocation, FxLocationMenu, FxLocationMenuItem } from './feritual-api.model';
+import { FxLocation, FxLocationMenu, FxLocationMenuItem, Recipe } from './feritual-api.model';
 import { UserProfile } from '../userprofile-api/userprofile.model';
+
+export class RecipeHelper {
+  public static getRecipeId(r : Recipe) {
+    let i = r.uri.indexOf("#recipe_") +1;
+    return r.uri.substr(i);
+  }
+
+  public static isFavoriteRecipe(p : UserProfile, r : Recipe) : boolean
+  {
+    return (p.favoriteRecipes.indexOf(RecipeHelper.getRecipeId(r))>=0);
+  }
+
+  public static setFavoriteRecipe(p : UserProfile, r : Recipe, setFlag : boolean) : boolean
+  {
+    let id = RecipeHelper.getRecipeId(r);
+    console.log('id: ', id, 'setFlag: ', setFlag);
+    if(setFlag)
+    {
+      if(!RecipeHelper.isFavoriteRecipe(p, r)) {
+        p.favoriteRecipes.push(id);
+        return true;
+      }
+      else { return false; }
+    }
+    else if (!setFlag) {
+      let i = p.favoriteRecipes.indexOf(id);
+      console.log('i: ', i);
+      if(i>=0) {
+        p.favoriteRecipes.splice(i, 1);
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+  }
+}
 
 export class MenuHelper
 {

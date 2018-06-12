@@ -7,6 +7,17 @@ export class UserProfile {
   public allergies = new UserProfileAllergies();
   public cuisine = new CuisinePreferences();
   public recentAddressList : string[] = [];
+
+  public favoriteRecipes : string[] = [];
+
+  public static validate(p : UserProfile) : UserProfile {
+    if(p.allergies==null) { p.allergies = new UserProfileAllergies(); }
+    if(p.cuisine==null) { p.cuisine = new CuisinePreferences(); }
+    if(p.recentAddressList==null) { p.recentAddressList = []; }
+    if(p.favoriteRecipes==null) { p.favoriteRecipes = [] }
+
+    return p;
+  }
 }
 
 export interface KeyValueItem {

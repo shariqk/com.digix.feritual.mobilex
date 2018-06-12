@@ -18,7 +18,7 @@
 
     <ion-col>
       <li><b>Serves:</b> {{recipe.yield}}
-      <li><b>Cooking time:</b> {{recipe.totalTime}}
+      <li><b>Cooking time:</b> {{recipe.totalTime}} m
       <li><b>Total weight:</b> {{floor(recipe.totalWeight)}}
 
       <button ion-button icon-only clear (click)="navigateToRecipe(recipe)">
@@ -26,7 +26,8 @@
       </button>
 
       <button ion-button icon-only clear (click)="favoriteToggle(recipe)">
-        <ion-icon large name="heart-outline"></ion-icon>
+        <ion-icon *ngIf="!isFavorite" large name="heart-outline"></ion-icon>
+        <ion-icon *ngIf="isFavorite" large name="heart"></ion-icon>
       </button>
     </ion-col>
   </ion-row>
@@ -61,22 +62,19 @@
       <li *ngFor="let d of recipe.digest">{{d.label}}: {{floor(d.total)}} {{d.unit}}
     </ion-col>
   </ion-row>
-<!--
-  <ion-row>
-    <ion-col>
-      <b>Total Daily</b>
-
-      <li *ngFor="let d of recipe.totalDaily">{{d.label}}: {{floor(d.quantity)}}{{d.unit}}
-    </ion-col>
-  </ion-row>
 
   <ion-row>
     <ion-col>
       <b>Total Nutrients</b>
 
-      <li *ngFor="let d of recipe.totalNutrients">{{d.label}}: {{floor(d.quantity)}} {{d.unit}}
+      <li *ngFor="let d of getObjectArray(recipe.totalNutrients)">{{d.label}}: {{floor(d.quantity)}} {{d.unit}}
+    </ion-col>
+
+    <ion-col>
+      <b>Total Daily</b>
+
+      <li *ngFor="let d of getObjectArray(recipe.totalDaily)">{{d.label}}: {{floor(d.quantity)}}{{d.unit}}
     </ion-col>
   </ion-row>
--->
 
 </ion-content>

@@ -23,8 +23,10 @@ export class UserprofileApiProvider {
             }
             else {
               //console.log('loaded', json);
-              let token = JSON.parse(json);
-              resolve(token);
+              let profile = JSON.parse(json);
+              console.log('profile', profile);
+              //if(profile !=null) { UserProfile.validate(profile) };
+              resolve(profile);
             }
           });
         });

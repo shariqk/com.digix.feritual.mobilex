@@ -49,7 +49,7 @@ export class RecipesPage {
 
     try {
       let result = await this.ferApi.searchForRecipes(this.searchTerm, 0, 100);
-      console.log('recipes', result);
+      //console.log('recipes', result);
       this.hits = result.hits;
     }
     catch(err) {
