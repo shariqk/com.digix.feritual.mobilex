@@ -25,7 +25,7 @@ export class UserprofileApiProvider {
               //console.log('loaded', json);
               let profile = JSON.parse(json);
               console.log('profile', profile);
-              //if(profile !=null) { UserProfile.validate(profile) };
+              UserProfile.validate(profile);
               resolve(profile);
             }
           });
