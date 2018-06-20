@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController, LoadingController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
@@ -22,6 +22,7 @@ export class ProfilePage {
   constructor(public navCtrl: NavController,
     public http : HttpClient,
     private viewCtrl: ViewController,
+    private loadingCtrl : LoadingController,
     private profileApi : UserprofileApiProvider,
     public navParams: NavParams) {
 
@@ -29,20 +30,34 @@ export class ProfilePage {
   }
 
   async initialize() {
-    let p =  this.navParams.get('profile');
-    this.profile = JSON.parse(JSON.stringify(p));
-    console.log('profile', this.profile);
+    let loading = this.loadingCtrl.create({
+       content: 'Please wait...'
+     });
+    loading.present();
 
-    this.options = await this.profileApi.getUserProfileOptionsAsync();
-    console.log('user profile options', this.options);
+    try {
+      let p =  this.navParams.get('profile');
+      this.profile = JSON.parse(JSON.stringify(p));
+      //console.log('profile', this.profile);
+
+      this.options = await this.profileApi.getUserProfileOptionsAsync();
+      //console.log('user profile options', this.options);
 
 
-    this.mergeArrays(this.options.cuisines, this.profile.cuisines);
+      this.mergeArrays(this.options.cuisines, this.profile.cuisines);
 
-    this.diets = this.createKeyValueItemArray(this.options.diets, this.profile.diets);
-    this.avoids = this.createKeyValueItemArray(this.options.avoids, this.profile.avoids);
+      this.diets = this.createKeyValueItemArray(this.options.diets, this.profile.diets);
+      this.avoids = this.createKeyValueItemArray(this.options.avoids, this.profile.avoids);
 
-    this.initialized = true;
+      this.initialized = true;
+    }
+    catch(err) {
+      alert('Error in loading menu:' + JSON.stringify(err));
+
+    }
+    finally {
+      loading.dismiss();
+    }
   }
 
   createKeyValueItemArray(keys : string[], selections : string[]) : KeyValueItem[] {
@@ -127,7 +142,7 @@ export class ProfilePage {
     this.profile.diets = this.getSelectedKeys(this.diets);
     this.profile.avoids = this.getSelectedKeys(this.avoids);
 
-    console.log('profile to save', this.profile);
+    //console.log('profile to save', this.profile);
 
     this.viewCtrl.dismiss(this.profile);
   }

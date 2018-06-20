@@ -63,16 +63,16 @@ export class MenuHelper
 
   public static applyAllergies(menu : FxLocationMenu, profile : UserProfile)
   {
-    let allergies = profile.allergies;
+    let allergies = profile.avoids;
 
     for(var c of menu.categories) {
       for(var item of c.items) {
         let str = item.name + ' ' + item.description + ' ' + item.details;
         str = str.toLowerCase();
-        for(let a of profile.allergies.Items) {
-          if(a.value && str.indexOf(a.key)>=0) {
-            item.allergic = true;
-          }
+        for(let a of profile.avoids) {
+          //if(a.value && str.indexOf(a.key)>=0) {
+          //  item.allergic = true;
+          //}
         }
         MenuHelper.fixMenuItemPhotoUrl(item);
       }
