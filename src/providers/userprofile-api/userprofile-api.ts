@@ -2,14 +2,31 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
-import { UserProfile } from './userprofile.model';
+import { UserProfile, UserProfileOptions } from './userprofile.model';
 
 @Injectable()
 export class UserprofileApiProvider {
+  baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
 
   constructor(
     public http: HttpClient,
     private storage : Storage) {
+  }
+
+  public getUserProfileOptionsAsync() : Promise<UserProfileOptions> {
+    var ctx = this;
+    return new Promise(function(resolve, reject) {
+      let url = ctx.baseUrl + '/userprofileoptions';
+
+      ctx.http.get(url)
+        .map(res => <UserProfileOptions>res)
+        .subscribe(
+          options => {
+            resolve(options)
+          },
+          error => { console.log('getUserProfileOptions', error); reject(error); }
+        );
+    });
   }
 
   _profileStorageKeyName='user.profile';

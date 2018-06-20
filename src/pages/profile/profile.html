@@ -13,17 +13,30 @@
       </button>
     </ion-buttons>
   </ion-toolbar>
+
+  <div padding>
+    <ion-segment [(ngModel)]="pref">
+      <ion-segment-button value="avoids">
+        Avoids
+      </ion-segment-button>
+      <ion-segment-button value="cuisines">
+        Cuisines
+      </ion-segment-button>
+      <ion-segment-button value="diets">
+        Diets
+      </ion-segment-button>
+    </ion-segment>
+  </div>
 </ion-header>
 
 
 <ion-content padding>
-  <div *ngIf="profile!=null">
-    <ion-row>
+  <div *ngIf="initialized" [ngSwitch]="pref">
+    <ion-row *ngSwitchCase="'avoids'">
       <ion-col>
-        <h4>Allergies</h4>
-
+        <h4>Avoids</h4>
         <ion-list no-lines>
-          <ion-item class='item-name' *ngFor="let a of profile.allergies.Items">
+          <ion-item class='item-name' *ngFor="let a of this.avoids">
             <ion-label>{{a.key}}</ion-label>
             <ion-checkbox [(ngModel)]="a.value"></ion-checkbox>
           </ion-item>
@@ -31,13 +44,27 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
-
+    <ion-row *ngSwitchCase="'cuisines'">
       <ion-col>
-        <h4>Preferences</h4>
-        <ion-list no-lines reorder="true" (ionItemReorder)="reorderItems($event)">
-            <ion-item class='item-name' *ngFor="let c of profile.cuisine.Items">
-              {{c.key}}
+        <h4>Cuisines</h4>
+        <ion-list no-lines reorder="true" (ionItemReorder)="reorderItems(profile.cuisines, $event)">
+            <ion-item class='item-name' *ngFor="let c of profile.cuisines">
+              {{c}}
+            </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+
+    <ion-row *ngSwitchCase="'diets'">
+      <ion-col>
+        <h4>Diets</h4>
+        <ion-list no-lines>
+            <ion-item class='item-name' *ngFor="let d of diets">
+              <ion-label>{{d.key}}</ion-label>
+              <ion-checkbox [(ngModel)]="d.value"></ion-checkbox>
+
+              <!-- <ion-checkbox (ionChange)="itemSelectionChange(profile.diets, d, $event)"></ion-checkbox> -->
             </ion-item>
         </ion-list>
       </ion-col>

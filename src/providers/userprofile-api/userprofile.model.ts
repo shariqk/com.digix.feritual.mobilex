@@ -4,26 +4,39 @@ export class UserProfile {
   public email : string;
   public id : string;
 
-  public allergies = new UserProfileAllergies();
-  public cuisine = new CuisinePreferences();
-  public recentAddressList : string[] = [];
+  //public allergies = new UserProfileAllergies();
+  //public cuisine = new CuisinePreferences();
 
+  public avoids : string[] = [];
+  public cuisines : string[] = [];
+  public recentAddressList : string[] = [];
+  public diets : string[] = [];
   public favoriteRecipes : string[] = [];
 
   public static validate(p : UserProfile) : UserProfile {
-    if(p.allergies==null) { p.allergies = new UserProfileAllergies(); }
-    if(p.cuisine==null) { p.cuisine = new CuisinePreferences(); }
-    if(p.recentAddressList==null) { p.recentAddressList = []; }
+    if(p.avoids==null) { p.avoids = [] }
+    if(p.recentAddressList==null) { p.recentAddressList = [] }
     if(p.favoriteRecipes==null) { p.favoriteRecipes = [] }
+    if(p.diets == null) { p.diets = [] }
+    if(p.cuisines == null) { p.cuisines = [] }
 
     return p;
   }
 }
 
+export interface UserProfileOptions {
+    cuisines: string[];
+    avoids:   string[];
+    diets:    string[];
+}
+
+
 export interface KeyValueItem {
  key : string;
- value : any;
+ value : boolean;
 }
+
+
 
 
 
@@ -103,7 +116,7 @@ export class CuisinePreferences {
     for(let key of CuisinePreferences.keys) {
       this.Items.push({
         key: key,
-        value: 5
+        value: false
       });
     }
 
