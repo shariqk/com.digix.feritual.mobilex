@@ -5,11 +5,12 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 import { FxLocation, FxLocationMenu, RecipeSearchResult } from './feritual-api.model';
+import { UserProfile } from '../userprofile-api/userprofile.model';
 
 @Injectable()
 export class FeritualApiProvider {
-  baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
-  //baseUrl = 'http://localhost:56893/api/feritual';
+  //baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
+  baseUrl = 'http://localhost:56893/api/feritual';
 
   constructor(public http: HttpClient) {
   }
@@ -53,11 +54,11 @@ export class FeritualApiProvider {
     });
   }
 
-  public getLocationMenuAsync(locationId : string, provider : string, refresh : boolean) : Promise<FxLocationMenu> {
+  public getLocationMenuAsync(locationId : string, provider : string, refresh : boolean, profile : UserProfile) : Promise<FxLocationMenu> {
     var ctx = this;
     return new Promise(function(resolve, reject) {
       //https://comdigixferitualwebapi.azurewebsites.net/api/feritual/menu?id=23909fa74bd804fb144247b91fbcb2f3e04f50a61623f62f&provider=es
-      let url : string = ctx.baseUrl + '/menu?id=' + locationId
+      let url : string = ctx.baseUrl + '/locationmenu?id=' + locationId
         + '&provider=' + provider;
       if(refresh) {
         url += '&refresh=1';
@@ -65,7 +66,7 @@ export class FeritualApiProvider {
 
       console.log('getLocationMenuAsync', url);
 
-      ctx.http.get(url)
+      ctx.http.post(url, JSON.stringify(profile))
         .map(res => <FxLocationMenu>res)
         .subscribe(
           menu => {
@@ -77,7 +78,7 @@ export class FeritualApiProvider {
     });
   }
 
-  public searchLocationMenuAsync(fxLocations: FxLocation[], query : string) : Promise<FxLocationMenu[]> {
+  public searchLocationMenuAsync(fxLocations: FxLocation[], query : string, profile : UserProfile) : Promise<FxLocationMenu[]> {
     var ctx = this;
     return new Promise(function(resolve, reject) {
       let url : string = ctx.baseUrl + '/search';
@@ -87,26 +88,23 @@ export class FeritualApiProvider {
       for(let loc of fxLocations) {
         locations.push({
           id: loc.id,
-          provider: loc.type
+          provider: loc.provider
         })
       }
 
       var options = {
         query: query,
-        locations: locations
+        locations: locations,
+        profile : profile
       };
 
       var headers = new HttpHeaders();
       headers = headers.set('Content-Type', 'application/json');
-        //.set('Accept', 'application/json');
-
-      //console.log('searchLocationMenuAsync.options', options);
 
       ctx.http.post(url, JSON.stringify(options))
         .map(res => <FxLocationMenu[]>res)
         .subscribe(
           results => {
-            //console.log('results', results);
             resolve(results)
           },
           error => { console.log('searchLocationMenuAsync', error); reject(error); }

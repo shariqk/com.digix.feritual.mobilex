@@ -74,7 +74,8 @@ export class FoodPage {
   {
     this.navCtrl.push(LocationMenuPage,
       {
-        location : loc
+        location : loc,
+        profile : this.profile
       });
   }
 
@@ -93,9 +94,9 @@ export class FoodPage {
       let locations = await this.ferApi.getLocationsAsync(loc.lat, loc.lng, this.radius);
       //console.log(this.locations);
 
-      var obj = new DistanceCalculator();
-      obj.calculateDistance(loc.lat, loc.lng, locations);
-      obj.sortByDistance(locations);
+      //var obj = new DistanceCalculator();
+      //obj.calculateDistance(loc.lat, loc.lng, locations);
+      //obj.sortByDistance(locations);
 
       for(var l of locations) {
         if(l.logoUrl==null) {
@@ -179,7 +180,7 @@ export class FoodPage {
 
 
     try {
-      let results =  await this.ferApi.searchLocationMenuAsync(this.locations, this.searchTerm);
+      let results =  await this.ferApi.searchLocationMenuAsync(this.locations, this.searchTerm, this.profile);
 
       for(var menu of results) {
         var loc = this.getLocationFromId(this.locations, menu.locationId);
@@ -196,11 +197,6 @@ export class FoodPage {
       loading.dismiss();
     }
 
-
-    //var search = new FoodSearch(this.api, this.eatstreetApi);
-    //this.results = await search.search(this.locations, this.searchTerm);
-    //console.log(this.results);
-    //toast.dismiss();
   }
 
 }

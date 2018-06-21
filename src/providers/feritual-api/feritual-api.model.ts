@@ -1,19 +1,26 @@
 
-export class FxLocationType {
-  public static provider_type_nx = 'nx';
-  public static provider_type_es = 'es';
-
-}
+//export class FxLocationType {
+//  public static provider_type_nx = 'nx';
+//  public static provider_type_es = 'es';
+//
+//}
 
 export class FxLocation {
   public id : string;
   public name : string;
   public lat : number;
   public lng : number;
-  public type : string;
+  public provider : string;
   public distance : number;
   public logoUrl : string;
   public description : string;
+
+  public foodTypes : string[];
+
+  public street : string;
+  public city : string;
+  public zip : string;
+  public state : string;
 }
 
 export class FxIcons {
@@ -182,8 +189,8 @@ export class FxLocationMenuItem {
   public calories : number;
   public photoUrl : string;
 
-  public allergic : boolean;
-  public allergic_reason : string;
+  public avoid : boolean;
+  public avoidReason : string;
 
   /*
   public allergen_contains_milk : boolean;

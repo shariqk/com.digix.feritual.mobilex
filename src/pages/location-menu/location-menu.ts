@@ -3,19 +3,19 @@ import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-an
 import { Observable } from 'rxjs/Observable';
 
 
-import { FoodApiProvider } from '../../providers/food-api/food-api';
-import { FoodSearchResult } from '../../providers/food-api/food-api.model';
+//import { FoodApiProvider } from '../../providers/food-api/food-api';
+//import { FoodSearchResult } from '../../providers/food-api/food-api.model';
 
-import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
-import { RestaurantMenuNode } from '../../providers/eatstreet-api/eatstreet-api.model';
+//import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
+//import { RestaurantMenuNode } from '../../providers/eatstreet-api/eatstreet-api.model';
 
 //import { FxLocation, FxLocationMenu, FxLocationMenuItem, FxLocationType, FxIcons } from '../../providers/models/fxlocation';
-import { FoodItem } from '../../providers/food-api/food-api.model';
+//import { FoodItem } from '../../providers/food-api/food-api.model';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { FxLocation, FxLocationMenu, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
 import { MenuHelper } from '../../providers/feritual-api/feritual-helper';
-
+import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
 
 @IonicPage()
 @Component({
@@ -33,14 +33,14 @@ export class LocationMenuPage {
     public navParams: NavParams) {
   }
 
-  async initialize(loc : FxLocation, refresh : boolean) {
+  async initialize(loc : FxLocation, profile : UserProfile, refresh : boolean) {
     let loading = this.loadingCtrl.create({
        content: 'Please wait...'
      });
     loading.present();
 
     try {
-      let menus = await this.ferApi.getLocationMenuAsync(loc.id, loc.type, refresh);
+      let menus = await this.ferApi.getLocationMenuAsync(loc.id, loc.provider, refresh, profile);
       let menu = menus[0];
       MenuHelper.fixMenuPhotoUrl(menu);
       this.menu = menu;
@@ -57,8 +57,9 @@ export class LocationMenuPage {
   async refreshData(refresher: any) {
     try {
       let loc = this.navParams.get('location');
+      let profile = this.navParams.get('profile');
       let refresh = (refresher != null);
-      await this.initialize(loc, refresh);
+      await this.initialize(loc, profile, refresh);
     }
     finally {
       if(refresher != null) {

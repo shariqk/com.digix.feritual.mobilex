@@ -45,7 +45,9 @@
             <ion-row>
               <ion-col class="loc-details">
                 <p *ngIf="loc.description!=null" [innerHtml]="loc.description"></p>
-                {{formatDistance(loc.distance)}}
+                <span *ngIf="loc.foodTypes!=null">type: {{loc.foodTypes}}<br></span>
+                {{loc.street}}, {{loc.city}}<br/>
+                distance: {{formatDistance(loc.distance)}}
               </ion-col>
             </ion-row>
           </ion-col>

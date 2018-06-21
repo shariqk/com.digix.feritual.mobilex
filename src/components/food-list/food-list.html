@@ -11,6 +11,13 @@
             {{menu.location.name}}
           </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-col class="loc-details">
+            <p *ngIf="menu.location.description!=null" [innerHtml]="menu.location.description"></p>
+            {{menu.location.street}}, {{menu.location.city}}<br/>
+            {{formatDistance(menu.location.distance)}}
+          </ion-col>
+        </ion-row>
       </ion-col>
     </ion-row>
   </ion-card-header>
@@ -29,6 +36,7 @@
               <p class="item-name" text-wrap>{{m.name}}</p>
               <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
               <p *ngIf="m.calories!=null" class="item-detail">{{m.calories}} calories</p>
+              <p *ngIf="m.avoid!=null && m.avoid" class="item-detail">Avoid: {{m.avoidReason}}</p>
             </ion-col>
           </ion-row>
         </ion-col>

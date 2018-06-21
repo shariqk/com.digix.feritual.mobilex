@@ -1,12 +1,14 @@
 import { Component, OnChanges, Input} from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, ModalController } from 'ionic-angular';
 
-import { FoodLocation, FoodLocationMenu, FoodLocationMenuItem } from '../../providers/food-api/food-api.model';
-import { FoodApiProvider } from '../../providers/food-api/food-api';
+//import { FoodLocation, FoodLocationMenu, FoodLocationMenuItem } from '../../providers/food-api/food-api.model';
+//import { FoodApiProvider } from '../../providers/food-api/food-api';
 //import { FxLocationMenu, FxLocationMenuItem } from '../../providers/models/fxlocation';
 import { FxLocationMenu, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
 import { MenuHelper } from '../../providers/feritual-api/feritual-helper';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
+import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
+
 
 @Component({
   selector: 'food-list',
@@ -17,6 +19,7 @@ export class FoodListComponent implements OnChanges {
   //@Input('location') location : FoodLocation;
   //@Input('menu') menu : FoodLocationMenu;
   @Input('menu') menu : FxLocationMenu;
+  @Input('profile') profile : UserProfile;
 
   topHitCount = 3;
   totalHitsCount = 0;
@@ -40,8 +43,13 @@ export class FoodListComponent implements OnChanges {
   {
     this.navCtrl.push(LocationMenuPage,
       {
-        location : this.menu.location
+        location: this.menu.location,
+        profile: this.profile
       });
+  }
+
+  formatDistance(distance : number) : string {
+    return distance.toFixed(2) + ' m';
   }
 
   ngOnChanges() {
