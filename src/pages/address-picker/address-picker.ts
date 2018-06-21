@@ -53,7 +53,12 @@ export class AddressPickerPage {
     this.suggestedAddress = places;
   }
 
-
+  searchEntered(event : any) {
+    if(this.searchAddress !=null && this.searchAddress != '')
+    {
+      this.addressSelected(this.searchAddress);
+    }
+  }
 
   searchClicked() {
     if(this.searchAddress !=null && this.searchAddress != '')

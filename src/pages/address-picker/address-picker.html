@@ -18,6 +18,7 @@
       (ionFocus)="editingAddress=true"
       [(ngModel)]="searchAddress"
       (ionInput)="lookupAddress()"
+      (search)="searchEntered($event)"
       placeholder='Try "San Francisco or PHL or JFK"'>
     </ion-searchbar>
     <ion-list *ngIf="editingAddress">

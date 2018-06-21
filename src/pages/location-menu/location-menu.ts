@@ -45,6 +45,7 @@ export class LocationMenuPage {
       MenuHelper.fixMenuPhotoUrl(menu);
       this.menu = menu;
       this.location = loc;
+      //console.log('menu', this.menu);
     }
     catch(err) {
       alert('Error in loading menu:' + JSON.stringify(err));
@@ -58,6 +59,7 @@ export class LocationMenuPage {
     try {
       let loc = this.navParams.get('location');
       let profile = this.navParams.get('profile');
+      console.log('profile', profile);
       let refresh = (refresher != null);
       await this.initialize(loc, profile, refresh);
     }

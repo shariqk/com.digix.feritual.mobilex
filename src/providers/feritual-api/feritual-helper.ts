@@ -38,6 +38,20 @@ export class RecipeHelper {
   }
 }
 
+export class Helper
+{
+  public static concatStrArray(items : string[]) : string {
+    let str = '';
+    if(items!=null && items.length>0)
+    {
+      for(let a of items) {
+        str += (str.length>0 ? ', ' : '') + a;
+      }
+    }
+    return str;
+  }
+}
+
 export class MenuHelper
 {
   public static fixMenuItemPhotoUrl(item : FxLocationMenuItem) {

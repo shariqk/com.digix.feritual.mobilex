@@ -27,8 +27,8 @@
       placeholder="{{placeholderText}}">
     </ion-searchbar>
 
-    <div *ngIf="this.results!=null">
-      <food-list *ngFor="let r of results" [menu]="r"></food-list>
+    <div *ngIf="results!=null">
+      <food-list *ngFor="let r of results" [profile]="this.profile" [menu]="r"></food-list>
     </div>
 
     <div *ngIf="this.locations!=null && this.results==null">
@@ -38,16 +38,15 @@
           </ion-col>
           <ion-col>
             <ion-row>
-              <ion-col class="loc-title">
-                {{loc.name}}
+              <ion-col>
+                <span class="loc-title">{{loc.name}}</span><br>
+                <span class="loc-details" *ngIf="loc.foodTypes!=null">{{concatStrArray(loc.foodTypes)}}</span>
               </ion-col>
             </ion-row>
             <ion-row>
               <ion-col class="loc-details">
                 <p *ngIf="loc.description!=null" [innerHtml]="loc.description"></p>
-                <span *ngIf="loc.foodTypes!=null">type: {{loc.foodTypes}}<br></span>
-                {{loc.street}}, {{loc.city}}<br/>
-                distance: {{formatDistance(loc.distance)}}
+                {{loc.street}}, {{loc.city}} ({{formatDistance(loc.distance)}})
               </ion-col>
             </ion-row>
           </ion-col>

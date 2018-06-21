@@ -21,7 +21,7 @@ import { UserprofileApiProvider } from '../../providers/userprofile-api/userprof
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
 import { AddressPickerPage } from '../../pages/address-picker/address-picker';
-import { MenuHelper } from '../../providers/feritual-api/feritual-helper';
+import { Helper, MenuHelper } from '../../providers/feritual-api/feritual-helper';
 
 
 @IonicPage()
@@ -67,7 +67,7 @@ export class FoodPage {
   }
 
   formatDistance(distance : number) : string {
-    return distance.toFixed(2) + ' m';
+    return distance.toFixed(2) + ' mi';
   }
 
   navigateToLocationMenu(loc : FxLocation)
@@ -77,6 +77,10 @@ export class FoodPage {
         location : loc,
         profile : this.profile
       });
+  }
+
+  concatStrArray(items : string[]) : string {
+    return Helper.concatStrArray(items);
   }
 
   async getLocations(loc : GoogleLocation)
