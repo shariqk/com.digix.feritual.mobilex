@@ -25,6 +25,9 @@
       <ion-segment-button value="diets">
         Diets
       </ion-segment-button>
+      <ion-segment-button value="connect">
+        Connect
+      </ion-segment-button>
     </ion-segment>
   </div>
 </ion-header>
@@ -70,6 +73,21 @@
       </ion-col>
 
     </ion-row>
+
+
+    <ion-row *ngSwitchCase="'connect'">
+      <ion-col col-7>
+        <img src='https://blog.fitbit.com/wp-content/uploads/2016/04/Fitbit_logo_RGB.jpg'>
+      </ion-col>
+
+      <ion-col>
+        <button *ngIf="token_fitbit==null" ion-button (click)="connectToFitBit()">
+          Connect
+        </button>
+
+      </ion-col>
+    </ion-row>
+
 
   </div>
 

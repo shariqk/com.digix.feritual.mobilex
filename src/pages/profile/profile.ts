@@ -5,6 +5,10 @@ import { HttpClient } from '@angular/common/http';
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 import { UserProfile, UserProfileOptions, KeyValueItem } from '../../providers/userprofile-api/userprofile.model';
 
+import { FitbitApiProvider } from '../../providers/fitbit-api/fitbit-api';
+import { FitBitAccessTokenModel } from '../../providers/fitbit-api/fitbit-api.model';
+
+
 @IonicPage()
 @Component({
   selector: 'page-profile',
@@ -19,9 +23,12 @@ export class ProfilePage {
   initialized : boolean;
   pref = 'avoids';
 
+  token_fitbit : FitBitAccessTokenModel = null;
+
   constructor(public navCtrl: NavController,
     public http : HttpClient,
     private viewCtrl: ViewController,
+    private fitbitApi : FitbitApiProvider,
     private loadingCtrl : LoadingController,
     private profileApi : UserprofileApiProvider,
     public navParams: NavParams) {
@@ -39,6 +46,8 @@ export class ProfilePage {
       let p =  this.navParams.get('profile');
       this.profile = JSON.parse(JSON.stringify(p));
       //console.log('profile', this.profile);
+
+      this.token_fitbit = await this.fitbitApi.GetLoginToken();
 
       this.options = await this.profileApi.getUserProfileOptionsAsync();
       //console.log('user profile options', this.options);
@@ -148,6 +157,9 @@ export class ProfilePage {
   }
 
 
+  connectToFitBit() {
+    
+  }
 
 
   ionViewDidLoad() {

@@ -26,6 +26,7 @@ import { MsvisionApiProvider } from '../providers/msvision-api/msvision-api';
 import { GoogleApiProvider } from '../providers/google-api/google-api';
 import { FeritualApiProvider } from '../providers/feritual-api/feritual-api';
 import { UserprofileApiProvider } from '../providers/userprofile-api/userprofile-api';
+import { FitbitApiProvider } from '../providers/fitbit-api/fitbit-api';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import { UserprofileApiProvider } from '../providers/userprofile-api/userprofile
     MsvisionApiProvider,
     GoogleApiProvider,
     FeritualApiProvider,
-    UserprofileApiProvider
+    UserprofileApiProvider,
+    FitbitApiProvider
   ]
 })
 export class AppModule {}
