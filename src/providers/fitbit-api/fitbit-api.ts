@@ -55,9 +55,7 @@ export class FitbitApiProvider {
     return new Promise(function(resolve, reject) {
       let url = ctx.baseUrl + '/user/' + token.user_id + '/profile.json';
 
-      let headers = new HttpHeaders();
-      headers = headers.set('Authorization', token.token_type + ' ' + token.access_token);
-      headers = headers.set('Content-Type', 'application/json');
+      let headers = ctx.getRequestHeaders(token);
 
       ctx.http.get(url, { headers: headers })
         .map(res => <FitBitProfileModel>res)
@@ -85,6 +83,39 @@ export class FitbitApiProvider {
           });
 
     });
+  }
+
+  private getRequestHeaders(token : FitBitAccessTokenModel) : HttpHeaders {
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', token.token_type + ' ' + token.access_token);
+    headers = headers.set('Content-Type', 'application/json');
+
+    return headers;
+  }
+
+  public GetActivity(token : FitBitAccessTokenModel) : Promise<FitBitActivityModel> {
+    var ctx = this;
+
+    return new Promise(function(resolve, reject) {
+      let d = new Date();
+      let m : number = d.getMonth();
+      m++;
+      let url = ctx.baseUrl + '/user/' + token.user_id +
+        '/activities/date/' + d.getFullYear() + '-' + m + '-' + d.getDate() + '.json';
+
+      let headers = ctx.getRequestHeaders(token);
+
+      ctx.http.get(url, { headers: headers })
+        .map(res => <FitBitActivityModel>res)
+        .subscribe(
+          activity => {
+            resolve(activity)
+          },
+          error => { console.log('GetActivity', error); reject(error); }
+        );
+    });
+
+
   }
 
   public ClearLoginToken() : Promise<boolean> {

@@ -54,16 +54,17 @@ export class ProfilePage {
       this.token_fitbit = await this.fitbitApi.GetLoginToken();
 
       if (this.token_fitbit==null && this.platform.is('mobileweb')) {
-        // This will only print when on iOS
+        // This will only print when on a browser in test mode
         this.token_fitbit = await this.fitbitApi.GetTestLoginToken();
       }
 
       if(this.token_fitbit!=null) {
         try {
-          let profile = await this.fitbitApi.GetUserProfile(this.token_fitbit);
-          console.log('profile', profile);
+          let fb = await this.fitbitApi.GetUserProfile(this.token_fitbit);
+          console.log('profile', fb);
         }
         catch(ex) {
+          console.log(ex);
           if(ex.error !=null && ex.error.errors!=null && ex.error.errors.length>0 &&
             ex.error.errors[0]=="Authorization Error: Invalid authorization token type")
           {
