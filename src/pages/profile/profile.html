@@ -85,6 +85,10 @@
           Connect
         </button>
 
+        <button *ngIf="token_fitbit!=null" ion-button (click)="disconnectFromFitBit()">
+          Disconnect
+        </button>
+
       </ion-col>
     </ion-row>
 

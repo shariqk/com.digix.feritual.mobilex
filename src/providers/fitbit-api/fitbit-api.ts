@@ -61,6 +61,14 @@ export class FitbitApiProvider {
     });
   }
 
+  public ClearLoginToken() : Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.storage.set(this._storageKeyName, "")
+        .then(() => {
+          Promise.resolve(true);
+        });
+    });
+  }
 
   public LoginImplicit() : Promise<FitBitAccessTokenModel> {
       const grantUrl : string = this._fitBitImplicitGrantUrl +

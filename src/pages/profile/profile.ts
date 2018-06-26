@@ -157,8 +157,25 @@ export class ProfilePage {
   }
 
 
-  connectToFitBit() {
-    
+  async connectToFitBit() {
+    try {
+      let token = await this.fitbitApi.LoginImplicit();
+
+      this.token_fitbit = token;
+    }
+    catch(err) {
+      alert('Something unexpected happened.  Please retry to see if the problem is resolved');
+    }
+    finally {
+
+    }
+  }
+
+  async disconnectFromFitBit() {
+    if(confirm("Are you sure you want to disconnect your profile with Fitbit?")) {
+      await this.fitbitApi.ClearLoginToken();
+      this.token_fitbit = null;
+    }
   }
 
 
