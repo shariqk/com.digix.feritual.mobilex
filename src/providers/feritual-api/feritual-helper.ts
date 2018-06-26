@@ -1,6 +1,7 @@
 import { FxLocation, FxLocationMenu, FxLocationMenuItem, Recipe } from './feritual-api.model';
 import { UserProfile } from '../userprofile-api/userprofile.model';
 
+
 export class RecipeHelper {
   public static getRecipeId(r : Recipe) {
     let i = r.uri.indexOf("#recipe_") +1;

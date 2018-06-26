@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser';
 import { FitBitAccessTokenModel, FitBitProfileModel, FitBitActivityModel } from './fitbit-api.model';
@@ -7,15 +7,16 @@ import { Storage } from '@ionic/storage';
 @Injectable()
 export class FitbitApiProvider {
 
-  _fitBitClientId : string = '2289CP';
-  _fitBitClientSecret = '1c061bf1234e803edc187c939eff3914';
-  _fitBitAuthCodeFlowUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight';
-  _fitBitImplicitGrantUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=token&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight';
-  _fitBitRedirectUrl = 'http://localhost/callback';
+  private _fitBitClientId : string = '2289CP';
+  private _fitBitAuthCodeFlowUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight';
+  private _fitBitImplicitGrantUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=token&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight';
+  private _fitBitRedirectUrl = 'http://localhost/callback';
 
-  _storageKeyName : string = 'fitbit.token.json';
+  private _storageKeyName : string = 'fitbit.token.json';
 
-  _options : InAppBrowserOptions = {
+  private baseUrl = 'https://api.fitbit.com/1';
+
+  private _options : InAppBrowserOptions = {
     location : 'no',//Or 'no'
     hidden : 'no', //Or  'yes'
     clearcache : 'yes',
@@ -39,11 +40,36 @@ export class FitbitApiProvider {
   }
 
   public GetTestLoginToken() : Promise<FitBitAccessTokenModel> {
-    let url = 'http://localhost/callback#access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyRlczNzciLCJhdWQiOiIyMjg5Q1AiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd3dlaSB3c29jIHdzZXQgd2FjdCB3bG9jIiwiZXhwIjoxNTMxNTc3OTk4LCJpYXQiOjE1MDAwNDU4OTF9.UKILbwtQoqwW6fTT1pO2hTeKekyKMLncPtz8yZdALNw&user_id=2FW377&scope=sleep+settings+nutrition+activity+social+heartrate+profile+weight+location&token_type=Bearer&expires_in=31532107';
+    //let url = 'http://localhost/callback#access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyRlczNzciLCJhdWQiOiIyMjg5Q1AiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd251dCB3cHJvIHdzbGUgd3dlaSB3c29jIHdzZXQgd2FjdCB3bG9jIiwiZXhwIjoxNTMxNTc3OTk4LCJpYXQiOjE1MDAwNDU4OTF9.UKILbwtQoqwW6fTT1pO2hTeKekyKMLncPtz8yZdALNw&user_id=2FW377&scope=sleep+settings+nutrition+activity+social+heartrate+profile+weight+location&token_type=Bearer&expires_in=31532107';
+    let url = "http://localhost/callback#access_token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyRlczNzciLCJhdWQiOiIyMjg5Q1AiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJ3aHIgd3BybyB3bnV0IHdzbGUgd3dlaSB3c29jIHdhY3Qgd3NldCB3bG9jIiwiZXhwIjoxNTMxNTc3OTk5LCJpYXQiOjE1MzAwMzk1ODl9.iXt4HcjqF1rar1UE-UuQDLmjDCShCFAIC9ma22QoKGk&user_id=2FW377&scope=social+profile+nutrition+activity+settings+weight+sleep+location+heartrate&token_type=Bearer&expires_in=1538410";
     let token = this.parseImplicitGrant(url);
+    console.log('(*) token', token);
+
     return Promise.resolve(token);
   }
 
+
+  public GetUserProfile(token : FitBitAccessTokenModel) : Promise<FitBitProfileModel> {
+    var ctx = this;
+
+    return new Promise(function(resolve, reject) {
+      let url = ctx.baseUrl + '/user/' + token.user_id + '/profile.json';
+
+      let headers = new HttpHeaders();
+      headers = headers.set('Authorization', token.token_type + ' ' + token.access_token);
+      headers = headers.set('Content-Type', 'application/json');
+
+      ctx.http.get(url, { headers: headers })
+        .map(res => <FitBitProfileModel>res)
+        .subscribe(
+          profile => {
+            resolve(profile)
+          },
+          error => { console.log('GetUserProfile', error); reject(error); }
+        );
+    });
+
+  }
 
   public GetLoginToken() : Promise<FitBitAccessTokenModel> {
     return new Promise((resolve, reject) => {

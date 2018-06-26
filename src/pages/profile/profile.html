@@ -78,6 +78,9 @@
     <ion-row *ngSwitchCase="'connect'">
       <ion-col col-7>
         <img src='https://blog.fitbit.com/wp-content/uploads/2016/04/Fitbit_logo_RGB.jpg'>
+
+        <p [innerHtml]="platform_json" class='item-analysis'></p>
+
       </ion-col>
 
       <ion-col>
@@ -91,6 +94,7 @@
 
       </ion-col>
     </ion-row>
+
 
 
   </div>

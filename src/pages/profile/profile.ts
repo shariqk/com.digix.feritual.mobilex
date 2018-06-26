@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ViewController, LoadingController } from 'ionic-angular';
+import { Platform, IonicPage, NavController, NavParams, ViewController, LoadingController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
@@ -7,6 +7,7 @@ import { UserProfile, UserProfileOptions, KeyValueItem } from '../../providers/u
 
 import { FitbitApiProvider } from '../../providers/fitbit-api/fitbit-api';
 import { FitBitAccessTokenModel } from '../../providers/fitbit-api/fitbit-api.model';
+
 
 
 @IonicPage()
@@ -31,6 +32,7 @@ export class ProfilePage {
     private fitbitApi : FitbitApiProvider,
     private loadingCtrl : LoadingController,
     private profileApi : UserprofileApiProvider,
+    private platform : Platform,
     public navParams: NavParams) {
 
       this.initialize();
@@ -47,9 +49,33 @@ export class ProfilePage {
       this.profile = JSON.parse(JSON.stringify(p));
       //console.log('profile', this.profile);
 
+      let promise = this.profileApi.getUserProfileOptionsAsync();
+
       this.token_fitbit = await this.fitbitApi.GetLoginToken();
 
-      this.options = await this.profileApi.getUserProfileOptionsAsync();
+      if (this.token_fitbit==null && this.platform.is('mobileweb')) {
+        // This will only print when on iOS
+        this.token_fitbit = await this.fitbitApi.GetTestLoginToken();
+      }
+
+      if(this.token_fitbit!=null) {
+        try {
+          let profile = await this.fitbitApi.GetUserProfile(this.token_fitbit);
+          console.log('profile', profile);
+        }
+        catch(ex) {
+          if(ex.error !=null && ex.error.errors!=null && ex.error.errors.length>0 &&
+            ex.error.errors[0]=="Authorization Error: Invalid authorization token type")
+          {
+            // token has expired
+          }
+
+          this.fitbitApi.ClearLoginToken();
+          this.token_fitbit = null;
+        }
+      }
+
+      this.options = await promise; // this.profileApi.getUserProfileOptionsAsync();
       //console.log('user profile options', this.options);
 
 
@@ -172,7 +198,7 @@ export class ProfilePage {
   }
 
   async disconnectFromFitBit() {
-    if(confirm("Are you sure you want to disconnect your profile with Fitbit?")) {
+    if(confirm("Are you sure you want to disconnect your profile from Fitbit?")) {
       await this.fitbitApi.ClearLoginToken();
       this.token_fitbit = null;
     }
