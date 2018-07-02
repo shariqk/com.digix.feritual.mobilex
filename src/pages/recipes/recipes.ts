@@ -16,6 +16,7 @@ export class RecipesPage {
   searchTerm : string;
   placeholderText : string = 'Type an ingredient to search for';
   hits : Hit[];
+  view : string = 'grid';
 
   constructor(public navCtrl: NavController,
     private loadingCtrl : LoadingController,
@@ -26,6 +27,11 @@ export class RecipesPage {
 
   ionViewDidLoad() {
     //console.log('ionViewDidLoad RecipesPage');
+  }
+
+  switchView(v : string)
+  {
+    this.view = v;
   }
 
   getDetails(r : Recipe) : string {
