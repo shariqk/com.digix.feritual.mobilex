@@ -10,13 +10,6 @@
 
 <ion-content>
 
-  <ion-searchbar
-    [(ngModel)]="searchTerm"
-    (search)="doRecipeSearch($event)"
-    (ionClear)="searchCleared()"
-    placeholder="{{placeholderText}}">
-  </ion-searchbar>
-
   <ion-grid  *ngIf="hits!=null">
     <ion-row>
       <ion-col col-4 text-center>
@@ -49,6 +42,15 @@
     </ion-row>
 
   </ion-grid>
+
+
+    <ion-searchbar
+      [(ngModel)]="searchTerm"
+      (search)="doRecipeSearch($event)"
+      (ionClear)="searchCleared()"
+      placeholder="{{placeholderText}}">
+    </ion-searchbar>
+
 
   <div *ngIf="hits!=null && view=='grid'">
     <ion-row>

@@ -29,11 +29,6 @@ export class RecipesPage {
     //console.log('ionViewDidLoad RecipesPage');
   }
 
-  switchView(v : string)
-  {
-    this.view = v;
-  }
-
   getDetails(r : Recipe) : string {
     let str = 'Serves ' + r.yield
           + ', ' + Math.floor(r.calories) + ' calories';
