@@ -7,7 +7,8 @@
 
 export class Recommendations {
   public static instance : Recommendations = null;
-
+  public static loading : boolean;
+  public items : RecommendationGroup[] = null;
 }
 
 export class RecommendationGroup

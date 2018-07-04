@@ -9,8 +9,9 @@ import { UserProfile } from '../userprofile-api/userprofile.model';
 
 @Injectable()
 export class FeritualApiProvider {
-  baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
-  //baseUrl = 'http://localhost:56893/api/feritual';
+  //baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
+  baseUrl = 'http://localhost:56893/api/feritual';
+  baseUrlSmart = 'http://localhost:56893/api/smart';
 
   constructor(public http: HttpClient) {
   }
@@ -18,10 +19,16 @@ export class FeritualApiProvider {
   public getRecommendations(profile : UserProfile, lat : number, lng : number) : Promise<Recommendations> {
     var ctx = this;
     return new Promise(function(resolve, reject) {
-      let url : string = ctx.baseUrl + '/recommend?lat=' + lat
-        + '&lng=' + lng;
+      let url : string = ctx.baseUrlSmart + '/recommendations';
+      console.log('getRecommendations', url);
 
-      ctx.http.post(url, JSON.stringify(profile))
+      let options = {
+        profile: profile,
+        latitude: lat,
+        longitude: lng
+      };
+
+      ctx.http.post(url, JSON.stringify(options))
         .map(res => <Recommendations>res)
         .subscribe(
           recommendations => {

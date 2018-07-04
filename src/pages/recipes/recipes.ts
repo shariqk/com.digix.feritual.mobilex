@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController  } from 'ionic-angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { Hit, Recipe } from '../../providers/feritual-api/feritual-api.model';
@@ -21,12 +22,20 @@ export class RecipesPage {
   constructor(public navCtrl: NavController,
     private loadingCtrl : LoadingController,
     private ferApi : FeritualApiProvider,
+    private profileApi : UserprofileApiProvider,
     private browser: InAppBrowser,
     public navParams: NavParams) {
+      this.getRecommendations();
   }
 
   ionViewDidLoad() {
     //console.log('ionViewDidLoad RecipesPage');
+  }
+
+  async getRecommendations() {
+    let profile = await this.profileApi.loadUserProfile();
+    let r = await this.ferApi.getRecommendations(profile, -1, -1);
+    console.log('r', r);
   }
 
   switchView(v : string)
