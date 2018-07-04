@@ -5,6 +5,20 @@
 //
 //}
 
+export class Recommendations {
+  public static instance : Recommendations = null;
+
+}
+
+export class RecommendationGroup
+{
+  public title : string;
+
+  public locations : FxLocation[];
+  public menuItems : FxLocationMenuItem[];
+  public recipes : Recipe[];
+}
+
 export class FxLocation {
   public id : string;
   public name : string;
