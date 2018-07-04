@@ -17,7 +17,7 @@
     placeholder="{{placeholderText}}">
   </ion-searchbar>
 
-  <ion-grid *ngIf="hits!=null">
+  <ion-grid  *ngIf="hits!=null">
     <ion-row>
       <ion-col col-4 text-center>
         <button *ngIf="view=='grid'" ion-button icon-only>
@@ -45,6 +45,7 @@
           <ion-icon large name="list-outline"></ion-icon>
         </button>
       </ion-col>
+
     </ion-row>
 
   </ion-grid>
@@ -61,7 +62,7 @@
   <div *ngIf="hits!=null && view=='images'">
     <ion-grid>
       <ion-row *ngFor="let h of hits" (click)="navigateToRecipe(h.recipe)" align-items-start>
-        <ion-col>
+        <ion-col col-12>
           <ion-row align-items-start>
             <ion-col>
               <span class="r-title">{{h.recipe.label}}</span>
@@ -78,11 +79,6 @@
             <ion-col class="r-details">
               <span [innerHtml]="getDetails(h.recipe)"></span><br/>
               <span [innerHtml]="h.recipe.healthLabels"></span><br/>
-            </ion-col>
-            <ion-col col-2 class="r-details">
-              <button ion-button icon-only clear (click)="favoriteToggle(recipe)">
-                <ion-icon large name="heart-outline"></ion-icon>
-              </button>
             </ion-col>
           </ion-row>
         </ion-col>
