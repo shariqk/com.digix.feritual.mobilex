@@ -6,7 +6,7 @@ import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { GoogleLocation, AutocompleteResult } from '../../providers/google-api/google-api.model';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
-import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
+import { UserProfile, UserProfileHelper } from '../../providers/userprofile-api/userprofile.model';
 
 @IonicPage()
 @Component({
@@ -134,10 +134,15 @@ export class AddressPickerPage {
     let loc = await this.googleApi.getLocationFromLatLng(pos.coords.latitude, pos.coords.longitude);
     //console.log('current position', loc);
 
-    return loc;
+    return Promise.resolve(loc);
   }
 
   async saveRecentAddress(address : string) {
+    if(UserProfileHelper.addRecentAddress(this.profile, address))
+    {
+      await this.profileApi.saveUserProfile(this.profile);
+    }
+    /*
     if(this.profile.recentAddressList==null)
     {
       this.profile.recentAddressList = [];
@@ -148,6 +153,7 @@ export class AddressPickerPage {
       await this.profileApi.saveUserProfile(this.profile)
 
     }
+    */
   }
 
 

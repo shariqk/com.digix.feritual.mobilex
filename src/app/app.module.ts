@@ -27,6 +27,7 @@ import { GoogleApiProvider } from '../providers/google-api/google-api';
 import { FeritualApiProvider } from '../providers/feritual-api/feritual-api';
 import { UserprofileApiProvider } from '../providers/userprofile-api/userprofile-api';
 import { FitbitApiProvider } from '../providers/fitbit-api/fitbit-api';
+import { RecommendationApiProvider } from '../providers/recommendation-api/recommendation-api';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { FitbitApiProvider } from '../providers/fitbit-api/fitbit-api';
     GoogleApiProvider,
     FeritualApiProvider,
     UserprofileApiProvider,
-    FitbitApiProvider
+    FitbitApiProvider,
+    RecommendationApiProvider
   ]
 })
 export class AppModule {}

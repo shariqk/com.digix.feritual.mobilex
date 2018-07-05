@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
-import { UserProfile, UserProfileOptions } from './userprofile.model';
+import { UserProfile, UserProfileOptions, UserProfileHelper } from './userprofile.model';
 
 @Injectable()
 export class UserprofileApiProvider {
@@ -41,8 +41,8 @@ export class UserprofileApiProvider {
             else {
               //console.log('loaded', json);
               let profile = JSON.parse(json);
-              console.log('profile', profile);
-              UserProfile.validate(profile);
+              //console.log('profile', profile);
+              UserProfileHelper.validate(profile);
               resolve(profile);
             }
           });

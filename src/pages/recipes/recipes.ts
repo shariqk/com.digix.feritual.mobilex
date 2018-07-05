@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController  } from 'ionic-angular';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
+//import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
-import { Hit, Recipe, Recommendations } from '../../providers/feritual-api/feritual-api.model';
+import { RecommendationApiProvider } from '../../providers/recommendation-api/recommendation-api';
+import { Hit, Recipe } from '../../providers/feritual-api/feritual-api.model';
+import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
 import { RecipeDetailPage } from '../recipe-detail/recipe-detail';
-import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
+import { UserProfile, UserProfileHelper } from '../../providers/userprofile-api/userprofile.model';
 
 @IonicPage()
 @Component({
@@ -14,7 +16,7 @@ import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
   templateUrl: 'recipes.html',
 })
 export class RecipesPage {
-
+  profile: UserProfile;
   searchTerm : string;
   placeholderText : string = 'Type an ingredient to search for';
   hits : Hit[];
@@ -25,32 +27,24 @@ export class RecipesPage {
     private loadingCtrl: LoadingController,
     private ferApi: FeritualApiProvider,
     private profileApi: UserprofileApiProvider,
-    private browser: InAppBrowser,
+    private recommendApi: RecommendationApiProvider,
+    //private browser: InAppBrowser,
     public navParams: NavParams) {
       this.getRecommendations();
+      this.loadProfile();
   }
 
   ionViewDidLoad() {
     //console.log('ionViewDidLoad RecipesPage');
   }
 
+  async loadProfile() {
+    this.profile = await this.profileApi.loadUserProfile();
+  }
+
   async getRecommendations() {
-    if(Recommendations.instance==null) {
-      let profile = await this.profileApi.loadUserProfile();
-      let r = await this.ferApi.getRecommendations(profile, -1, -1);
-      console.log('Recommendations', r);
-
-      for(let g of r.items)
-      {
-        if(g.recipes.length>9) {
-          g.recipes.splice(9);
-        }
-      }
-
-      Recommendations.instance = r;
-    }
-
-    this.recommendations = Recommendations.instance;
+    let r = await this.recommendApi.loadRecommendations();
+    this.recommendations = r;
   }
 
   getDetails(r : Recipe) : string {
@@ -74,6 +68,7 @@ export class RecipesPage {
 
     try {
       let result = await this.ferApi.searchForRecipes(this.searchTerm, 0, 100);
+      this.saveSearchTerm(this.searchTerm);
       //console.log('recipes', result);
       this.hits = result.hits;
     }
@@ -82,6 +77,13 @@ export class RecipesPage {
     }
     finally {
       loading.dismiss();
+    }
+  }
+
+  async saveSearchTerm(searchTerm : string) {
+    if(UserProfileHelper.addRecipeSearch(this.profile, searchTerm))
+    {
+      await this.profileApi.saveUserProfile(this.profile);
     }
   }
 

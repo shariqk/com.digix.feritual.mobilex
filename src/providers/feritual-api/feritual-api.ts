@@ -4,7 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { FxLocation, FxLocationMenu, RecipeSearchResult, Recommendations } from './feritual-api.model';
+import { FxLocation, FxLocationMenu, RecipeSearchResult } from './feritual-api.model';
+
 import { UserProfile } from '../userprofile-api/userprofile.model';
 
 @Injectable()
@@ -17,27 +18,8 @@ export class FeritualApiProvider {
   constructor(public http: HttpClient) {
   }
 
-  public getRecommendations(profile : UserProfile, lat : number, lng : number) : Promise<Recommendations> {
-    var ctx = this;
-    return new Promise(function(resolve, reject) {
-      let url : string = ctx.baseUrlSmart + '/recommendations';
-      console.log('getRecommendations', url);
+  public loadRecommendations() {
 
-      let options = {
-        profile: profile,
-        latitude: lat,
-        longitude: lng
-      };
-
-      ctx.http.post(url, JSON.stringify(options))
-        .map(res => <Recommendations>res)
-        .subscribe(
-          recommendations => {
-            resolve(recommendations)
-          },
-          error => { console.log('getRecommendations', error); reject(error); }
-        );
-    });
   }
 
 

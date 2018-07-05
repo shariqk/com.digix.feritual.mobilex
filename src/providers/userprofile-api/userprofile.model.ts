@@ -1,17 +1,33 @@
 
-export class UserProfile {
-  public name : string;
-  public email : string;
-  public id : string;
+export class UserProfileHelper {
+  public static addRecentAddress = function(profile : UserProfile, address : string) : boolean {
+    if(address!=null && address.length>0 && UserProfileHelper.indexOfItem(profile.recentAddressList, address)<0) {
+      profile.recentAddressList.push(address);
+      return true;
+    }
+  }
 
-  //public allergies = new UserProfileAllergies();
-  //public cuisine = new CuisinePreferences();
+  public static addFoodSearch(profile : UserProfile, searchTerm : string) : boolean {
+    if(searchTerm!=null && searchTerm.length>0 && UserProfileHelper.indexOfItem(profile.foodSearches, searchTerm)<0) {
+      profile.foodSearches.push(searchTerm);
+      return true;
+    }
+  }
 
-  public avoids : string[] = [];
-  public cuisines : string[] = [];
-  public recentAddressList : string[] = [];
-  public diets : string[] = [];
-  public favoriteRecipes : string[] = [];
+  public static addRecipeSearch(profile : UserProfile, searchTerm : string) : boolean {
+    if(searchTerm!=null && searchTerm.length>0 && UserProfileHelper.indexOfItem(profile.recipeSearches, searchTerm)<0) {
+      profile.recipeSearches.push(searchTerm);
+      return true;
+    }
+  }
+
+  private static indexOfItem(list : string[], item : string) {
+    if(item == null) { return -1; }
+    item = item.toLowerCase();
+    let pos = list.findIndex(str => str.toLowerCase() === item);
+    return pos;
+  }
+
 
   public static validate(p : UserProfile) : UserProfile {
     if(p.avoids==null) { p.avoids = [] }
@@ -19,9 +35,29 @@ export class UserProfile {
     if(p.favoriteRecipes==null) { p.favoriteRecipes = [] }
     if(p.diets == null) { p.diets = [] }
     if(p.cuisines == null) { p.cuisines = [] }
+    if(p.recipeSearches == null) { p.recipeSearches = [] }
+    if(p.foodSearches == null) { p.foodSearches = [] }
 
     return p;
   }
+
+
+}
+
+export class UserProfile {
+  public name : string;
+  public email : string;
+  public id : string;
+
+  public avoids : string[] = [];
+  public cuisines : string[] = [];
+  public recentAddressList : string[] = [];
+  public diets : string[] = [];
+  public favoriteRecipes : string[] = [];
+
+  public recipeSearches : string[] = [];
+  public foodSearches : string[] = [];
+
 }
 
 export interface UserProfileOptions {
@@ -39,7 +75,7 @@ export interface KeyValueItem {
 
 
 
-
+/*
 export class UserProfileAllergies {
   Items : KeyValueItem[] = [];
 
@@ -67,7 +103,7 @@ export class UserProfileAllergies {
     'gluten'
   ];
 
-  /*
+
   public set(key: string, value : boolean)
   {
     var item = this._get(key);
@@ -106,7 +142,7 @@ export class UserProfileAllergies {
   wheat  : boolean = false;
   soybeans : boolean = false;
   gluten : boolean = false;
-  */
+
 }
 
 export class CuisinePreferences {
@@ -138,3 +174,4 @@ export class CuisinePreferences {
 
 
 }
+*/

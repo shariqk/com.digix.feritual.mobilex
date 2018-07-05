@@ -15,7 +15,7 @@ import { ProfilePage } from '../../pages/profile/profile';
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { FxLocation, FxLocationMenu, FxIcons } from '../../providers/feritual-api/feritual-api.model';
 import { DistanceCalculator } from '../../providers/feritual-api/feritual-helper';
-import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
+import { UserProfile, UserProfileHelper } from '../../providers/userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
@@ -185,6 +185,7 @@ export class FoodPage {
 
     try {
       let results =  await this.ferApi.searchLocationMenuAsync(this.locations, this.searchTerm, this.profile);
+      this.saveSearchTerm(this.searchTerm);
 
       for(var menu of results) {
         var loc = this.getLocationFromId(this.locations, menu.locationId);
@@ -201,6 +202,13 @@ export class FoodPage {
       loading.dismiss();
     }
 
+  }
+
+  async saveSearchTerm(searchTerm : string) {
+    if(UserProfileHelper.addFoodSearch(this.profile, searchTerm))
+    {
+      await this.profileApi.saveUserProfile(this.profile);
+    }
   }
 
 }
