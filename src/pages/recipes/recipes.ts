@@ -45,6 +45,7 @@ export class RecipesPage {
   async getRecommendations() {
     let r = await this.recommendApi.loadRecommendations();
     this.recommendations = r;
+    //console.log('recommendations', r);
   }
 
   getDetails(r : Recipe) : string {

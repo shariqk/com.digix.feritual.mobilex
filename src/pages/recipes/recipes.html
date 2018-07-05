@@ -61,7 +61,7 @@
   <div *ngIf="hits==null && recommendations!=null">
     <ion-grid>
       <ion-row *ngFor="let g of recommendations.items" align-items-start>
-        <ion-col>
+        <ion-col *ngIf="g.recipes!=null">
           <span class="r-title">{{g.title}}</span>
           <ion-row>
             <ion-col col-4 *ngFor="let r of g.recipes" (click)="navigateToRecipe(r)" align-items-start>

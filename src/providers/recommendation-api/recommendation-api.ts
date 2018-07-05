@@ -11,6 +11,7 @@ import { Recommendations } from './recommendation-api.model'
 @Injectable()
 export class RecommendationApiProvider {
   private baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/smart';
+  //baseUrl = 'http://localhost:56893/api/smart';
 
   constructor(public http: HttpClient,
     private profileApi: UserprofileApiProvider,
@@ -65,17 +66,17 @@ export class RecommendationApiProvider {
     try {
       let profile = await this.profileApi.loadUserProfile();
       let r = await this.getRecommendations(profile, lat, lng);
-      console.log('Recommendations', r);
+      //console.log('Recommendations', r);
 
       for(let g of r.items)
       {
-        if(g.recipes.length>9) {
+        if(g.recipes!=null && g.recipes.length>9) {
           g.recipes.splice(9);
         }
       }
 
       Recommendations.instance = r;
-      Promise.resolve(r);
+      return Promise.resolve(r);
     }
     catch(error) {
       console.log('loadRecommendations', error);

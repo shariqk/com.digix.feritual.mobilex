@@ -12,8 +12,6 @@ import { UserProfile } from '../userprofile-api/userprofile.model';
 export class FeritualApiProvider {
   private baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
   //baseUrl = 'http://localhost:56893/api/feritual';
-  private baseUrlSmart = 'https://comdigixferitualwebapi.azurewebsites.net/api/smart';
-  //baseUrlSmart = 'http://localhost:56893/api/smart';
 
   constructor(public http: HttpClient) {
   }

@@ -17,6 +17,8 @@ import { FxLocation, FxLocationMenu, FxIcons } from '../../providers/feritual-ap
 import { DistanceCalculator } from '../../providers/feritual-api/feritual-helper';
 import { UserProfile, UserProfileHelper } from '../../providers/userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
+import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
+import { RecommendationApiProvider } from '../../providers/recommendation-api/recommendation-api';
 
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
@@ -38,6 +40,7 @@ export class FoodPage {
   locations : FxLocation[];
   radius = 5;
   profile : UserProfile;
+  recommendations : Recommendations;
 
   constructor(public navCtrl: NavController,
     public modalCtrl : ModalController,
@@ -46,10 +49,12 @@ export class FoodPage {
     private loadingCtrl: LoadingController,
     private profileApi : UserprofileApiProvider,
     private geolocation: Geolocation,
+    private recommendApi: RecommendationApiProvider,
     private googleApi : GoogleApiProvider,
     private ferApi : FeritualApiProvider) {
 
-        this.initialize();
+      this.getRecommendations();
+      this.initialize();
   }
 
   async initialize() {
@@ -59,7 +64,12 @@ export class FoodPage {
   }
 
   ionViewDidLoad() {
+  }
 
+  async getRecommendations() {
+    let r = await this.recommendApi.loadRecommendations();
+    this.recommendations = r;
+    //console.log('recommendations', r);
   }
 
   searchCleared() {
