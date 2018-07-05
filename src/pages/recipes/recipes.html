@@ -10,6 +10,13 @@
 
 <ion-content>
 
+  <ion-searchbar
+    [(ngModel)]="searchTerm"
+    (search)="doRecipeSearch($event)"
+    (ionClear)="searchCleared()"
+    placeholder="{{placeholderText}}">
+  </ion-searchbar>
+
   <ion-grid  *ngIf="hits!=null">
     <ion-row>
       <ion-col col-4 text-center>
@@ -43,15 +50,6 @@
 
   </ion-grid>
 
-
-    <ion-searchbar
-      [(ngModel)]="searchTerm"
-      (search)="doRecipeSearch($event)"
-      (ionClear)="searchCleared()"
-      placeholder="{{placeholderText}}">
-    </ion-searchbar>
-
-
   <div *ngIf="hits!=null && view=='grid'">
     <ion-row>
       <ion-col col-4 *ngFor="let h of hits" (click)="navigateToRecipe(h.recipe)" align-items-start>
@@ -60,6 +58,20 @@
     </ion-row>
   </div>
 
+  <div *ngIf="hits==null && recommendations!=null">
+    <ion-grid>
+      <ion-row *ngFor="let g of recommendations.items" align-items-start>
+        <ion-col>
+          <span class="r-title">{{g.title}}</span>
+          <ion-row>
+            <ion-col col-4 *ngFor="let r of g.recipes" (click)="navigateToRecipe(r)" align-items-start>
+              <img [src]="r.image">
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 
   <div *ngIf="hits!=null && view=='images'">
     <ion-grid>

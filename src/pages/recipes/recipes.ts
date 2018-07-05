@@ -3,8 +3,10 @@ import { IonicPage, NavController, NavParams, LoadingController  } from 'ionic-a
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
-import { Hit, Recipe } from '../../providers/feritual-api/feritual-api.model';
+import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
+import { Hit, Recipe, Recommendations } from '../../providers/feritual-api/feritual-api.model';
 import { RecipeDetailPage } from '../recipe-detail/recipe-detail';
+import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
 
 @IonicPage()
 @Component({
@@ -17,16 +19,38 @@ export class RecipesPage {
   placeholderText : string = 'Type an ingredient to search for';
   hits : Hit[];
   view : string = 'grid';
+  recommendations : Recommendations;
 
   constructor(public navCtrl: NavController,
-    private loadingCtrl : LoadingController,
-    private ferApi : FeritualApiProvider,
+    private loadingCtrl: LoadingController,
+    private ferApi: FeritualApiProvider,
+    private profileApi: UserprofileApiProvider,
     private browser: InAppBrowser,
     public navParams: NavParams) {
+      this.getRecommendations();
   }
 
   ionViewDidLoad() {
     //console.log('ionViewDidLoad RecipesPage');
+  }
+
+  async getRecommendations() {
+    if(Recommendations.instance==null) {
+      let profile = await this.profileApi.loadUserProfile();
+      let r = await this.ferApi.getRecommendations(profile, -1, -1);
+      console.log('Recommendations', r);
+
+      for(let g of r.items)
+      {
+        if(g.recipes.length>9) {
+          g.recipes.splice(9);
+        }
+      }
+
+      Recommendations.instance = r;
+    }
+
+    this.recommendations = Recommendations.instance;
   }
 
   getDetails(r : Recipe) : string {
