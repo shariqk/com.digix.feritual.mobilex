@@ -94,7 +94,8 @@ export class AddressPickerPage {
       }
     }
     catch (err) {
-      alert(JSON.stringify(err));
+      alert('Could not determine current location. Please make sure the app has the ability to get your location and retry.');
+      console.log(err);
     }
     finally {
       loader.dismiss();
