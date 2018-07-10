@@ -10,6 +10,7 @@ export class Recommendations {
 export class RecommendationGroup
 {
   public title : string;
+  public keywords : string[];
 
   public locations : FxLocation[];
   public menuItems : FxLocationMenuItem[];

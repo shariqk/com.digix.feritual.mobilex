@@ -54,6 +54,13 @@ export class RecipesPage {
     return str;
   }
 
+  startSearch(keywords : string[]) {
+    if(keywords!=null && keywords.length>0) {
+      this.searchTerm = keywords[0];
+      this.doRecipeSearch(null);
+    }
+  }
+
   navigateToRecipe(r : Recipe) {
     this.navCtrl.push(RecipeDetailPage,
       {
