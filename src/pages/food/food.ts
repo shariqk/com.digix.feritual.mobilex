@@ -69,7 +69,7 @@ export class FoodPage {
   async getRecommendations() {
     let r = await this.recommendApi.loadRecommendations();
     this.recommendations = r;
-    //console.log('recommendations', r);
+    console.log('recommendations', r);
   }
 
   searchCleared() {
