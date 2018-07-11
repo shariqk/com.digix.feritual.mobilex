@@ -75,8 +75,8 @@
 
   <div *ngIf="hits!=null && view=='images'">
     <ion-grid>
-      <ion-row *ngFor="let h of hits" (click)="navigateToRecipe(h.recipe)" align-items-start>
-        <ion-col col-12>
+      <ion-row>
+        <ion-col col-12  *ngFor="let h of hits" (click)="navigateToRecipe(h.recipe)">
           <ion-row align-items-start>
             <ion-col>
               <span class="r-title">{{h.recipe.label}}</span>
