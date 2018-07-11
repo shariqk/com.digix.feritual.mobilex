@@ -9,6 +9,7 @@ import { Hit, Recipe } from '../../providers/feritual-api/feritual-api.model';
 import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
 import { RecipeDetailPage } from '../recipe-detail/recipe-detail';
 import { UserProfile, UserProfileHelper } from '../../providers/userprofile-api/userprofile.model';
+import { Helper } from '../../providers/feritual-api/feritual-helper';
 
 @IonicPage()
 @Component({
@@ -66,6 +67,10 @@ export class RecipesPage {
       {
         recipe : r
       });
+  }
+
+  concatStrArray(items : string[]) : string {
+    return Helper.concatStrArray(items);
   }
 
   async doRecipeSearch(event : any) {

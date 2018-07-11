@@ -8,11 +8,14 @@ import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 
+import { FoodListComponent } from '../components/food-list/food-list';
+import { RecommendedFoodComponent } from '../components/recommended-food/recommended-food';
+
+import { IntroPage } from '../pages/intro/intro';
 import { FoodPage } from '../pages/food/food';
 import { ProfilePage } from '../pages/profile/profile';
 import { AnalyzePage } from '../pages/analyze/analyze';
 import { TabsPage } from '../pages/tabs/tabs';
-import { FoodListComponent } from '../components/food-list/food-list';
 import { AddressPickerPage } from '../pages/address-picker/address-picker';
 import { LocationMenuPage } from '../pages/location-menu/location-menu';
 import { RecipesPage } from '../pages/recipes/recipes';
@@ -40,7 +43,9 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     LocationMenuPage,
     RecipesPage,
     RecipeDetailPage,
-    FoodListComponent
+    IntroPage,
+    FoodListComponent,
+    RecommendedFoodComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +68,9 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     RecipesPage,
     RecipeDetailPage,
     LocationMenuPage,
-    FoodListComponent
+    IntroPage,
+    FoodListComponent,
+    RecommendedFoodComponent
   ],
   providers: [
     StatusBar,

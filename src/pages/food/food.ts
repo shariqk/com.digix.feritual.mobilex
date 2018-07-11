@@ -1,9 +1,10 @@
 import { Component , ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, ToastController, ModalController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Storage } from '@ionic/storage';
 
 //import { FoodApiProvider } from '../../providers/food-api/food-api';
-import { FoodListComponent } from '../../components/food-list/food-list'
+//import { FoodListComponent } from '../../components/food-list/food-list'
 //import { LocationSearchResult, FoodLocation, FoodLocationMenu } from '../../providers/food-api/food-api.model';
 //import { EatstreetApiProvider } from '../../providers/eatstreet-api/eatstreet-api';
 //import { Restaurant } from '../../providers/eatstreet-api/eatstreet-api.model';
@@ -11,7 +12,7 @@ import { FoodListComponent } from '../../components/food-list/food-list'
 //import { FxLocation, FxLocationMenu } from '../../providers/models/fxlocation';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 import { ProfilePage } from '../../pages/profile/profile';
-
+import { IntroPage } from '../../pages/intro/intro';
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { FxLocation, FxLocationMenu, FxIcons } from '../../providers/feritual-api/feritual-api.model';
 import { DistanceCalculator } from '../../providers/feritual-api/feritual-helper';
@@ -49,6 +50,7 @@ export class FoodPage {
     private loadingCtrl: LoadingController,
     private profileApi : UserprofileApiProvider,
     private geolocation: Geolocation,
+    private storage: Storage,
     private recommendApi: RecommendationApiProvider,
     private googleApi : GoogleApiProvider,
     private ferApi : FeritualApiProvider) {
@@ -64,12 +66,19 @@ export class FoodPage {
   }
 
   ionViewDidLoad() {
+    this.storage.get('intro-done').then(done => {
+    if (!done) {
+      this.storage.set('intro-done', true);
+      this.navCtrl.setRoot(IntroPage);
+    }
+  });
+
   }
 
   async getRecommendations() {
     let r = await this.recommendApi.loadRecommendations();
     this.recommendations = r;
-    console.log('recommendations', r);
+    //console.log('recommendations', r);
   }
 
   searchCleared() {

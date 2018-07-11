@@ -10,8 +10,8 @@ import { Recommendations } from './recommendation-api.model'
 
 @Injectable()
 export class RecommendationApiProvider {
-  //private baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/smart';
-  private baseUrl = 'http://localhost:56893/api/smart';
+  private baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/smart';
+  //private baseUrl = 'http://localhost:56893/api/smart';
 
   constructor(public http: HttpClient,
     private profileApi: UserprofileApiProvider,
@@ -72,6 +72,9 @@ export class RecommendationApiProvider {
       {
         if(g.recipes!=null && g.recipes.length>9) {
           g.recipes.splice(9);
+        }
+        if(g.menuItems!=null && g.menuItems.length>9) {
+          g.menuItems.splice(9);
         }
       }
 

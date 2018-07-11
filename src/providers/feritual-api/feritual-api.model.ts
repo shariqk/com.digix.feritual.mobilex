@@ -194,6 +194,14 @@ export class FxLocationMenuItem {
   public avoid : boolean;
   public avoidReason : string;
 
+  public calories_from_fat : number;
+  public cholesterol : number;
+  public protein: number;
+  public sodium:  number;
+  public sugars : number;
+  public total_carbohydrate : number;
+  public total_fat : number;
+
   /*
   public allergen_contains_milk : boolean;
   public allergen_contains_soybeans : boolean;
