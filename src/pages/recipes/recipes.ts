@@ -44,9 +44,14 @@ export class RecipesPage {
   }
 
   async getRecommendations() {
-    let r = await this.recommendApi.loadRecommendations();
-    this.recommendations = r;
-    //console.log('recommendations', r);
+    try {
+      let r = await this.recommendApi.loadRecommendations();
+      this.recommendations = r;
+    }
+    catch(err) {
+      console.log('recommendations error', err);
+      alert('Something went wrong in loading recommendations. We will try again in a few moments.');
+    }
   }
 
   getDetails(r : Recipe) : string {
