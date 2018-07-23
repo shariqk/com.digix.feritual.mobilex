@@ -1,0 +1,9 @@
+<ion-grid>
+  <ion-row *ngFor="let g of recommendations.items" align-items-start>
+    <ion-col *ngIf="g.locations!=null">
+      <span class="r-title" (click)="startSearch(g.keywords)">{{g.title}}</span>
+
+      <location-list [locations]="g.locations"></location-list>
+    </ion-col>
+  </ion-row>
+</ion-grid>

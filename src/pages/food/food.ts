@@ -41,7 +41,9 @@ export class FoodPage {
   locations : FxLocation[];
   radius = 5;
   profile : UserProfile;
+
   recommendations : Recommendations;
+  view : string = 'recommendations';
 
   constructor(public navCtrl: NavController,
     public modalCtrl : ModalController,
@@ -54,25 +56,82 @@ export class FoodPage {
     private recommendApi: RecommendationApiProvider,
     private googleApi : GoogleApiProvider,
     private ferApi : FeritualApiProvider) {
-
-      this.getRecommendations();
+      //this.getRecommendations();
       this.initialize();
+
+      Recommendations.onReload((val => {
+        console.log('recommendations were reloaded');
+        this.initialize();
+      }));
   }
 
+
   async initialize() {
-    this.currentLocation = new GoogleLocation();
-    this.currentLocation.address = 'Tap here to get started';
+    this.recommendations = Recommendations.instance;
+    this.currentLocation = Recommendations.instance.currentLocation;
+    this.locations = Recommendations.instance.locations;
+    this.searchTerm = null;
+    this.results = null;
+    this.placeholderText = 'Search in ' + this.locations.length + ' places (e.g., Sushi or Burger)';
     this.profile = await this.profileApi.loadUserProfile();
   }
 
-  ionViewDidLoad() {
-    this.storage.get('intro-done').then(done => {
-    if (!done) {
-      this.storage.set('intro-done', true);
-      this.navCtrl.setRoot(IntroPage);
-    }
-  });
+  async refresh(lat: number, lng: number) {
+    let loading = this.loadingCtrl.create({
+       content: 'Please wait...',
+     });
+    loading.present();
 
+    try {
+      await this.recommendApi.load(lat, lng);
+      //this.initialize();
+    }
+    catch(err) {
+      console.log(err);
+      alert('An unexpected error occured during refreshing data. Please wait a few minutes and retry.')
+    }
+    finally {
+      loading.dismiss();
+    }
+  }
+
+  async addressCardClicked(event : any) {
+    let dialog = this.modalCtrl.create(AddressPickerPage,
+      {
+        address: this.currentLocation.address
+      },
+      {
+        showBackdrop : true
+      });
+
+    dialog.onDidDismiss(async loc =>  {
+      if(loc != null) {
+        this.refresh(loc.lat, loc.lng);
+      }
+    });
+
+    dialog.present();
+  }
+
+
+  /*
+
+  async initialize() {
+    //let r = await this.recommendApi.loadRecommendations();
+    if(this.recommendations!=null) {
+      //this.currentLocation = this.recommendations.currentLocation;
+      this.profile = this.recommendations.profile;
+      //this.recommendations = r;
+    }
+    else {
+      // fallback
+      //this.currentLocation = new GoogleLocation();
+      this.currentLocation.address = 'Tap here to get started';
+      this.profile = await this.profileApi.loadUserProfile();
+    }
+  }
+
+  ionViewDidLoad() {
   }
 
   async getRecommendations() {
@@ -85,28 +144,29 @@ export class FoodPage {
       alert('Something went wrong in loading recommendations. We will try again in a few moments.');
     }
   }
+  */
 
   searchCleared() {
     this.results = null;
   }
 
-  formatDistance(distance : number) : string {
-    return distance.toFixed(2) + ' mi';
-  }
+  //formatDistance(distance : number) : string {
+  //  return distance.toFixed(2) + ' mi';
+  //}
 
   navigateToLocationMenu(loc : FxLocation)
   {
     this.navCtrl.push(LocationMenuPage,
       {
         location : loc,
-        profile : this.profile
       });
   }
 
-  concatStrArray(items : string[]) : string {
-    return Helper.concatStrArray(items);
-  }
+  //concatStrArray(items : string[]) : string {
+  //  return Helper.concatStrArray(items);
+  //}
 
+  /*
   async getLocations(loc : GoogleLocation)
   {
     let toast = this.toastCtrl.create({
@@ -116,26 +176,10 @@ export class FoodPage {
     toast.present();
 
     try {
-      //let search = new FoodSearch(this.api, this.eatstreetApi);
-      //let locations = await search.getLocationsAsync(loc.lat, loc.lng);
-
       let locations = await this.ferApi.getLocationsAsync(loc.lat, loc.lng, this.radius);
-      //console.log(this.locations);
-
-      //var obj = new DistanceCalculator();
-      //obj.calculateDistance(loc.lat, loc.lng, locations);
-      //obj.sortByDistance(locations);
-
-      for(var l of locations) {
-        if(l.logoUrl==null) {
-          l.logoUrl =  FxIcons.getIcon(l.name); // 'https://www.shareicon.net/data/256x256/2017/06/21/887479_heart_512x512.png';
-        }
-      }
-
-      this.currentLocation = loc;
-      this.locations = locations;
+      //this.currentLocation = loc;
+      //this.locations = locations;
       this.placeholderText = 'Search in ' + this.locations.length + ' places (e.g., Sushi or Burger)';
-      //console.log(this.locations);
     }
     catch(err) {
       alert('error in getting locations: ' + JSON.stringify(err));
@@ -145,6 +189,7 @@ export class FoodPage {
     }
 
   }
+  */
 
   editUserProfile() {
     let dialog = this.modalCtrl.create(ProfilePage,
@@ -158,6 +203,7 @@ export class FoodPage {
     dialog.onDidDismiss(async profile =>  {
       if(profile != null) {
         await this.profileApi.saveUserProfile(profile);
+        this.refresh(this.recommendations.currentLocation.lat, this.recommendations.currentLocation.lng);
         this.profile = profile;
       }
     });
@@ -165,25 +211,6 @@ export class FoodPage {
     dialog.present();
   }
 
-  addressCardClicked(event : any) {
-    let dialog = this.modalCtrl.create(AddressPickerPage,
-      {
-        address: this.currentLocation.address
-      },
-      {
-        showBackdrop : true
-      });
-
-    dialog.onDidDismiss(async loc =>  {
-      if(loc != null) {
-        await this.getLocations(loc);
-        this.searchTerm = null;
-        this.results = null;
-      }
-    });
-
-    dialog.present();
-  }
 
 
   getLocationFromId(locations : FxLocation[], id : string) : FxLocation {
@@ -195,6 +222,8 @@ export class FoodPage {
     }
     return null;
   }
+
+
 
   async doLocationMenuSearch(event : any) {
     if(this.searchTerm==null || this.searchTerm.length<4) {

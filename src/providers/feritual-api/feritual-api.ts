@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { FxLocation, FxLocationMenu, RecipeSearchResult } from './feritual-api.model';
+import { FxLocation, FxLocationMenu, FxIcons, RecipeSearchResult } from './feritual-api.model';
 
 import { UserProfile } from '../userprofile-api/userprofile.model';
 
@@ -33,6 +33,11 @@ export class FeritualApiProvider {
         .map(res => <FxLocation[]>res)
         .subscribe(
           locations => {
+            for(let l of locations) {
+              if(l.logoUrl==null) {
+                l.logoUrl =  FxIcons.getIcon(l.name);
+              }
+            }
             resolve(locations)
           },
           error => { console.log('getLocationsAsync', error); reject(error); }

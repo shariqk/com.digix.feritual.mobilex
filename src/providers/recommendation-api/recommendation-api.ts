@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Geolocation } from '@ionic-native/geolocation';
+import { GoogleApiProvider } from '../../providers/google-api/google-api';
 
 import { UserProfile } from '../userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../userprofile-api/userprofile-api';
@@ -16,6 +17,7 @@ export class RecommendationApiProvider {
   constructor(public http: HttpClient,
     private profileApi: UserprofileApiProvider,
     private ferApi: FeritualApiProvider,
+    private googleApi: GoogleApiProvider,
     private geo: Geolocation
   ) {
   }
@@ -45,22 +47,19 @@ export class RecommendationApiProvider {
     });
   }
 
-
-  public async loadRecommendations() : Promise<Recommendations> {
-    if(Recommendations.instance!=null) {
-      return Promise.resolve(Recommendations.instance);
-    }
-
-    let lat = null;
-    let lng = null;
-
-    try {
-      let pos = await this.geo.getCurrentPosition({timeout: 20000, enableHighAccuracy: false});
-      lat = pos.coords.latitude;
-      lng = pos.coords.longitude;
-    }
-    catch(err) {
-      //ignore since we may not have the ability to get location
+  public async load(lat: number, lng: number) : Promise<Recommendations> {
+    if(lat==null || lng==null)
+    {
+      try {
+        let pos = await this.geo.getCurrentPosition({timeout: 20000, enableHighAccuracy: false});
+        lat = pos.coords.latitude;
+        lng = pos.coords.longitude;
+      }
+      catch(err) {
+        // default to time square
+        lat = 40.759011;
+        lng = -73.984472;
+      }
     }
 
     try {
@@ -77,6 +76,13 @@ export class RecommendationApiProvider {
           g.menuItems.splice(9);
         }
       }
+
+      r.currentLocation = await this.googleApi.getLocationFromLatLng(lat, lng);
+      //r.profile = profile;
+      r.lat = lat;
+      r.lng = lng;
+
+      r.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
 
       Recommendations.instance = r;
       return Promise.resolve(r);

@@ -1,0 +1,21 @@
+<div *ngIf="locations!=null">
+  <ion-row *ngFor="let loc of locations" (click)="navigateToLocationMenu(loc)" align-items-start>
+    <ion-col col-3>
+      <img style='padding:5px;' [src]="loc.logoUrl">
+    </ion-col>
+    <ion-col>
+      <ion-row>
+        <ion-col>
+          <span class="loc-title">{{loc.name}}</span><br>
+          <span class="loc-details" *ngIf="loc.foodTypes!=null">{{concatStrArray(loc.foodTypes)}}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="loc-details">
+          <p *ngIf="loc.description!=null" [innerHtml]="loc.description"></p>
+          {{loc.street}}, {{loc.city}} ({{formatDistance(loc.distance)}})
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+</div>

@@ -10,6 +10,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { FoodListComponent } from '../components/food-list/food-list';
 import { RecommendedFoodComponent } from '../components/recommended-food/recommended-food';
+import { RecommendedLocationComponent } from '../components/recommended-location/recommended-location';
+import { LocationListComponent } from '../components/location-list/location-list';
 
 import { IntroPage } from '../pages/intro/intro';
 import { FoodPage } from '../pages/food/food';
@@ -20,6 +22,8 @@ import { AddressPickerPage } from '../pages/address-picker/address-picker';
 import { LocationMenuPage } from '../pages/location-menu/location-menu';
 import { RecipesPage } from '../pages/recipes/recipes';
 import { RecipeDetailPage } from '../pages/recipe-detail/recipe-detail';
+import { StartPage } from '../pages/start/start';
+
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -44,8 +48,11 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     RecipesPage,
     RecipeDetailPage,
     IntroPage,
+    StartPage,
     FoodListComponent,
-    RecommendedFoodComponent
+    RecommendedFoodComponent,
+    RecommendedLocationComponent,
+    LocationListComponent
   ],
   imports: [
     BrowserModule,
@@ -69,8 +76,11 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     RecipeDetailPage,
     LocationMenuPage,
     IntroPage,
+    StartPage,
     FoodListComponent,
-    RecommendedFoodComponent
+    RecommendedFoodComponent,
+    RecommendedLocationComponent,
+    LocationListComponent
   ],
   providers: [
     StatusBar,

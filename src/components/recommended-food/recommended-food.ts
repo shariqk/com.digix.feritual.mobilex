@@ -17,7 +17,7 @@ export class RecommendedFoodComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    console.log('recommendations', this.recommendations);
+    //console.log('recommendations', this.recommendations);
     for(let c of this.recommendations.items) {
       if(c.menuItems!=null) {
         for(let m of c.menuItems) {

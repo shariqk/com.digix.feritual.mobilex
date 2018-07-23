@@ -14,82 +14,80 @@
       </button>
     </ion-buttons>
   </ion-toolbar>
-
-
 </ion-header>
+
 <ion-content>
-
-
-    <ion-searchbar *ngIf="locations!=null"
-      [(ngModel)]="searchTerm"
-      (search)="doLocationMenuSearch($event)"
-      (ionClear)="searchCleared()"
-      placeholder="{{placeholderText}}">
-    </ion-searchbar>
-
-    <div *ngIf="results!=null">
-      <food-list *ngFor="let r of results" [profile]="this.profile" [menu]="r"></food-list>
-    </div>
-
-    <recommended-food *ngIf="recommendations!=null && locations==null" [recommendations]="this.recommendations"></recommended-food>
-
-    <div *ngIf="this.locations!=null && this.results==null">
-        <ion-row *ngFor="let loc of locations" (click)="navigateToLocationMenu(loc)" align-items-start>
-          <ion-col col-3>
-            <img style='padding:5px;' [src]="loc.logoUrl">
-          </ion-col>
-          <ion-col>
-            <ion-row>
-              <ion-col>
-                <span class="loc-title">{{loc.name}}</span><br>
-                <span class="loc-details" *ngIf="loc.foodTypes!=null">{{concatStrArray(loc.foodTypes)}}</span>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col class="loc-details">
-                <p *ngIf="loc.description!=null" [innerHtml]="loc.description"></p>
-                {{loc.street}}, {{loc.city}} ({{formatDistance(loc.distance)}})
-              </ion-col>
-            </ion-row>
-          </ion-col>
-        </ion-row>
-    </div>
-
-
-    <!--
-    <div *ngIf="this.locations==null && this.results==null">
+    <ion-grid>
       <ion-row>
-        <ion-col text-center>
-          <img src="assets/imgs/icon.png" width="40%">
+        <ion-col col-3 text-center>
+          <button *ngIf="view=='recommendations'" ion-button icon-only>
+            <ion-icon large name="checkmark-circle-outline"></ion-icon>
+          </button>
+          <button *ngIf="view!='recommendations'" clear ion-button clear icon-only (click)="view='recommendations'">
+            <ion-icon large name="checkmark-circle-outline"></ion-icon>
+          </button>
         </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <p style="font-size:14pt;" text-center>
-            Welcome to Feritual, the<br/>
-            <b>F</b>ood, <b>E</b>nergy and <b>Rituals</b> App
-          </p>
-          <p style="margin:10px;">
-            Click on top of the screen to select a location anywhere in United States.
-          </p>
-          <p style="margin:10px;">
-            You can then search for food (along with all their nuitritional information)
-            in all the nearby locations or checkout the entire menu.
-          </p>
-          <p style="margin:10px;">
-            To be adventurous and test out some kewl features, click on the Analyze tab,
-            take a picture (by tapping on the camera icon) and let us see what we can determine
-            about the image you took.
-          </p>
-          <p style="margin:10px;">
-            Tap the Settings icon (right top) to set your preferences.
-          </p>
+
+        <ion-col col-3 text-center>
+          <button *ngIf="view=='list'" ion-button icon-only>
+            <ion-icon large name="list-outline"></ion-icon>
+          </button>
+          <button *ngIf="view!='list'" clear ion-button clear icon-only (click)="view='list'">
+            <ion-icon large name="list-outline"></ion-icon>
+          </button>
         </ion-col>
+
+        <ion-col col-3 text-center>
+          <button *ngIf="view=='food'" ion-button icon-only>
+            <ion-icon large name="leaf-outline"></ion-icon>
+          </button>
+          <button *ngIf="view!='food'" clear ion-button clear icon-only (click)="view='food'">
+            <ion-icon large name="leaf-outline"></ion-icon>
+          </button>
+        </ion-col>
+
+        <ion-col col-3 text-center>
+          <button *ngIf="view=='search'" ion-button icon-only>
+            <ion-icon large name="search-outline"></ion-icon>
+          </button>
+          <button *ngIf="view!='search'" clear ion-button clear icon-only (click)="view='search'">
+            <ion-icon large name="search-outline"></ion-icon>
+          </button>
+        </ion-col>
+
       </ion-row>
+    </ion-grid>
 
-      <p>
+    <div *ngIf="view=='search'">
+      <ion-searchbar
+        [(ngModel)]="searchTerm"
+        (search)="doLocationMenuSearch($event)"
+        (ionClear)="searchCleared()"
+        placeholder="{{placeholderText}}">
+      </ion-searchbar>
 
-      </p>
+      <food-list
+        *ngFor="let r of results"
+        [profile]="profile"
+        [menu]="r">
+      </food-list>
     </div>
-  -->
+
+
+    <recommended-location
+      *ngIf="recommendations!=null && view=='recommendations'"
+      [recommendations]="recommendations">
+    </recommended-location>
+
+    <recommended-food
+      *ngIf="recommendations!=null && view=='food'"
+      [recommendations]="this.recommendations">
+    </recommended-food>
+
+    <location-list
+      *ngIf="this.locations!=null && view=='list'"
+      [locations]="locations">
+    </location-list>
+
+
 </ion-content>

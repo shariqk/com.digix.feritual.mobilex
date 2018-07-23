@@ -31,14 +31,39 @@ export class RecipesPage {
     private recommendApi: RecommendationApiProvider,
     //private browser: InAppBrowser,
     public navParams: NavParams) {
-      this.getRecommendations();
-      this.loadProfile();
+      this.initialize();
+
+      Recommendations.onReload((val => {
+        console.log('recommendations were reloaded');
+        this.initialize();
+      }));
   }
 
   ionViewDidLoad() {
     //console.log('ionViewDidLoad RecipesPage');
   }
 
+  //get recommendations() : Recommendations {
+      //return Recommendations.instance;
+  //}
+
+  async initialize() {
+    this.recommendations = Recommendations.instance;
+    this.profile = await this.profileApi.loadUserProfile();
+
+    //this.recommendations = await this.recommendApi.loadRecommendations();
+    /*
+    if(this.recommendations != null)
+    {
+      this.profile = this.recommendations.profile;
+    }
+    else {
+      this.profile = await this.profileApi.loadUserProfile();
+    }
+    */
+  }
+
+  /*
   async loadProfile() {
     this.profile = await this.profileApi.loadUserProfile();
   }
@@ -53,6 +78,7 @@ export class RecipesPage {
       alert('Something went wrong in loading recommendations. We will try again in a few moments.');
     }
   }
+  */
 
   getDetails(r : Recipe) : string {
     let str = 'Serves ' + r.yield

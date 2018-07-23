@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
+import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 
 //import { FoodApiProvider } from '../../providers/food-api/food-api';
 //import { FoodSearchResult } from '../../providers/food-api/food-api.model';
@@ -30,6 +31,7 @@ export class LocationMenuPage {
   constructor(public navCtrl: NavController,
     private ferApi : FeritualApiProvider,
     private loadingCtrl : LoadingController,
+    private profileApi: UserprofileApiProvider,
     public navParams: NavParams) {
   }
 
@@ -58,8 +60,8 @@ export class LocationMenuPage {
   async refreshData(refresher: any) {
     try {
       let loc = this.navParams.get('location');
-      let profile = this.navParams.get('profile');
-      console.log('profile', profile);
+      let profile = await this.profileApi.loadUserProfile();
+      //console.log('profile', profile);
       let refresh = (refresher != null);
       await this.initialize(loc, profile, refresh);
     }
