@@ -1,4 +1,11 @@
-<div *ngIf="locations!=null">
+
+  <ion-grid *ngIf="locations!=null">
+    <ion-row>
+      <ion-col>
+        <h5>Nearby locations:</h5>
+      </ion-col>
+    </ion-row>
+
   <ion-row *ngFor="let loc of locations" (click)="navigateToLocationMenu(loc)" align-items-start>
     <ion-col col-3>
       <img style='padding:5px;' [src]="loc.logoUrl">
@@ -18,4 +25,5 @@
       </ion-row>
     </ion-col>
   </ion-row>
-</div>
+
+</ion-grid>

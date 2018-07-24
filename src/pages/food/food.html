@@ -14,49 +14,52 @@
       </button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
 
-<ion-content>
     <ion-grid>
       <ion-row>
+
         <ion-col col-3 text-center>
-          <button *ngIf="view=='recommendations'" ion-button icon-only>
+          <button *ngIf="view=='recommendations'" ion-button icon-only clear color="primary">
             <ion-icon large name="checkmark-circle-outline"></ion-icon>
           </button>
-          <button *ngIf="view!='recommendations'" clear ion-button clear icon-only (click)="view='recommendations'">
+          <button *ngIf="view!='recommendations'" clear ion-button clear color="dark" icon-only (click)="view='recommendations'">
             <ion-icon large name="checkmark-circle-outline"></ion-icon>
           </button>
         </ion-col>
 
         <ion-col col-3 text-center>
-          <button *ngIf="view=='list'" ion-button icon-only>
+          <button *ngIf="view=='list'" ion-button icon-only clear color="primary">
             <ion-icon large name="list-outline"></ion-icon>
           </button>
-          <button *ngIf="view!='list'" clear ion-button clear icon-only (click)="view='list'">
+          <button *ngIf="view!='list'" clear ion-button clear color="dark" icon-only (click)="view='list'">
             <ion-icon large name="list-outline"></ion-icon>
           </button>
         </ion-col>
 
         <ion-col col-3 text-center>
-          <button *ngIf="view=='food'" ion-button icon-only>
+          <button *ngIf="view=='food'" ion-button icon-only clear color="primary">
             <ion-icon large name="leaf-outline"></ion-icon>
           </button>
-          <button *ngIf="view!='food'" clear ion-button clear icon-only (click)="view='food'">
+          <button *ngIf="view!='food'" clear ion-button clear color="dark" icon-only (click)="view='food'">
             <ion-icon large name="leaf-outline"></ion-icon>
           </button>
         </ion-col>
 
         <ion-col col-3 text-center>
-          <button *ngIf="view=='search'" ion-button icon-only>
+          <button *ngIf="view=='search'" ion-button clear icon-only color="primary">
             <ion-icon large name="search-outline"></ion-icon>
           </button>
-          <button *ngIf="view!='search'" clear ion-button clear icon-only (click)="view='search'">
+          <button *ngIf="view!='search'" clear ion-button color="dark" icon-only (click)="view='search'">
             <ion-icon large name="search-outline"></ion-icon>
           </button>
         </ion-col>
 
       </ion-row>
     </ion-grid>
+</ion-header>
+
+<ion-content>
+
 
     <div *ngIf="view=='search'">
       <ion-searchbar
@@ -71,9 +74,16 @@
         [profile]="profile"
         [menu]="r">
       </food-list>
+
+      <p style="padding:10px;" *ngIf="results==null">
+        Type in a search query (e.g., "Gluten Free") and we will find all
+          dishes near you that are Gluten Free.
+      </p>
+
     </div>
 
 
+    
     <recommended-location
       *ngIf="recommendations!=null && view=='recommendations'"
       [recommendations]="recommendations">
