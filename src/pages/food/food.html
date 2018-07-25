@@ -90,10 +90,23 @@
       [recommendations]="recommendations">
     </recommended-location>
 
-    <recommended-food
-      *ngIf="recommendations!=null && view=='food'"
-      [recommendations]="this.recommendations">
-    </recommended-food>
+    <div *ngIf="view=='food'">
+      <ion-grid>
+        <ion-row>
+          <ion-col col-2 *ngFor="let f of profile.foodFilters.items">
+            <button text-wrap (click)="setFoodFilter(f)" class="food-filters" ion-button block [color]="f.selected ? 'primary' : 'light'">
+              {{f.title}}
+            </button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <recommended-food
+        *ngIf="recommendations!=null"
+        [recommendations]="this.recommendations">
+      </recommended-food>
+    </div>
+
 
     <location-list
       *ngIf="this.locations!=null && view=='list'"

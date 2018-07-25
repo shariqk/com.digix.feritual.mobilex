@@ -16,7 +16,7 @@ import { IntroPage } from '../../pages/intro/intro';
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { FxLocation, FxLocationMenu, FxIcons } from '../../providers/feritual-api/feritual-api.model';
 import { DistanceCalculator } from '../../providers/feritual-api/feritual-helper';
-import { UserProfile, UserProfileHelper } from '../../providers/userprofile-api/userprofile.model';
+import { UserProfile, UserProfileHelper, FoodFilters, FoodFilterItem } from '../../providers/userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
 import { RecommendationApiProvider } from '../../providers/recommendation-api/recommendation-api';
@@ -44,6 +44,7 @@ export class FoodPage {
 
   recommendations : Recommendations;
   view : string = 'recommendations';
+  //foodFilters: FoodFilters;
 
   constructor(public navCtrl: NavController,
     public modalCtrl : ModalController,
@@ -93,6 +94,12 @@ export class FoodPage {
     finally {
       loading.dismiss();
     }
+  }
+
+  async setFoodFilter(filter: FoodFilterItem) {
+    filter.selected = !filter.selected;
+    await this.profileApi.saveUserProfile(this.profile);
+    this.refresh(this.recommendations.currentLocation.lat, this.recommendations.currentLocation.lng);
   }
 
   async addressCardClicked(event : any) {
@@ -162,34 +169,7 @@ export class FoodPage {
       });
   }
 
-  //concatStrArray(items : string[]) : string {
-  //  return Helper.concatStrArray(items);
-  //}
 
-  /*
-  async getLocations(loc : GoogleLocation)
-  {
-    let toast = this.toastCtrl.create({
-        message: 'Please wait...',
-        position: 'top'
-      });
-    toast.present();
-
-    try {
-      let locations = await this.ferApi.getLocationsAsync(loc.lat, loc.lng, this.radius);
-      //this.currentLocation = loc;
-      //this.locations = locations;
-      this.placeholderText = 'Search in ' + this.locations.length + ' places (e.g., Sushi or Burger)';
-    }
-    catch(err) {
-      alert('error in getting locations: ' + JSON.stringify(err));
-    }
-    finally {
-      toast.dismiss();
-    }
-
-  }
-  */
 
   editUserProfile() {
     let dialog = this.modalCtrl.create(ProfilePage,

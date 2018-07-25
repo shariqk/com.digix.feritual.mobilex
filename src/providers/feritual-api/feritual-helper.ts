@@ -2,6 +2,7 @@ import { FxLocation, FxLocationMenu, FxLocationMenuItem, Recipe } from './feritu
 import { UserProfile } from '../userprofile-api/userprofile.model';
 
 
+
 export class RecipeHelper {
   public static getRecipeId(r : Recipe) {
     let i = r.uri.indexOf("#recipe_") +1;

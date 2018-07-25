@@ -20,28 +20,28 @@
   <ion-grid  *ngIf="hits!=null">
     <ion-row>
       <ion-col col-4 text-center>
-        <button *ngIf="view=='grid'" ion-button icon-only>
+        <button *ngIf="view=='grid'" ion-button icon-only clear color="primary">
           <ion-icon large name="grid-outline"></ion-icon>
         </button>
-        <button *ngIf="view!='grid'" clear ion-button clear icon-only (click)="view='grid'">
+        <button *ngIf="view!='grid'" clear color="dark" ion-button  icon-only (click)="view='grid'">
           <ion-icon large name="grid-outline"></ion-icon>
         </button>
       </ion-col>
 
       <ion-col col-4 text-center>
-        <button *ngIf="view=='images'" ion-button icon-only>
+        <button *ngIf="view=='images'" ion-button icon-only clear color="primary">
           <ion-icon large name="image-outline"></ion-icon>
         </button>
-        <button *ngIf="view!='images'" clear ion-button clear icon-only (click)="view='images'">
+        <button *ngIf="view!='images'" clear color="dark" ion-button icon-only (click)="view='images'">
           <ion-icon large name="image-outline"></ion-icon>
         </button>
       </ion-col>
 
       <ion-col col-4 text-center>
-        <button *ngIf="view=='list'" ion-button icon-only>
+        <button *ngIf="view=='list'" ion-button icon-only clear color="primary">
           <ion-icon large name="list-outline"></ion-icon>
         </button>
-        <button *ngIf="view!='list'" clear ion-button clear icon-only (click)="view='list'">
+        <button *ngIf="view!='list'" clear color="dark" ion-button icon-only (click)="view='list'">
           <ion-icon large name="list-outline"></ion-icon>
         </button>
       </ion-col>

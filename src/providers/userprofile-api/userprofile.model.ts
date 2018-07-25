@@ -37,6 +37,7 @@ export class UserProfileHelper {
     if(p.cuisines == null) { p.cuisines = [] }
     if(p.recipeSearches == null) { p.recipeSearches = [] }
     if(p.foodSearches == null) { p.foodSearches = [] }
+    if(p.foodFilters==null) { p.foodFilters = new FoodFilters() }
 
     return p;
   }
@@ -58,7 +59,27 @@ export class UserProfile {
   public recipeSearches : string[] = [];
   public foodSearches : string[] = [];
 
+  public foodFilters: FoodFilters;
 }
+
+export class FoodFilters {
+  public items: FoodFilterItem[] = [
+    { title: 'Low Fat', selected: false },
+    { title: 'Low Sodium', selected: false },
+    { title: 'Low Sugar', selected: false },
+    { title: 'Low Carb', selected: false },
+    { title: 'Low Calories', selected: false },
+    { title: 'High Protein', selected: false },
+    { title: 'Gluten Free', selected: false },
+  ];
+}
+
+export interface FoodFilterItem {
+  title : string;
+  selected : boolean;
+}
+
+
 
 export interface UserProfileOptions {
     cuisines: string[];
@@ -72,10 +93,10 @@ export interface KeyValueItem {
  value : boolean;
 }
 
-
-
-
 /*
+
+
+
 export class UserProfileAllergies {
   Items : KeyValueItem[] = [];
 
