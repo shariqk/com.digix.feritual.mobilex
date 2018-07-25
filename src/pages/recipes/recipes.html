@@ -58,6 +58,7 @@
     </ion-row>
   </div>
 
+  <!--
   <div *ngIf="hits==null && recommendations!=null">
     <ion-grid>
       <ion-row *ngFor="let g of recommendations.items" align-items-start>
@@ -68,6 +69,28 @@
               <img [src]="r.image">
             </ion-col>
           </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+-->
+
+  <div *ngIf="hits==null && recommendations!=null">
+    <ion-grid>
+      <ion-row *ngFor="let g of recommendations.items" align-items-start>
+        <ion-col *ngIf="g.recipes!=null">
+          <span class="r-title" (click)="startSearch(g.keywords)">{{g.title}}</span>
+            <ion-row nowrap>
+
+              <ion-col nowrap>
+                <ion-scroll scrollX="true">
+                  <img *ngFor="let r of g.recipes"
+                    (click)="navigateToRecipe(r)"
+                    [alt]="r.image"
+                    class="scroll-item" [src]="r.image">
+                </ion-scroll>
+              </ion-col>
+            </ion-row>
         </ion-col>
       </ion-row>
     </ion-grid>

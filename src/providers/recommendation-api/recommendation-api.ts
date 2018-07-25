@@ -67,6 +67,7 @@ export class RecommendationApiProvider {
       let r = await this.getRecommendations(profile, lat, lng);
       //console.log('Recommendations', r);
 
+      /*
       for(let g of r.items)
       {
         if(g.recipes!=null && g.recipes.length>9) {
@@ -76,6 +77,7 @@ export class RecommendationApiProvider {
           g.menuItems.splice(9);
         }
       }
+      */
 
       r.currentLocation = await this.googleApi.getLocationFromLatLng(lat, lng);
       //r.profile = profile;
@@ -83,7 +85,7 @@ export class RecommendationApiProvider {
       r.lng = lng;
 
       //r.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
-
+      console.log('Recommendations', r);
       Recommendations.instance = r;
       return Promise.resolve(r);
     }
