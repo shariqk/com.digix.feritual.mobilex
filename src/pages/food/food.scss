@@ -12,6 +12,20 @@ page-food {
 
   .food-filters {
     font-size:8pt;
+    width:60px;
   }
 
+
+  ion-scroll[scrollX] {
+    white-space: nowrap;
+    height: 40px;
+    //border:1px solid black;
+    //overflow: hidden;
+
+    .scroll-item {
+      font-size:8pt;
+      width:70px;
+      display: inline-block;
+    }
+  }
 }

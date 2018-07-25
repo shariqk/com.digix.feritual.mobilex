@@ -93,10 +93,13 @@
     <div *ngIf="view=='food'">
       <ion-grid>
         <ion-row>
-          <ion-col col-2 *ngFor="let f of profile.foodFilters.items">
-            <button text-wrap (click)="setFoodFilter(f)" class="food-filters" ion-button block [color]="f.selected ? 'primary' : 'light'">
-              {{f.title}}
-            </button>
+          <ion-col>
+            <ion-scroll scrollX="true">
+              <button *ngFor="let f of profile.foodFilters.items" text-wrap (click)="setFoodFilter(f)"
+                class="scroll-item" ion-button [color]="f.selected ? 'primary' : 'light'">
+                {{f.title}}
+              </button>
+            </ion-scroll>
           </ion-col>
         </ion-row>
       </ion-grid>
