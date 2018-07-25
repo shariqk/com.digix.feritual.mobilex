@@ -14,7 +14,7 @@ import { UserprofileApiProvider } from '../../providers/userprofile-api/userprof
 export class LocationListComponent implements OnChanges {
 
   @Input('locations') locations : FxLocation[];
-
+  @Input('title') title : string = null;
 
   constructor(private navCtrl: NavController, private profileApi: UserprofileApiProvider) {
   }

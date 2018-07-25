@@ -1,8 +1,8 @@
 
   <ion-grid *ngIf="locations!=null">
-    <ion-row>
+    <ion-row *ngIf="title!=null">
       <ion-col>
-        <h5>Nearby locations:</h5>
+        <h5>{{title}}</h5>
       </ion-col>
     </ion-row>
 

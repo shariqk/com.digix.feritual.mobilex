@@ -28,6 +28,15 @@
         </ion-col>
 
         <ion-col col-3 text-center>
+          <button *ngIf="view=='food'" ion-button icon-only clear color="primary">
+            <ion-icon large name="leaf-outline"></ion-icon>
+          </button>
+          <button *ngIf="view!='food'" clear ion-button clear color="dark" icon-only (click)="view='food'">
+            <ion-icon large name="leaf-outline"></ion-icon>
+          </button>
+        </ion-col>
+
+        <ion-col col-3 text-center>
           <button *ngIf="view=='list'" ion-button icon-only clear color="primary">
             <ion-icon large name="list-outline"></ion-icon>
           </button>
@@ -36,14 +45,6 @@
           </button>
         </ion-col>
 
-        <ion-col col-3 text-center>
-          <button *ngIf="view=='food'" ion-button icon-only clear color="primary">
-            <ion-icon large name="leaf-outline"></ion-icon>
-          </button>
-          <button *ngIf="view!='food'" clear ion-button clear color="dark" icon-only (click)="view='food'">
-            <ion-icon large name="leaf-outline"></ion-icon>
-          </button>
-        </ion-col>
 
         <ion-col col-3 text-center>
           <button *ngIf="view=='search'" ion-button clear icon-only color="primary">
@@ -83,7 +84,7 @@
     </div>
 
 
-    
+
     <recommended-location
       *ngIf="recommendations!=null && view=='recommendations'"
       [recommendations]="recommendations">
@@ -96,6 +97,7 @@
 
     <location-list
       *ngIf="this.locations!=null && view=='list'"
+      title="Locations around you"
       [locations]="locations">
     </location-list>
 

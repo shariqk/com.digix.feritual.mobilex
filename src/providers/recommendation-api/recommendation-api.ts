@@ -82,7 +82,7 @@ export class RecommendationApiProvider {
       r.lat = lat;
       r.lng = lng;
 
-      r.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
+      //r.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
 
       Recommendations.instance = r;
       return Promise.resolve(r);
