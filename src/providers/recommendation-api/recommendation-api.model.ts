@@ -13,7 +13,7 @@ export class Recommendations {
     Recommendations._instance = val;
     console.log(Recommendations.realoadEvents);
     for(let e of Recommendations.realoadEvents) {
-      e(val);
+      e.callBack(val);
     }
   }
 
@@ -24,8 +24,27 @@ export class Recommendations {
   //public profile : UserProfile = null;
 
   private static realoadEvents : any[] = [];
-  public static onReload(event : any) {
-    Recommendations.realoadEvents.push(event);
+  public static onReload(name: string, callBack: any) {
+    for(let e of Recommendations.realoadEvents) {
+      if(e.name==name) {
+        return;
+      }
+    }
+
+    Recommendations.realoadEvents.push({
+      name: name,
+      callBack: callBack
+    });
+    console.log('callback added', Recommendations.realoadEvents);
+  }
+
+  public static onReloadRemove(name: string) {
+    for(let i=0; i<Recommendations.realoadEvents.length; i++) {
+      if(Recommendations.realoadEvents[i].name==name) {
+        Recommendations.realoadEvents.splice(i,1);
+      }
+    }
+    console.log('callback removed', Recommendations.realoadEvents);
   }
 
   public locations : FxLocation[];

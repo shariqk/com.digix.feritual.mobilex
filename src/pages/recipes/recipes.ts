@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController  } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 //import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
@@ -8,6 +8,7 @@ import { RecommendationApiProvider } from '../../providers/recommendation-api/re
 import { Hit, Recipe } from '../../providers/feritual-api/feritual-api.model';
 import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
 import { RecipeDetailPage } from '../recipe-detail/recipe-detail';
+import { RecipeSearchResultPage } from '../recipe-search-result/recipe-search-result';
 import { UserProfile, UserProfileHelper } from '../../providers/userprofile-api/userprofile.model';
 import { Helper } from '../../providers/feritual-api/feritual-helper';
 
@@ -26,6 +27,7 @@ export class RecipesPage {
 
   constructor(public navCtrl: NavController,
     private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController,
     private ferApi: FeritualApiProvider,
     private profileApi: UserprofileApiProvider,
     private recommendApi: RecommendationApiProvider,
@@ -33,52 +35,21 @@ export class RecipesPage {
     public navParams: NavParams) {
       this.initialize();
 
-      Recommendations.onReload((val => {
+      Recommendations.onReload('recipes', (val => {
         console.log('recommendations were reloaded');
         this.initialize();
       }));
   }
 
   ionViewDidLoad() {
-    //console.log('ionViewDidLoad RecipesPage');
   }
-
-  //get recommendations() : Recommendations {
-      //return Recommendations.instance;
-  //}
 
   async initialize() {
     this.recommendations = Recommendations.instance;
     this.profile = await this.profileApi.loadUserProfile();
 
-    //this.recommendations = await this.recommendApi.loadRecommendations();
-    /*
-    if(this.recommendations != null)
-    {
-      this.profile = this.recommendations.profile;
-    }
-    else {
-      this.profile = await this.profileApi.loadUserProfile();
-    }
-    */
   }
 
-  /*
-  async loadProfile() {
-    this.profile = await this.profileApi.loadUserProfile();
-  }
-
-  async getRecommendations() {
-    try {
-      let r = await this.recommendApi.loadRecommendations();
-      this.recommendations = r;
-    }
-    catch(err) {
-      console.log('recommendations error', err);
-      alert('Something went wrong in loading recommendations. We will try again in a few moments.');
-    }
-  }
-  */
 
   getDetails(r : Recipe) : string {
     let str = 'Serves ' + r.yield
@@ -88,7 +59,8 @@ export class RecipesPage {
 
   startSearch(keywords : string[]) {
     if(keywords!=null && keywords.length>0) {
-      this.searchTerm = keywords[0];
+      let query = keywords[0];
+      this.searchTerm = query;
       this.doRecipeSearch(null);
     }
   }
@@ -104,7 +76,38 @@ export class RecipesPage {
     return Helper.concatStrArray(items);
   }
 
-  async doRecipeSearch(event : any) {
+  async doRecipeSearch(event: any)
+  {
+    if(this.searchTerm==null || this.searchTerm.trim()=='')
+    {
+      this.presentAlert('Oops', 'Please specify ingredients or cuisine to search for.');
+      return;
+    }
+
+    this.navCtrl.push(RecipeSearchResultPage,
+      {
+        query : this.searchTerm,
+        profile: this.profile
+      });
+
+      if(UserProfileHelper.addRecipeSearch(this.profile, this.searchTerm))
+      {
+        await this.profileApi.saveUserProfile(this.profile);
+      }
+  }
+
+  presentAlert(title: string, text: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
+
+
+  /*
+  async _doRecipeSearch(event : any) {
     let loading = this.loadingCtrl.create({
        content: 'Please wait...'
      });
@@ -134,5 +137,5 @@ export class RecipesPage {
   searchCleared() {
     this.hits = null;
   }
-
+  */
 }

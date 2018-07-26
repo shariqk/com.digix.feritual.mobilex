@@ -23,7 +23,7 @@ import { LocationMenuPage } from '../pages/location-menu/location-menu';
 import { RecipesPage } from '../pages/recipes/recipes';
 import { RecipeDetailPage } from '../pages/recipe-detail/recipe-detail';
 import { StartPage } from '../pages/start/start';
-
+import { RecipeSearchResultPage } from '../pages/recipe-search-result/recipe-search-result';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -49,6 +49,7 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     RecipeDetailPage,
     IntroPage,
     StartPage,
+    RecipeSearchResultPage,
     FoodListComponent,
     RecommendedFoodComponent,
     RecommendedLocationComponent,
@@ -77,6 +78,7 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     LocationMenuPage,
     IntroPage,
     StartPage,
+    RecipeSearchResultPage,
     FoodListComponent,
     RecommendedFoodComponent,
     RecommendedLocationComponent,

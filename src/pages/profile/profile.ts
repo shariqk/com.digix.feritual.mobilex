@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, IonicPage, NavController, NavParams, ViewController, LoadingController } from 'ionic-angular';
+import { Platform, IonicPage, NavController, NavParams, ViewController, LoadingController, AlertController } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
@@ -29,6 +29,7 @@ export class ProfilePage {
   constructor(public navCtrl: NavController,
     public http : HttpClient,
     private viewCtrl: ViewController,
+    private alertCtrl: AlertController,
     private fitbitApi : FitbitApiProvider,
     private loadingCtrl : LoadingController,
     private profileApi : UserprofileApiProvider,
@@ -88,8 +89,8 @@ export class ProfilePage {
       this.initialized = true;
     }
     catch(err) {
-      alert('Error in loading menu:' + JSON.stringify(err));
-
+      console.log(err);
+      this.presentAlert('Error', 'An unexpected error occured during initialization of the profile editor. Please wait a few minutes and retry.');
     }
     finally {
       loading.dismiss();
@@ -191,7 +192,8 @@ export class ProfilePage {
       this.token_fitbit = token;
     }
     catch(err) {
-      alert('Something unexpected happened.  Please retry to see if the problem is resolved');
+      console.log(err);
+      this.presentAlert('Error', 'An error occured during logging into Fitbit. Please wait a few minutes and retry.');
     }
     finally {
 
@@ -205,6 +207,14 @@ export class ProfilePage {
     }
   }
 
+  presentAlert(title: string, text: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
 
   ionViewDidLoad() {
   }

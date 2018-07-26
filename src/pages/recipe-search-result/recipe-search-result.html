@@ -1,53 +1,13 @@
-
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Recipes</ion-title>
+    <ion-title>{{searchTerm}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
-  <ion-toolbar>
-    <ion-searchbar
-      [(ngModel)]="searchTerm"
-      autocorrect="on"
-      type="search"
-      spellcheck="true"
-      (search)="doRecipeSearch($event)"
-      placeholder="{{placeholderText}}">
-    </ion-searchbar>
-
-    <ion-buttons end>
-      <button ion-button icon-only (click)="doRecipeSearch(null)">
-        <ion-icon large name="search"></ion-icon>
-      </button>
-    </ion-buttons>
-  </ion-toolbar>
-
-  <div *ngIf="hits==null && recommendations!=null">
-    <ion-grid>
-      <ion-row *ngFor="let g of recommendations.items" align-items-start>
-        <ion-col *ngIf="g.recipes!=null">
-          <span class="r-title" (click)="startSearch(g.keywords)">{{g.title}}</span>
-            <ion-row nowrap>
-
-              <ion-col nowrap>
-                <ion-scroll scrollX="true">
-                  <img *ngFor="let r of g.recipes"
-                    (click)="navigateToRecipe(r)"
-                    [alt]="r.image"
-                    class="scroll-item" [src]="r.image">
-                </ion-scroll>
-              </ion-col>
-            </ion-row>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
-
-  <!--
   <ion-grid  *ngIf="hits!=null">
     <ion-row>
       <ion-col col-4 text-center>
@@ -89,21 +49,6 @@
     </ion-row>
   </div>
 
-
-  <div *ngIf="hits==null && recommendations!=null">
-    <ion-grid>
-      <ion-row *ngFor="let g of recommendations.items" align-items-start>
-        <ion-col *ngIf="g.recipes!=null">
-          <span class="r-title" (click)="startSearch(g.keywords)">{{g.title}}</span>
-          <ion-row>
-            <ion-col col-4 *ngFor="let r of g.recipes" (click)="navigateToRecipe(r)" align-items-start>
-              <img [src]="r.image">
-            </ion-col>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
 
   <div *ngIf="hits!=null && view=='images'">
     <ion-grid>
@@ -155,7 +100,5 @@
         </ion-col>
       </ion-row>
   </div>
--->
-
 
 </ion-content>

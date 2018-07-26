@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 
 import { Storage } from '@ionic/storage';
 
@@ -19,6 +19,7 @@ export class StartPage {
 
   constructor(public navCtrl: NavController,
     private storage: Storage,
+    private alertCtrl: AlertController,
     private recommendApi: RecommendationApiProvider,
     private loadingCtrl: LoadingController,
     public navParams: NavParams) {
@@ -57,9 +58,17 @@ export class StartPage {
     {
       console.log(err);
       loading.dismiss();
-      alert('Something unexpected occured during initialization and start up. Please try again in a few minutes.');
+      this.presentAlert('Error', 'Something unexpected occured during initialization and start up. Please try again in a few minutes.');
     }
   }
 
+  presentAlert(title: string, text: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
 
 }

@@ -1,5 +1,5 @@
 import { Component , ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, ToastController, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, ToastController, ModalController, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Storage } from '@ionic/storage';
 
@@ -50,6 +50,7 @@ export class FoodPage {
     public modalCtrl : ModalController,
     public navParams: NavParams,
     public toastCtrl: ToastController,
+    private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private profileApi : UserprofileApiProvider,
     private geolocation: Geolocation,
@@ -60,7 +61,7 @@ export class FoodPage {
       //this.getRecommendations();
       this.initialize();
 
-      Recommendations.onReload((val => {
+      Recommendations.onReload('food', (val => {
         console.log('recommendations were reloaded');
         this.initialize();
       }));
@@ -89,7 +90,7 @@ export class FoodPage {
     }
     catch(err) {
       console.log(err);
-      alert('An unexpected error occured during refreshing data. Please wait a few minutes and retry.')
+      this.presentAlert('Error', 'An unexpected error occured during refreshing data. Please wait a few minutes and retry.')
     }
     finally {
       loading.dismiss();
@@ -120,6 +121,14 @@ export class FoodPage {
     dialog.present();
   }
 
+  presentAlert(title: string, text: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present();
+  }
 
   /*
 
@@ -229,7 +238,7 @@ export class FoodPage {
       this.results = results;
     }
     catch(err) {
-      alert('error in getting locations: ' + JSON.stringify(err));
+      this.presentAlert('Error', 'An unexpected error occured while getting results. Please wait a few minutes and retry.')
     }
     finally {
       loading.dismiss();
