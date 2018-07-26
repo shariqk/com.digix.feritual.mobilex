@@ -48,9 +48,11 @@ export class StartPage {
           //this.navCtrl.setRoot(IntroPage);
         }
 
-        this.recommendApi.load(null, null).then(r => {
-          this.navCtrl.setRoot(TabsPage);
-        });
+        this.navCtrl.setRoot(TabsPage);
+
+        //this.recommendApi.load(null, null).then(r => {
+        //  this.navCtrl.setRoot(TabsPage);
+        //});
       });
 
     }

@@ -44,6 +44,7 @@ export class FoodPage {
 
   recommendations : Recommendations;
   view : string = 'recommendations';
+  initialized: boolean = false;
   //foodFilters: FoodFilters;
 
   constructor(public navCtrl: NavController,
@@ -59,7 +60,14 @@ export class FoodPage {
     private googleApi : GoogleApiProvider,
     private ferApi : FeritualApiProvider) {
       //this.getRecommendations();
-      this.initialize();
+      if(Recommendations.instance!=null) {
+        this.initialize();
+      }
+      else {
+        this.recommendApi.load(null,null);
+        this.currentLocation = new GoogleLocation();
+        this.currentLocation.address = "Click here to get started";
+      }
 
       Recommendations.onReload('food', (val => {
         console.log('recommendations were reloaded');
@@ -76,6 +84,7 @@ export class FoodPage {
     this.results = null;
     this.placeholderText = 'Search in ' + this.locations.length + ' places (e.g., Sushi or Burger)';
     this.profile = await this.profileApi.loadUserProfile();
+    this.initialized = true;
   }
 
   async refresh(lat: number, lng: number) {

@@ -21,7 +21,7 @@ export class RecipesPage {
   profile: UserProfile;
   searchTerm : string;
   placeholderText : string = 'Type an ingredient to search for';
-  hits : Hit[];
+  //hits : Hit[];
   view : string = 'grid';
   recommendations : Recommendations;
 
