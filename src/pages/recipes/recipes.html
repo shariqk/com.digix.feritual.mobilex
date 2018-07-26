@@ -26,14 +26,21 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <div *ngIf="recommendations==null" style="padding:20px;">
-    <p>
-      It may take a few moments to load recommendations for you.
-    </p>
-    <p>
-      You may continue to use the application while we personalize your experience.
-    </p>
-  </div>
+  <ion-grid *ngIf="recommendations==null" style="padding:20px;">
+    <ion-row align-items-center>
+      <ion-col col-2>
+        <ion-spinner></ion-spinner>
+      </ion-col>
+      <ion-col>
+        <p>
+          It may take a few moments to load recommendations for you.
+        </p>
+          <p>
+          You may continue to use the application while we personalize your experience.
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <div *ngIf="recommendations!=null">
     <ion-grid>
@@ -41,7 +48,6 @@
         <ion-col *ngIf="g.recipes!=null">
           <span class="r-title" (click)="startSearch(g.keywords)">{{g.title}}</span>
             <ion-row nowrap>
-
               <ion-col nowrap>
                 <ion-scroll scrollX="true">
                   <img *ngFor="let r of g.recipes"
