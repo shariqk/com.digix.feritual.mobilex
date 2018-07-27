@@ -1,8 +1,11 @@
 import { Component, OnChanges, Input} from '@angular/core';
+import { NavController } from 'ionic-angular';
 
 import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
 import { MenuHelper } from '../../providers/feritual-api/feritual-helper';
-import { FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
+import { FxLocation, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
+import { LocationMenuPage } from '../../pages/location-menu/location-menu';
+import { Helper } from '../../providers/feritual-api/feritual-helper';
 
 @Component({
   selector: 'recommended-food',
@@ -10,32 +13,50 @@ import { FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.mo
 })
 export class RecommendedFoodComponent implements OnChanges {
 
-  @Input('recommendations') recommendations : Recommendations;
+  @Input('title') title : string;
+  @Input('items') items : FxLocationMenuItem[];
+  @Input('keywords') keywords: string[];
+  @Input('location') location: FxLocation;
 
-  constructor() {
-    //console.log('Hello RecommendedFoodComponent Component');
+  private previewList: FxLocationMenuItem[];
+  private expandViewTitle: string = 'Expand >>';
+  private expanded: boolean = false;
+
+  constructor(private navCtrl: NavController) {
   }
 
-  previewList(items: FxLocationMenuItem[]) : FxLocationMenuItem[] {
-    let list: FxLocationMenuItem[] = [];
-    for(let m of items) {
-      list.push(m);
-      if(list.length>2)
+  switchExpandedView() {
+    this.expanded = !this.expanded;
+    this.expandViewTitle = this.expanded ? 'Collapse <<' : 'Expand >>';
+  }
+
+  formatDistance(distance : number) : string {
+    return distance.toFixed(2) + ' mi';
+  }
+
+  concatStrArray(items : string[]) : string {
+    return Helper.concatStrArray(items);
+  }
+
+  navigateToLocationMenu(loc: FxLocation) {
+    this.navCtrl.push(LocationMenuPage,
       {
-        break;
-      }
-    }
-    return list;
+        location: loc
+      });
   }
 
   ngOnChanges() {
-    //console.log('recommendations', this.recommendations);
-    for(let c of this.recommendations.items) {
-      if(c.menuItems!=null) {
-        for(let m of c.menuItems) {
-          MenuHelper.fixMenuItemPhotoUrl(m);
-        }
+    let list: FxLocationMenuItem[] = [];
+
+    for(let m of this.items) {
+      MenuHelper.fixMenuItemPhotoUrl(m);
+
+      if(list.length<3)
+      {
+        list.push(m);
       }
     }
+
+    this.previewList = list;
   }
 }

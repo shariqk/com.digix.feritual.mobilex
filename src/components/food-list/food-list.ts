@@ -43,8 +43,7 @@ export class FoodListComponent implements OnChanges {
   {
     this.navCtrl.push(LocationMenuPage,
       {
-        location: this.menu.location,
-        profile: this.profile
+        location: this.menu.location
       });
   }
 

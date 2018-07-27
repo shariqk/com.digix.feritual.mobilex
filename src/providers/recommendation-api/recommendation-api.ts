@@ -7,6 +7,7 @@ import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { UserProfile } from '../userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../userprofile-api/userprofile-api';
 import { FeritualApiProvider } from '../feritual-api/feritual-api';
+import { FxIcons } from '../feritual-api/feritual-api.model';
 import { Recommendations } from './recommendation-api.model'
 
 @Injectable()
@@ -77,7 +78,11 @@ export class RecommendationApiProvider {
       r.lat = lat;
       r.lng = lng;
 
-
+      for(let loc of r.locations) {
+        if(loc.logoUrl==null) {
+          loc.logoUrl = FxIcons.getIcon(loc.name);
+        }
+      }
 
       //r.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
       console.log('Recommendations', r);

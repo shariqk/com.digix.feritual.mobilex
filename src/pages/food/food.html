@@ -19,15 +19,6 @@
       <ion-row>
 
         <ion-col col-3 text-center>
-          <button *ngIf="view=='recommendations'" ion-button icon-only clear color="primary">
-            <ion-icon large name="checkmark-circle-outline"></ion-icon>
-          </button>
-          <button *ngIf="view!='recommendations'" clear ion-button clear color="dark" icon-only (click)="view='recommendations'">
-            <ion-icon large name="checkmark-circle-outline"></ion-icon>
-          </button>
-        </ion-col>
-
-        <ion-col col-3 text-center>
           <button *ngIf="view=='food'" ion-button icon-only clear color="primary">
             <ion-icon large name="leaf-outline"></ion-icon>
           </button>
@@ -52,6 +43,15 @@
           </button>
           <button *ngIf="view!='search'" clear ion-button color="dark" icon-only (click)="view='search'">
             <ion-icon large name="search-outline"></ion-icon>
+          </button>
+        </ion-col>
+
+        <ion-col col-3 text-center>
+          <button *ngIf="view=='recommendations'" ion-button icon-only clear color="primary">
+            <ion-icon large name="checkmark-circle-outline"></ion-icon>
+          </button>
+          <button *ngIf="view!='recommendations'" clear ion-button clear color="dark" icon-only (click)="view='recommendations'">
+            <ion-icon large name="checkmark-circle-outline"></ion-icon>
           </button>
         </ion-col>
 
@@ -108,9 +108,12 @@
       [recommendations]="recommendations">
     </recommended-location>
 
-    <div *ngIf="view=='food'">
+    <div *ngIf="view=='food' && recommendations!=null">
       <ion-grid>
-        <ion-row>
+        <ion-row align-items-center>
+          <ion-col col-2>
+            Filters:
+          </ion-col>
           <ion-col>
             <ion-scroll scrollX="true">
               <button *ngFor="let f of profile.foodFilters.items" text-wrap (click)="setFoodFilter(f)"
@@ -122,10 +125,14 @@
         </ion-row>
       </ion-grid>
 
-      <recommended-food
-        *ngIf="recommendations!=null"
-        [recommendations]="this.recommendations">
-      </recommended-food>
+      <div *ngFor="let g of recommendations.items">
+        <recommended-food *ngIf="g.menuItems!=null"
+          [location]="getLocationFromId(recommendations.locations, g.keywords)"
+          [keywords]="g.keywords"
+          [title]="g.title"
+          [items]="g.menuItems">
+        </recommended-food>
+      </div>
     </div>
 
 

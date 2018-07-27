@@ -1,46 +1,98 @@
-<ion-grid>
-  <ion-row>
+<ion-grid *ngIf="items!=null">
+
+  <ion-row *ngIf="location==null" align-items-start>
     <ion-col>
-      <h5>Recommended dishes for you:</h5>
+      <span class="loc-title" (click)="navigateToLocationMenu(keywords)">{{title}}</span>
     </ion-col>
   </ion-row>
 
-  <ion-row *ngFor="let g of recommendations.items" align-items-start>
-    <ion-col *ngIf="g.menuItems!=null">
-      <span class="loc-title" (click)="startSearch(g.keywords)">{{g.title}}</span>
+  <ion-row *ngIf="location!=null" (click)="navigateToLocationMenu(location)" align-items-start>
+    <ion-col col-3>
+      <img style='padding:5px;' [src]="location.logoUrl">
+    </ion-col>
+    <ion-col>
+      <ion-row>
+        <ion-col>
+          <span class="loc-title">{{location.name}}</span><br>
+          <span class="loc-details" *ngIf="location.foodTypes!=null">{{concatStrArray(location.foodTypes)}}</span>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="loc-details">
+          <p *ngIf="location.description!=null" [innerHtml]="location.description"></p>
+          {{location.street}}, {{location.city}} ({{formatDistance(location.distance)}})
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
 
-      <!-- preview list -->
-      <ion-row *ngFor="let m of g.menuItems" align-items-start>
+  <!-- preview list -->
+  <ion-row *ngIf="!expanded" align-items-start>
+    <ion-col>
+      <ion-row *ngFor="let m of previewList" align-items-start>
         <ion-col col-2>
           <img [src]="m.photoUrl">
         </ion-col>
         <ion-col>
           <ion-row>
             <ion-col>
-              <p class="item-name" text-wrap>{{m.name}}</p>
-              <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
-              <p *ngIf="m.calories!=null" class="item-detail">
+              <span class="item-name" text-wrap>{{m.name}}</span>
+              <br/>
+              <span class="item-detail">
                 calories: {{m.calories}},
                 sodium: {{m.sodium}},
                 carbs: {{m.total_carbohydrate}},
                 fat: {{m.total_fat}},
-                sugars: {{m.sugars}}
-              </p>
+                sugars: {{m.sugars}},
+                protein: {{m.protein}}
+              </span>
+              <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
+
               <p *ngIf="m.avoid!=null && m.avoid" class="item-detail">Avoid: {{m.avoidReason}}</p>
             </ion-col>
           </ion-row>
         </ion-col>
       </ion-row>
-
-      <ion-row>
-
-      </ion-row>
-
-        <!--
-        <ion-col col-4 *ngFor="let r of g.menuItems" (click)="navigateToRecipe(r)" align-items-start>
-          <img [src]="r.image">
-        </ion-col>
-      -->
     </ion-col>
   </ion-row>
+
+
+  <!-- full list -->
+  <ion-row *ngIf="expanded" align-items-start>
+    <ion-col>
+      <ion-row *ngFor="let m of items" align-items-start>
+        <ion-col col-2>
+          <img [src]="m.photoUrl">
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-col>
+              <span class="item-name" text-wrap>{{m.name}}</span>
+              <br/>
+              <span class="item-detail">
+                calories: {{m.calories}},
+                sodium: {{m.sodium}},
+                carbs: {{m.total_carbohydrate}},
+                fat: {{m.total_fat}},
+                sugars: {{m.sugars}},
+                protein: {{m.protein}}
+              </span>
+              <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
+
+              <p *ngIf="m.avoid!=null && m.avoid" class="item-detail">Avoid: {{m.avoidReason}}</p>
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+      <button *ngIf="items.length>previewList.length" ion-button color="primary" (click)="switchExpandedView()" clear small icon-start>
+        {{expandViewTitle}} ({{items.length}})
+      </button>
+    </ion-col>
+  </ion-row>
+
 </ion-grid>

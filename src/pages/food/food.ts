@@ -43,7 +43,7 @@ export class FoodPage {
   profile : UserProfile;
 
   recommendations : Recommendations;
-  view : string = 'recommendations';
+  view : string = 'food';
   initialized: boolean = false;
   //foodFilters: FoodFilters;
 
