@@ -64,25 +64,20 @@ export class RecommendationApiProvider {
 
     try {
       let profile = await this.profileApi.loadUserProfile();
-      let r = await this.getRecommendations(profile, lat, lng);
-      //console.log('Recommendations', r);
 
-      /*
-      for(let g of r.items)
-      {
-        if(g.recipes!=null && g.recipes.length>9) {
-          g.recipes.splice(9);
-        }
-        if(g.menuItems!=null && g.menuItems.length>9) {
-          g.menuItems.splice(9);
-        }
-      }
-      */
+      console.log('sending...');
+      let recommendationPromise = this.getRecommendations(profile, lat, lng);
+      let locPromise = this.googleApi.getLocationFromLatLng(lat, lng);
 
-      r.currentLocation = await this.googleApi.getLocationFromLatLng(lat, lng);
-      //r.profile = profile;
+      await Promise.all([recommendationPromise, locPromise]);
+      console.log('completed!!!');
+
+      let r = await recommendationPromise; // await this.getRecommendations(profile, lat, lng);
+      r.currentLocation = await locPromise; //await this.googleApi.getLocationFromLatLng(lat, lng);
       r.lat = lat;
       r.lng = lng;
+
+
 
       //r.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
       console.log('Recommendations', r);

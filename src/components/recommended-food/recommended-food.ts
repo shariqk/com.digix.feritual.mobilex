@@ -2,7 +2,7 @@ import { Component, OnChanges, Input} from '@angular/core';
 
 import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
 import { MenuHelper } from '../../providers/feritual-api/feritual-helper';
-
+import { FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
 
 @Component({
   selector: 'recommended-food',
@@ -14,6 +14,18 @@ export class RecommendedFoodComponent implements OnChanges {
 
   constructor() {
     //console.log('Hello RecommendedFoodComponent Component');
+  }
+
+  previewList(items: FxLocationMenuItem[]) : FxLocationMenuItem[] {
+    let list: FxLocationMenuItem[] = [];
+    for(let m of items) {
+      list.push(m);
+      if(list.length>2)
+      {
+        break;
+      }
+    }
+    return list;
   }
 
   ngOnChanges() {

@@ -8,6 +8,8 @@
   <ion-row *ngFor="let g of recommendations.items" align-items-start>
     <ion-col *ngIf="g.menuItems!=null">
       <span class="loc-title" (click)="startSearch(g.keywords)">{{g.title}}</span>
+
+      <!-- preview list -->
       <ion-row *ngFor="let m of g.menuItems" align-items-start>
         <ion-col col-2>
           <img [src]="m.photoUrl">
@@ -28,14 +30,17 @@
             </ion-col>
           </ion-row>
         </ion-col>
+      </ion-row>
 
+      <ion-row>
+
+      </ion-row>
 
         <!--
         <ion-col col-4 *ngFor="let r of g.menuItems" (click)="navigateToRecipe(r)" align-items-start>
           <img [src]="r.image">
         </ion-col>
       -->
-      </ion-row>
     </ion-col>
   </ion-row>
 </ion-grid>
