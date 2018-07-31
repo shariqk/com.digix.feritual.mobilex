@@ -19,6 +19,12 @@ page-home {
   .location-card {
     font-family: 'Roboto','sans-serif';
     height:140px;
+    width: 100%;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    ion-card-content{
+        padding: 0 !important;
+    }
     //width:220px;
     //padding:4px;
     //font-weight:bold;

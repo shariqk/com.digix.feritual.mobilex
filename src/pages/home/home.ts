@@ -20,8 +20,8 @@ declare var google;
 })
 export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
-  map: GoogleMap;
-
+  map: any;
+  markers: any = [];
 
   currentLocationAddress = 'Loading Near By Locations...';
   currentLocation: GoogleLocation;
@@ -79,29 +79,41 @@ export class HomePage {
   async initMap(r: Recommendations) {
     let zoom_level = 12;
     let pos = new LatLng(r.currentLocation.lat, r.currentLocation.lng);
-    this.map = GoogleMaps.create(this.mapElement.nativeElement, {
-      zoom: zoom_level,
-      tilt: 10,
-      center: pos
-    });
 
-    //console.log(this.map);
-    let m : any = this.map;
-    if(m.zoom==null)
+    if(this.map==null)
     {
-      this.map = new google.maps.Map(this.mapElement.nativeElement, {
+      this.map = GoogleMaps.create(this.mapElement.nativeElement, {
         zoom: zoom_level,
         tilt: 10,
         center: pos
       });
+
+      //console.log(this.map);
+      let m : any = this.map;
+      if(m.zoom==null)
+      {
+        this.map = new google.maps.Map(this.mapElement.nativeElement, {
+          zoom: zoom_level,
+          tilt: 10,
+          center: pos
+        });
+      }
+    }
+
+    if(this.markers!=null)
+    {
+      for(let m of this.markers)
+      {
+        m.setMap(null);
+      }
     }
 
     //console.log(this.map);
+    this.map.setCenter(pos);
 
-    let i = 0;
+    this.markers = [];
     for(let p of r.locations)
     {
-      i++;
       let pos = new LatLng( p.lat, p.lng);
 
       let marker = new google.maps.Marker({
@@ -109,8 +121,10 @@ export class HomePage {
         //animation: google.maps.Animation.DROP,
         map: this.map,
         title: p.name,
-        label: i.toString()
+        //label: (this.markers.length+1).toString(),
       });
+      //marker.zIndex = this.markers.length;
+      this.markers.push(marker);
 
       let infowindow = new google.maps.InfoWindow({
           content: '<b>'+p.name+'</b>'
