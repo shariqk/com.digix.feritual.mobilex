@@ -7,6 +7,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicStorageModule } from '@ionic/storage';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { GoogleMaps } from '@ionic-native/google-maps';
 
 import { FoodListComponent } from '../components/food-list/food-list';
 import { RecommendedFoodComponent } from '../components/recommended-food/recommended-food';
@@ -15,6 +16,7 @@ import { LocationListComponent } from '../components/location-list/location-list
 
 import { IntroPage } from '../pages/intro/intro';
 import { FoodPage } from '../pages/food/food';
+import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { AnalyzePage } from '../pages/analyze/analyze';
 import { TabsPage } from '../pages/tabs/tabs';
@@ -40,6 +42,7 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
   declarations: [
     MyApp,
     FoodPage,
+    HomePage,
     ProfilePage,
     AnalyzePage,
     TabsPage,
@@ -69,6 +72,7 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
   entryComponents: [
     MyApp,
     FoodPage,
+    HomePage,
     ProfilePage,
     AnalyzePage,
     TabsPage,
@@ -86,6 +90,7 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
   ],
   providers: [
     StatusBar,
+    GoogleMaps,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FoodApiProvider,

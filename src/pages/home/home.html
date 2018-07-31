@@ -1,0 +1,56 @@
+
+
+<ion-content>
+  <ion-card text-nowrap class="floating-panel" block text-left (click)="addressCardClicked();">
+    {{currentLocationAddress}}
+  </ion-card>
+
+
+    <ion-scroll *ngIf="recommendations!=null" class="film-strip"  scrollX="true">
+    <ion-grid>
+      <ion-row nowrap>
+        <ion-col col-11 text-left no-padding *ngFor="let loc of recommendations.locations">
+            <ion-card class="location-card" (click)="navigateToLocationMenu(loc)">
+              <ion-grid>
+                <ion-row nowrap>
+                  <ion-col col-5>
+                    <img style="width:100%;height:100%;" [src]="loc.logoUrl">
+                  </ion-col>
+                  <ion-col>
+                    <ion-row>
+                      <ion-col text-wrap>
+                        <span class="loc-title">{{loc.name}}</span><br>
+                        <span class="loc-details" *ngIf="loc.foodTypes!=null">{{concatStrArray(loc.foodTypes)}}</span>
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col class="loc-details" text-wrap>
+                        <p *ngIf="loc.description!=null" [innerHtml]="loc.description"></p>
+                        {{loc.street}}, {{loc.city}} ({{formatDistance(loc.distance)}})
+                      </ion-col>
+                    </ion-row>
+                  </ion-col>
+                </ion-row>
+                <!--
+                <ion-row>
+                  <ion-col>
+                    39
+                  </ion-col>
+                  <ion-col>
+                    43
+                  </ion-col>
+                  <ion-col>
+                    44
+                  </ion-col>
+                </ion-row>
+              -->
+              </ion-grid>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+    </ion-grid>
+  </ion-scroll>
+
+  <div #map id="map"></div>
+
+</ion-content>
