@@ -32,12 +32,12 @@ export class StartPage {
   }
 
   async initialize() {
+    /*
     let loading = this.loadingCtrl.create({
       dismissOnPageChange: true,
-      //spinner: 'hide',
-      //content: "<div class='custom-spinner-container'><div class='custom-spinner-box'></div></div>"
      });
     loading.present();
+*/
 
     try {
       this.storage.get('intro-done').then(done =>
@@ -59,7 +59,7 @@ export class StartPage {
     catch(err)
     {
       console.log(err);
-      loading.dismiss();
+      //loading.dismiss();
       this.presentAlert('Error', 'Something unexpected occured during initialization and start up. Please try again in a few minutes.');
     }
   }

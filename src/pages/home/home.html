@@ -19,10 +19,22 @@
    </ion-fab-list>
  </ion-fab>
 
-  <ion-card *ngIf="recommendations!=null" text-nowrap class="floating-panel" block text-left (click)="addressCardClicked();">
+  <ion-card *ngIf="recommendations!=null"  class="floating-address-panel" (click)="addressCardClicked();">
     {{currentLocationAddress}}
   </ion-card>
 
+  <ion-scroll scrollX="true" zoom="false" class="filter-panel">
+    <ion-grid *ngIf="profile!=null">
+      <ion-row nowrap>
+        <ion-col nowrap>
+            <button *ngFor="let f of profile.foodFilters.items" text-wrap (click)="setFoodFilter(f)"
+              class="filter-button" ion-button [color]="f.selected ? 'primary' : 'light'">
+              {{f.title}}
+            </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-scroll>
 
   <ion-scroll class="film-strip"  scrollX="true" #filmStrip id="filmStrip">
     <ion-grid *ngIf="recommendations!=null">

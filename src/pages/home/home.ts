@@ -11,6 +11,8 @@ import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 import { Helper } from '../../providers/feritual-api/feritual-helper';
 import { FxLocation, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
 import { Geolocation } from '@ionic-native/geolocation';
+import { UserProfile, UserProfileHelper, FoodFilters, FoodFilterItem } from '../../providers/userprofile-api/userprofile.model';
+import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 
 declare var google;
 
@@ -27,7 +29,7 @@ export class HomePage {
 
   map: any;
   markers: any = [];
-
+  profile: UserProfile;
   currentLocationAddress = 'Loading Near By Locations...';
   currentLocation: GoogleLocation;
   recommendations: Recommendations;
@@ -40,6 +42,7 @@ export class HomePage {
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
     private geo: Geolocation,
+    private profileApi: UserprofileApiProvider,
     private recommendApi: RecommendationApiProvider,
     public navParams: NavParams) {
 
@@ -101,11 +104,17 @@ export class HomePage {
         m.map.panTo(m.getPosition());
         m.zIndex = google.maps.Marker.MAX_ZINDEX + 2;
 
+
         this.highlightedMarker = m;
         console.log('marker', m.title);
         break;
       }
     }
+  }
+
+  async setFoodFilter(filter: string)
+  {
+    
   }
 
   async initialize() {
@@ -116,7 +125,11 @@ export class HomePage {
 
       this.currentLocationAddress = r.currentLocation.address;
       this.currentLocation = r.currentLocation;
+      this.profile = await this.profileApi.loadUserProfile();
       this.recommendations = r;
+
+      //console.log('profile',this.profile);
+
 
       this.buildMapMarkers(r);
       let p = this.filmScrollContent.nativeElement as HTMLElement;
@@ -215,7 +228,7 @@ export class HomePage {
 
       marker.addListener('click', function() {
         //alert('hello');
-        this.map.setZoom(this.zoom_level);
+        this.map.setZoom(this.street_zoom_level);
         this.map.panTo(marker.getPosition());
         //console.log('clicked', p.name);
         //this.filmStrip.scrollElement.scrollTo(0, 500);
