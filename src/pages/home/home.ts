@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, AlertController, LoadingController } from 'ionic-angular';
+import { Content, IonicPage, NavController, NavParams, ModalController, AlertController, LoadingController, FabContainer, Scroll } from 'ionic-angular';
 import { GoogleMaps, GoogleMap, CameraPosition, LatLng, GoogleMapsEvent } from '@ionic-native/google-maps';
 
 import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
@@ -10,6 +10,7 @@ import { RecommendationApiProvider } from '../../providers/recommendation-api/re
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 import { Helper } from '../../providers/feritual-api/feritual-helper';
 import { FxLocation, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
+import { Geolocation } from '@ionic-native/geolocation';
 
 declare var google;
 
@@ -20,6 +21,10 @@ declare var google;
 })
 export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
+  @ViewChild('filmStrip') filmStrip: any;
+  @ViewChild(Content) content: Content;
+  filmScrollContent: ElementRef;
+
   map: any;
   markers: any = [];
 
@@ -34,71 +39,144 @@ export class HomePage {
     private modalCtrl: ModalController,
     private alertCtrl: AlertController,
     private loadingCtrl: LoadingController,
+    private geo: Geolocation,
     private recommendApi: RecommendationApiProvider,
     public navParams: NavParams) {
 
-    Recommendations.onReload('homePage', (val => {
-      console.log('recommendations were reloaded');
-      this.initialize();
-    }));
+
+      Recommendations.onReload('homePage', (val => {
+        console.log('recommendations were reloaded');
+        this.initialize();
+      }));
+
   }
 
+  private film_scrolling = false;
+  private zoom_level = 11;
+  private street_zoom_level = 15;
+  private default_marker_pin = this.pinSymbol("#f4f4f4");
+  private highlight_marker_pin = this.pinSymbol("#488aff");
+  private highlightedMarker = null;
 
   ionViewDidLoad() {
+    if(Recommendations.instance==null) {
+      this.refresh(null, null);
+    }
     this.initialize();
+    this.filmScrollContent =  this.filmStrip._scrollContent;
+    //console.log('filmStrip', this.filmStrip._scrollContent);
+
+    this.filmStrip.addScrollEventListener(($event: any) => {
+      if(!this.film_scrolling) {
+        window.setTimeout(() => {
+          this.autoSelectMapMarker();
+          this.film_scrolling = false;
+        }, 1500);
+        this.film_scrolling = true;
+      }
+
+      //console.log(event);
+      //console.log(this.filmStrip);
+    });
+
   }
 
+  async autoSelectMapMarker() {
+    let p = this.filmScrollContent.nativeElement as HTMLElement;
+    let offset = p.scrollLeft;
+
+    for(let m of this.markers) {
+      let e = document.getElementById(m.locationId).parentElement;
+      if(e.offsetLeft+(e.clientWidth/2)>p.scrollLeft)
+      {
+        if(this.highlightedMarker==m) {
+          break;
+        }
+        if(this.highlightedMarker!=null) {
+          this.highlightedMarker.setIcon(this.default_marker_pin);
+          this.highlightedMarker.zIndex = google.maps.Marker.MAX_ZINDEX + 1;
+        }
+        m.setIcon(this.highlight_marker_pin);
+        m.map.setZoom(this.street_zoom_level);
+        m.map.panTo(m.getPosition());
+        m.zIndex = google.maps.Marker.MAX_ZINDEX + 2;
+
+        this.highlightedMarker = m;
+        console.log('marker', m.title);
+        break;
+      }
+    }
+  }
 
   async initialize() {
-    //let lat = 40.759011;
-    //let lng = -73.984472;
-    //this.initMap(new LatLng(lat, lng));
+    this.createMap(null,null);
 
     if(Recommendations.instance!=null) {
-      //await this.map.one(GoogleMapsEvent.MAP_READY);
-
       let r = Recommendations.instance;
 
       this.currentLocationAddress = r.currentLocation.address;
       this.currentLocation = r.currentLocation;
       this.recommendations = r;
 
-      this.initMap(r);
-
-      /*
-      await this.map.moveCamera({
-        target: new LatLng(r.currentLocation.lat, r.currentLocation.lng),
-        zoom: 15,
-        tilt: 10,
-      });
-      */
-
+      this.buildMapMarkers(r);
+      let p = this.filmScrollContent.nativeElement as HTMLElement;
+      p.scrollTo(0,0);
     }
   }
 
-  async initMap(r: Recommendations) {
-    let zoom_level = 12;
-    let pos = new LatLng(r.currentLocation.lat, r.currentLocation.lng);
+  async createMap(lat: number, lng: number) {
+    // default to time square
 
     if(this.map==null)
     {
-      this.map = GoogleMaps.create(this.mapElement.nativeElement, {
-        zoom: zoom_level,
+      if(lat==null || lng==null)
+      {
+        lat = 40.759011;
+        lng = -73.984472;
+      }
+
+      let pos = new LatLng(lat, lng);
+      let options = {
+        zoom: this.zoom_level,
         tilt: 10,
-        center: pos
-      });
+        center: pos,
+        fullscreenControl: false
+      };
+
+      this.map = GoogleMaps.create(this.mapElement.nativeElement, options);
 
       //console.log(this.map);
       let m : any = this.map;
       if(m.zoom==null)
       {
-        this.map = new google.maps.Map(this.mapElement.nativeElement, {
-          zoom: zoom_level,
-          tilt: 10,
-          center: pos
-        });
+        this.map = new google.maps.Map(this.mapElement.nativeElement, options);
       }
+
+      this.map.panTo(await this.getCurrentPosition());
+
     }
+  }
+
+  async getCurrentPosition(): Promise<LatLng> {
+    let lat = 0;
+    let lng = 0;
+
+    try {
+      let pos = await this.geo.getCurrentPosition({timeout: 20000, enableHighAccuracy: false});
+      lat = pos.coords.latitude;
+      lng = pos.coords.longitude;
+    }
+    catch(err) {
+      // default to time square
+      lat = 40.759011;
+      lng = -73.984472;
+    }
+
+    return Promise.resolve(new LatLng(lat, lng));
+  }
+
+  async buildMapMarkers(r: Recommendations) {
+    let pos = new LatLng(r.currentLocation.lat, r.currentLocation.lng);
 
     if(this.markers!=null)
     {
@@ -109,20 +187,25 @@ export class HomePage {
     }
 
     //console.log(this.map);
-    this.map.setCenter(pos);
-
+    this.highlightedMarker = null;
+    this.map.panTo(pos);
+    let ctx = this;
     this.markers = [];
     for(let p of r.locations)
     {
-      let pos = new LatLng( p.lat, p.lng);
+      let pos = new LatLng(p.lat, p.lng);
 
       let marker = new google.maps.Marker({
         position: pos,
         //animation: google.maps.Animation.DROP,
         map: this.map,
+        icon: this.default_marker_pin, // 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
         title: p.name,
+        zIndex: google.maps.Marker.MAX_ZINDEX + 1,
+        locationId: p.id,
         //label: (this.markers.length+1).toString(),
       });
+
       //marker.zIndex = this.markers.length;
       this.markers.push(marker);
 
@@ -131,11 +214,47 @@ export class HomePage {
         });
 
       marker.addListener('click', function() {
-        this.map.setZoom(zoom_level);
-        this.map.setCenter(marker.getPosition());
+        //alert('hello');
+        this.map.setZoom(this.zoom_level);
+        this.map.panTo(marker.getPosition());
+        //console.log('clicked', p.name);
+        //this.filmStrip.scrollElement.scrollTo(0, 500);
+        ctx.scrollTo(p.id);
+
         infowindow.open(marker.get('map'), marker);
+        window.setTimeout(() => {
+          infowindow.close();
+        }, 5000);
       });
 
+    }
+  }
+
+  async scrollTo(element: string) {
+    let e = document.getElementById(element).parentElement;
+    e.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+  }
+
+  async fabActionButtonClicked(fab: FabContainer, action: string) {
+    fab.close();
+    console.log('action', action, fab);
+
+    switch(action) {
+      case 'restaurant':
+        this.map.setZoom(this.zoom_level);
+        this.map.panTo(new LatLng(this.currentLocation.lat, this.currentLocation.lng));
+        break;
+
+      case 'refresh':
+        this.refresh(this.use_current_lat, this.use_current_lng);
+        break;
+
+      case 'locate':
+        this.refresh(null,null);
+        break;
+
+      default:
+        break;
     }
   }
 
@@ -150,6 +269,9 @@ export class HomePage {
       });
   }
 
+  private use_current_lat=-9999;
+  private use_current_lng=-9999;
+
   async refresh(lat: number, lng: number) {
     let loading = this.loadingCtrl.create({
        content: 'Please wait...',
@@ -157,6 +279,19 @@ export class HomePage {
     loading.present();
 
     try {
+      if(lat==null || lng==null)
+      {
+        let pos = await this.getCurrentPosition();
+        lat = pos.lat;
+        lng = pos.lng;
+      }
+      else if(this.recommendations!=null && lat==this.use_current_lat && lng==this.use_current_lng) {
+        lat = this.recommendations.currentLocation.lat;
+        lng = this.recommendations.currentLocation.lng;
+      }
+
+      this.map.setCenter(new LatLng(lat, lng));
+
       await this.recommendApi.load(lat, lng);
       //this.initialize();
     }
@@ -192,6 +327,16 @@ export class HomePage {
     return distance.toFixed(2) + ' mi';
   }
 
+  pinSymbol(color: string) {
+    return {
+        path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+        fillColor: color,
+        fillOpacity: 1,
+        strokeColor: '#000',
+        strokeWeight: 2,
+        scale: 1,
+   };
+}
 
   presentAlert(title: string, text: string) {
     let alert = this.alertCtrl.create({

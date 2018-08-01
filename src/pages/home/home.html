@@ -1,16 +1,34 @@
 
 
 <ion-content>
-  <ion-card text-nowrap class="floating-panel" block text-left (click)="addressCardClicked();">
+  <ion-fab bottom left *ngIf="recommendations!=null" #fab>
+   <button ion-fab color="dark" icon-only>
+     <ion-icon large name="arrow-dropup"></ion-icon>
+   </button>
+
+   <ion-fab-list side="top">
+     <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'locate')">
+       <ion-icon large name="locate"></ion-icon>
+     </button>
+     <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'refresh')">
+       <ion-icon large name="refresh"></ion-icon>
+     </button>
+     <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'restaurant')">
+       <ion-icon large name="restaurant"></ion-icon>
+     </button>
+   </ion-fab-list>
+ </ion-fab>
+
+  <ion-card *ngIf="recommendations!=null" text-nowrap class="floating-panel" block text-left (click)="addressCardClicked();">
     {{currentLocationAddress}}
   </ion-card>
 
 
-    <ion-scroll *ngIf="recommendations!=null" class="film-strip"  scrollX="true">
-    <ion-grid>
+  <ion-scroll class="film-strip"  scrollX="true" #filmStrip id="filmStrip">
+    <ion-grid *ngIf="recommendations!=null">
       <ion-row nowrap>
         <ion-col col-11 text-left no-padding *ngFor="let loc of recommendations.locations">
-            <ion-card class="location-card" (click)="navigateToLocationMenu(loc)">
+            <ion-card class="location-card" (click)="navigateToLocationMenu(loc)" [id]="loc.id">
               <ion-grid>
                 <ion-row nowrap>
                   <ion-col col-5>
