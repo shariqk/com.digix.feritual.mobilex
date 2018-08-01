@@ -114,7 +114,7 @@ export class HomePage {
 
   async setFoodFilter(filter: string)
   {
-    
+
   }
 
   async initialize() {
@@ -259,7 +259,9 @@ export class HomePage {
         break;
 
       case 'refresh':
-        this.refresh(this.use_current_lat, this.use_current_lng);
+        let pos = this.map.getBounds().getCenter();
+        console.log('center', pos);
+        this.refresh(pos.lat(), pos.lng());
         break;
 
       case 'locate':

@@ -3,15 +3,15 @@
 <ion-content>
   <ion-fab bottom left *ngIf="recommendations!=null" #fab>
    <button ion-fab color="dark" icon-only>
-     <ion-icon large name="arrow-dropup"></ion-icon>
+     <ion-icon large name="arrow-forward"></ion-icon>
    </button>
 
-   <ion-fab-list side="top">
-     <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'locate')">
-       <ion-icon large name="locate"></ion-icon>
-     </button>
+   <ion-fab-list side="right">
      <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'refresh')">
        <ion-icon large name="refresh"></ion-icon>
+     </button>
+     <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'locate')">
+       <ion-icon large name="navigate"></ion-icon>
      </button>
      <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'restaurant')">
        <ion-icon large name="restaurant"></ion-icon>
