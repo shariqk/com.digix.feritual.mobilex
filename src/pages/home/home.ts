@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Content, IonicPage, NavController, NavParams, ModalController, AlertController, LoadingController, FabContainer, Scroll } from 'ionic-angular';
+import { Content, IonicPage, NavController, NavParams, ModalController, AlertController, LoadingController, ToastController, FabContainer, Scroll } from 'ionic-angular';
 import { GoogleMaps, GoogleMap, CameraPosition, LatLng, GoogleMapsEvent } from '@ionic-native/google-maps';
 
 //import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
@@ -32,7 +32,6 @@ export class HomePage {
   map: any;
   markers: any = [];
   profile: UserProfile;
-  currentLocationAddress = 'Loading Near By Locations...';
   currentLocation: GoogleLocation;
   locations: FxLocation[];
   //recommendations: Recommendations;
@@ -47,6 +46,7 @@ export class HomePage {
     private geo: Geolocation,
     private profileApi: UserprofileApiProvider,
     private googleApi: GoogleApiProvider,
+    private toastCtrl: ToastController,
     private ferApi: FeritualApiProvider,
     //private recommendApi: RecommendationApiProvider,
     public navParams: NavParams) {
@@ -187,8 +187,9 @@ export class HomePage {
         this.using_map_plugIn = false;
       }
 
-      this.map.panTo(await this.getCurrentPosition());
-
+      //this.getCurrentPosition().then(pos => {
+      //  this.map.panTo(pos);
+      //});
     }
   }
 
@@ -338,25 +339,17 @@ export class HomePage {
       }
       this.locations = null;
 
+      this.map.setZoom(this.zoom_level);
+      this.map.panTo(new LatLng(lat, lng));
+
       this.googleApi.getLocationFromLatLng(lat, lng).then(result => {
         this.currentLocation = result;
       })
 
-      this.ferApi.getLocationsAsync(lat, lng, 5).then(locations => {
-        this.locations = locations;
-        this.buildMapMarkers();
-        let p = this.filmScrollContent.nativeElement as HTMLElement;
-        p.scrollTo(0,0);
-      });
-
-      this.map.setZoom(this.zoom_level);
-      this.map.panTo(new LatLng(lat, lng));
-
-      //this.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
-
-      //this.buildMapMarkers();
-
-      //this.initialize();
+      this.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
+      this.buildMapMarkers();
+      let p = this.filmScrollContent.nativeElement as HTMLElement;
+      p.scrollTo(0,0);
     }
     catch(err) {
       console.log(err);

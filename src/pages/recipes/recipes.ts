@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController } from 'ionic-angular';
 //import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
@@ -30,26 +30,35 @@ export class RecipesPage {
     private alertCtrl: AlertController,
     private ferApi: FeritualApiProvider,
     private profileApi: UserprofileApiProvider,
+    private toastCtrl: ToastController,
     private recommendApi: RecommendationApiProvider,
     //private browser: InAppBrowser,
     public navParams: NavParams) {
-      this.initialize();
-
-      Recommendations.onReload('recipes', (val => {
-        console.log('recommendations were reloaded');
-        this.initialize();
-      }));
   }
 
   ionViewDidLoad() {
+    this.refresh(null);
   }
 
-  async initialize() {
-    this.recommendations = Recommendations.instance;
-    this.profile = await this.profileApi.loadUserProfile();
+  async refresh($event : any) {
+    let toast = this.toastCtrl.create({
+      message: 'Loading recommendations',
+      position: 'top'
+    });
+    toast.present();
 
+    try {
+      this.profile = await this.profileApi.loadUserProfile();
+      this.recommendations = await this.recommendApi.getRecipeRecommendationsAsync(this.profile);
+    }
+    catch(err) {
+      console.log(err);
+      this.presentAlert("Error", "An unexpected error occured in loading recommendations and refreshing data. Please try again in a few moments.");
+    }
+    finally {
+      toast.dismiss();
+    }
   }
-
 
   getDetails(r : Recipe) : string {
     let str = 'Serves ' + r.yield
@@ -106,36 +115,4 @@ export class RecipesPage {
   }
 
 
-  /*
-  async _doRecipeSearch(event : any) {
-    let loading = this.loadingCtrl.create({
-       content: 'Please wait...'
-     });
-    loading.present();
-
-    try {
-      let result = await this.ferApi.searchForRecipes(this.searchTerm, 0, 100);
-      this.saveSearchTerm(this.searchTerm);
-      //console.log('recipes', result);
-      this.hits = result.hits;
-    }
-    catch(err) {
-      alert('Error in loading menu:' + JSON.stringify(err));
-    }
-    finally {
-      loading.dismiss();
-    }
-  }
-
-  async saveSearchTerm(searchTerm : string) {
-    if(UserProfileHelper.addRecipeSearch(this.profile, searchTerm))
-    {
-      await this.profileApi.saveUserProfile(this.profile);
-    }
-  }
-
-  searchCleared() {
-    this.hits = null;
-  }
-  */
 }

@@ -51,8 +51,8 @@ export class Recommendations {
 
   public items : RecommendationGroup[];
   public currentLocation : GoogleLocation;
-  public lat : number;
-  public lng : number;
+  //public lat : number;
+  //public lng : number;
 }
 
 export class RecommendationGroup

@@ -7,7 +7,7 @@ import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { UserProfile } from '../userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../userprofile-api/userprofile-api';
 import { FeritualApiProvider } from '../feritual-api/feritual-api';
-import { FxIcons } from '../feritual-api/feritual-api.model';
+import { FxIcons, FxLocation } from '../feritual-api/feritual-api.model';
 import { Recommendations } from './recommendation-api.model'
 
 @Injectable()
@@ -23,6 +23,26 @@ export class RecommendationApiProvider {
   ) {
   }
 
+  public getRecipeRecommendationsAsync(profile: UserProfile) : Promise<Recommendations>  {
+    let ctx = this;
+    return new Promise(function(resolve, reject) {
+      let url : string = ctx.baseUrl + '/recipes';
+      //console.log('getRecommendations', url);
+
+      let options = {
+        profile: profile
+      };
+
+      ctx.http.post(url, JSON.stringify(options))
+        .map(res => <Recommendations>res)
+        .subscribe(
+          recommendations => {
+            resolve(recommendations)
+          },
+          error => { console.log('getRecipeRecommendationsAsync', error); reject(error); }
+        );
+    });
+  }
 
 
   private getRecommendations(profile : UserProfile, lat : number, lng : number) : Promise<Recommendations> {
@@ -47,6 +67,36 @@ export class RecommendationApiProvider {
         );
     });
   }
+
+
+  /*
+  public async loadLocations(lat: number, lng: number) : Promise<FxLocation[]> {
+    let r = Recommendations.instance;
+
+    try {
+      if(lat==null || lng==null)
+      {
+        try {
+          let pos = await this.geo.getCurrentPosition({timeout: 20000, enableHighAccuracy: false});
+          lat = pos.coords.latitude;
+          lng = pos.coords.longitude;
+        }
+        catch(err) {
+          // default to time square
+          lat = 40.759011;
+          lng = -73.984472;
+        }
+      }
+
+      let locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
+      r.locations = locations;
+      return Promise.resolve(locations);
+    }
+    catch(err) {
+      return Promise.reject(err);
+    }
+  }
+  */
 
   public async load(lat: number, lng: number) : Promise<Recommendations> {
     if(lat==null || lng==null)
@@ -75,8 +125,8 @@ export class RecommendationApiProvider {
 
       let r = await recommendationPromise; // await this.getRecommendations(profile, lat, lng);
       r.currentLocation = await locPromise; //await this.googleApi.getLocationFromLatLng(lat, lng);
-      r.lat = lat;
-      r.lng = lng;
+      //r.lat = lat;
+      //r.lng = lng;
 
       for(let loc of r.locations) {
         if(loc.logoUrl==null) {
