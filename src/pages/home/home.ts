@@ -2,17 +2,19 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Content, IonicPage, NavController, NavParams, ModalController, AlertController, LoadingController, FabContainer, Scroll } from 'ionic-angular';
 import { GoogleMaps, GoogleMap, CameraPosition, LatLng, GoogleMapsEvent } from '@ionic-native/google-maps';
 
-import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
+//import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
 import { AddressPickerPage } from '../../pages/address-picker/address-picker';
 //import { FxLocation, FxLocationMenu, FxIcons } from '../../providers/feritual-api/feritual-api.model';
 import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
-import { RecommendationApiProvider } from '../../providers/recommendation-api/recommendation-api';
+//import { RecommendationApiProvider } from '../../providers/recommendation-api/recommendation-api';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 import { Helper } from '../../providers/feritual-api/feritual-helper';
 import { FxLocation, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UserProfile, UserProfileHelper, FoodFilters, FoodFilterItem } from '../../providers/userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
+import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
+import { GoogleApiProvider } from '../../providers/google-api/google-api';
 
 declare var google;
 
@@ -32,7 +34,8 @@ export class HomePage {
   profile: UserProfile;
   currentLocationAddress = 'Loading Near By Locations...';
   currentLocation: GoogleLocation;
-  recommendations: Recommendations;
+  locations: FxLocation[];
+  //recommendations: Recommendations;
 
   //directionsService = new google.maps.DirectionsService;
   //directionsDisplay = new google.maps.DirectionsRenderer;
@@ -43,14 +46,16 @@ export class HomePage {
     private loadingCtrl: LoadingController,
     private geo: Geolocation,
     private profileApi: UserprofileApiProvider,
-    private recommendApi: RecommendationApiProvider,
+    private googleApi: GoogleApiProvider,
+    private ferApi: FeritualApiProvider,
+    //private recommendApi: RecommendationApiProvider,
     public navParams: NavParams) {
 
 
-      Recommendations.onReload('homePage', (val => {
-        console.log('recommendations were reloaded');
-        this.initialize();
-      }));
+      //Recommendations.onReload('homePage', (val => {
+      //  console.log('recommendations were reloaded');
+      //  this.initialize();
+      //}));
 
   }
 
@@ -58,35 +63,47 @@ export class HomePage {
   private zoom_level = 11;
   private street_zoom_level = 15;
   private default_marker_pin = this.pinSymbol("#f4f4f4");
-  private highlight_marker_pin = this.pinSymbol("#488aff");
+  private highlight_marker_pin = null;// this.pinSymbol("#488aff");
   private highlightedMarker = null;
 
   ionViewDidLoad() {
-    if(Recommendations.instance==null) {
-      this.refresh(null, null);
-    }
     this.initialize();
+
+  }
+
+  async initialize() {
+    this.createMap(null,null);
+    this.profile = await this.profileApi.loadUserProfile();
     this.filmScrollContent =  this.filmStrip._scrollContent;
-    //console.log('filmStrip', this.filmStrip._scrollContent);
 
     this.filmStrip.addScrollEventListener(($event: any) => {
+      //console.log('$event', event);
       if(!this.film_scrolling) {
         window.setTimeout(() => {
           this.autoSelectMapMarker();
           this.film_scrolling = false;
-        }, 1500);
+        }, 1000);
         this.film_scrolling = true;
       }
-
-      //console.log(event);
-      //console.log(this.filmStrip);
     });
 
+    this.refresh(null, null);
+  }
+
+  async setDefaultMarkerIcon(selectedLocId: string) {
+    if(selectedLocId!=null) {
+      for(let m of this.markers) {
+        if(m.locationId!=selectedLocId) {
+          m.setIcon(this.default_marker_pin);
+        }
+      }
+    }
   }
 
   async autoSelectMapMarker() {
     let p = this.filmScrollContent.nativeElement as HTMLElement;
     let offset = p.scrollLeft;
+    let locId = null;
 
     for(let m of this.markers) {
       let e = document.getElementById(m.locationId).parentElement;
@@ -99,8 +116,9 @@ export class HomePage {
           this.highlightedMarker.setIcon(this.default_marker_pin);
           this.highlightedMarker.zIndex = google.maps.Marker.MAX_ZINDEX + 1;
         }
+        locId = m.locationId;
         m.setIcon(this.highlight_marker_pin);
-        m.map.setZoom(this.street_zoom_level);
+        //m.map.setZoom(this.street_zoom_level);
         m.map.panTo(m.getPosition());
         m.zIndex = google.maps.Marker.MAX_ZINDEX + 2;
 
@@ -110,6 +128,8 @@ export class HomePage {
         break;
       }
     }
+
+    this.setDefaultMarkerIcon(locId);
   }
 
   async setFoodFilter(filter: string)
@@ -117,15 +137,14 @@ export class HomePage {
 
   }
 
+  /*
   async initialize() {
-    this.createMap(null,null);
 
     if(Recommendations.instance!=null) {
       let r = Recommendations.instance;
 
       this.currentLocationAddress = r.currentLocation.address;
       this.currentLocation = r.currentLocation;
-      this.profile = await this.profileApi.loadUserProfile();
       this.recommendations = r;
 
       //console.log('profile',this.profile);
@@ -136,6 +155,7 @@ export class HomePage {
       p.scrollTo(0,0);
     }
   }
+  */
 
   async createMap(lat: number, lng: number) {
     // default to time square
@@ -188,8 +208,8 @@ export class HomePage {
     return Promise.resolve(new LatLng(lat, lng));
   }
 
-  async buildMapMarkers(r: Recommendations) {
-    let pos = new LatLng(r.currentLocation.lat, r.currentLocation.lng);
+  async buildMapMarkers() {
+    let pos = new LatLng(this.currentLocation.lat, this.currentLocation.lng);
 
     if(this.markers!=null)
     {
@@ -204,7 +224,7 @@ export class HomePage {
     this.map.panTo(pos);
     let ctx = this;
     this.markers = [];
-    for(let p of r.locations)
+    for(let p of this.locations)
     {
       let pos = new LatLng(p.lat, p.lng);
 
@@ -228,16 +248,20 @@ export class HomePage {
 
       marker.addListener('click', function() {
         //alert('hello');
-        this.map.setZoom(this.street_zoom_level);
+        //this.map.setZoom(this.street_zoom_level);
         this.map.panTo(marker.getPosition());
+        marker.setIcon(this.highlight_marker_pin);
+        ctx.setDefaultMarkerIcon(marker.locationId);
+
+        //
         //console.log('clicked', p.name);
         //this.filmStrip.scrollElement.scrollTo(0, 500);
         ctx.scrollTo(p.id);
 
-        infowindow.open(marker.get('map'), marker);
-        window.setTimeout(() => {
-          infowindow.close();
-        }, 5000);
+        //infowindow.open(marker.get('map'), marker);
+        //window.setTimeout(() => {
+        //  infowindow.close();
+        //}, 5000);
       });
 
     }
@@ -299,15 +323,21 @@ export class HomePage {
         let pos = await this.getCurrentPosition();
         lat = pos.lat;
         lng = pos.lng;
+        this.currentLocation = await this.googleApi.getLocationFromLatLng(lat, lng);
       }
-      else if(this.recommendations!=null && lat==this.use_current_lat && lng==this.use_current_lng) {
-        lat = this.recommendations.currentLocation.lat;
-        lng = this.recommendations.currentLocation.lng;
+      else if(this.currentLocation!=null && lat==this.use_current_lat && lng==this.use_current_lng) {
+        lat = this.currentLocation.lat;
+        lng = this.currentLocation.lng;
       }
 
-      this.map.setCenter(new LatLng(lat, lng));
+      this.map.panTo(new LatLng(lat, lng));
 
-      await this.recommendApi.load(lat, lng);
+      this.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
+
+      this.buildMapMarkers();
+      let p = this.filmScrollContent.nativeElement as HTMLElement;
+      p.scrollTo(0,0);
+
       //this.initialize();
     }
     catch(err) {

@@ -1,7 +1,7 @@
 
 
 <ion-content>
-  <ion-fab bottom left *ngIf="recommendations!=null" #fab>
+  <ion-fab bottom left *ngIf="locations!=null" #fab>
    <button ion-fab color="dark" icon-only>
      <ion-icon large name="arrow-forward"></ion-icon>
    </button>
@@ -19,12 +19,12 @@
    </ion-fab-list>
  </ion-fab>
 
-  <ion-card *ngIf="recommendations!=null"  class="floating-address-panel" (click)="addressCardClicked();">
-    {{currentLocationAddress}}
+  <ion-card *ngIf="currentLocation!=null"  class="floating-address-panel" (click)="addressCardClicked();">
+    {{currentLocation.address}}
   </ion-card>
 
   <ion-scroll scrollX="true" zoom="false" class="filter-panel">
-    <ion-grid *ngIf="profile!=null">
+    <ion-grid *ngIf="profile!=null && locations!=null">
       <ion-row nowrap>
         <ion-col nowrap>
             <button *ngFor="let f of profile.foodFilters.items" text-wrap (click)="setFoodFilter(f)"
@@ -37,9 +37,9 @@
   </ion-scroll>
 
   <ion-scroll class="film-strip"  scrollX="true" #filmStrip id="filmStrip">
-    <ion-grid *ngIf="recommendations!=null">
+    <ion-grid *ngIf="locations!=null">
       <ion-row nowrap>
-        <ion-col col-11 text-left no-padding *ngFor="let loc of recommendations.locations">
+        <ion-col col-11 text-left no-padding *ngFor="let loc of locations">
             <ion-card class="location-card" (click)="navigateToLocationMenu(loc)" [id]="loc.id">
               <ion-grid>
                 <ion-row nowrap>
