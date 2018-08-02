@@ -7,22 +7,36 @@
 
 
 
-export class FxLocation {
-  public id : string;
-  public name : string;
-  public lat : number;
-  public lng : number;
-  public provider : string;
-  public distance : number;
-  public logoUrl : string;
-  public description : string;
+export interface FxLocation {
+  id : string;
+  name : string;
+  lat : number;
+  lng : number;
+  provider : string;
+  distance : number;
+  logoUrl : string;
+  description : string;
 
-  public foodTypes : string[];
+  foodTypes : string[];
 
-  public street : string;
-  public city : string;
-  public zip : string;
-  public state : string;
+  street : string;
+  city : string;
+  zip : string;
+  state : string;
+
+  menuSummary: FxLocationMenuSummary;
+}
+
+export interface FxLocationMenuSummary {
+  locationId: FxLocationIdType;
+  count: number;
+  totalCount: number;
+}
+
+export class FxLocationIdType
+{
+  id: string;
+  provider: string;
 }
 
 export class FxIcons {

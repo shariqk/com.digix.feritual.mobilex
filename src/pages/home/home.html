@@ -62,19 +62,13 @@
                     </ion-row>
                   </ion-col>
                 </ion-row>
-                <!--
-                <ion-row>
+
+                <ion-row *ngIf="loc.menuSummary!=null">
                   <ion-col>
-                    39
-                  </ion-col>
-                  <ion-col>
-                    43
-                  </ion-col>
-                  <ion-col>
-                    44
+                    {{loc.menuSummary.count}} of {{loc.menuSummary.totalCount}} available
                   </ion-col>
                 </ion-row>
-              -->
+              
               </ion-grid>
             </ion-card>
           </ion-col>

@@ -9,7 +9,7 @@ import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-
 //import { RecommendationApiProvider } from '../../providers/recommendation-api/recommendation-api';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 import { Helper } from '../../providers/feritual-api/feritual-helper';
-import { FxLocation, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
+import { FxLocation, FxLocationMenuItem, FxLocationIdType, FxLocationMenuSummary } from '../../providers/feritual-api/feritual-api.model';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UserProfile, UserProfileHelper, FoodFilters, FoodFilterItem } from '../../providers/userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
@@ -133,9 +133,10 @@ export class HomePage {
     this.setDefaultMarkerIcon(locId);
   }
 
-  async setFoodFilter(filter: string)
-  {
-
+  async setFoodFilter(filter: FoodFilterItem) {
+    filter.selected = !filter.selected;
+    await this.profileApi.saveUserProfile(this.profile);
+    this.refreshMenusSummary();
   }
 
   /*
@@ -284,7 +285,9 @@ export class HomePage {
     switch(action) {
       case 'restaurant':
         this.map.setZoom(this.zoom_level);
-        this.map.panTo(new LatLng(this.currentLocation.lat, this.currentLocation.lng));
+        let ctr = new LatLng(this.currentLocation.lat, this.currentLocation.lng);
+        this.map.setCenter(ctr);
+        this.map.panTo(ctr);
         break;
 
       case 'refresh':
@@ -322,6 +325,31 @@ export class HomePage {
   private use_current_lat=-9999;
   private use_current_lng=-9999;
 
+  async refreshMenusSummary() {
+    var locationIdList: FxLocationIdType[] = [];
+    for(var loc of this.locations) {
+      locationIdList.push({
+        id: loc.id,
+        provider: loc.provider
+      });
+    }
+
+    this.ferApi.getLocationMenusSummaryAsync(this.profile, locationIdList).then(results => {
+      console.log('getLocationMenusSummaryAsync', results)
+      for(let r of results) {
+        for(let loc of this.locations) {
+          if(loc.id==r.locationId.id) {
+            loc.menuSummary = r;
+            break;
+          }
+        }
+      }
+    }).catch(err => {
+      console.log('refreshMenusSummary', err);
+      this.presentAlert('Error', 'An unexpected error occured during refreshing menu summary data. Please wait a few minutes and retry.')
+    });
+  }
+
   async refresh(lat: number, lng: number) {
     let loading = this.loadingCtrl.create({
        content: 'Please wait...',
@@ -343,6 +371,7 @@ export class HomePage {
 
       this.map.setZoom(this.zoom_level);
       this.map.panTo(new LatLng(lat, lng));
+      this.map.setCenter(new LatLng(lat, lng));
 
       this.googleApi.getLocationFromLatLng(lat, lng).then(result => {
         this.currentLocation = result;
@@ -352,6 +381,9 @@ export class HomePage {
       this.buildMapMarkers();
       let p = this.filmScrollContent.nativeElement as HTMLElement;
       p.scrollTo(0,0);
+
+      // refersh the menu summary for the locations
+      this.refreshMenusSummary();
     }
     catch(err) {
       console.log(err);

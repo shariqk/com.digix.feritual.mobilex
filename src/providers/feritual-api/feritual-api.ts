@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { FxLocation, FxLocationMenu, FxIcons, RecipeSearchResult } from './feritual-api.model';
+import { FxLocation, FxLocationMenu, FxIcons, RecipeSearchResult, FxLocationIdType, FxLocationMenuSummary } from './feritual-api.model';
 
 import { UserProfile } from '../userprofile-api/userprofile.model';
 
@@ -16,8 +16,26 @@ export class FeritualApiProvider {
   constructor(public http: HttpClient) {
   }
 
-  public loadRecommendations() {
+  public getLocationMenusSummaryAsync(profile: UserProfile, locationIdList: FxLocationIdType[]) : Promise<FxLocationMenuSummary[]> {
+    var ctx = this;
 
+    return new Promise(function(resolve, reject) {
+      let url : string = ctx.baseUrl + '/locationmenusummary';
+
+      let options = {
+        profile: profile,
+        locationIds: locationIdList
+      };
+
+      ctx.http.post(url, JSON.stringify(options))
+        .map(res => <FxLocationMenuSummary[]>res)
+        .subscribe(
+          results => {
+            resolve(results)
+          },
+          error => { console.log('getLocationMenusSummaryAsync', error); reject(error); }
+        );
+    });
   }
 
 
