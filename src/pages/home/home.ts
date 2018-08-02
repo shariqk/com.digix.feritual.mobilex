@@ -125,7 +125,7 @@ export class HomePage {
 
 
         this.highlightedMarker = m;
-        console.log('marker', m.title);
+        //console.log('marker', m.title);
         break;
       }
     }

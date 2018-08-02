@@ -58,17 +58,18 @@
                       <ion-col class="loc-details" text-wrap>
                         <p *ngIf="loc.description!=null" [innerHtml]="loc.description"></p>
                         {{loc.street}}, {{loc.city}} ({{formatDistance(loc.distance)}})
+                        <p *ngIf="loc.menuSummary!=null">
+                          <ion-icon name="leaf">
+                            <ion-badge id="notifications-badge" color="secondary">{{loc.menuSummary.count}}</ion-badge>
+                          </ion-icon>
+                          <ion-icon name="restaurant">
+                            <ion-badge id="notifications-badge" color="secondary">{{loc.menuSummary.totalCount}}</ion-badge>
+                          </ion-icon>
+                        </p>
                       </ion-col>
                     </ion-row>
                   </ion-col>
                 </ion-row>
-
-                <ion-row *ngIf="loc.menuSummary!=null">
-                  <ion-col>
-                    {{loc.menuSummary.count}} of {{loc.menuSummary.totalCount}} available
-                  </ion-col>
-                </ion-row>
-              
               </ion-grid>
             </ion-card>
           </ion-col>
