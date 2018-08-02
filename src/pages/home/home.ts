@@ -270,9 +270,11 @@ export class HomePage {
     }
   }
 
-  async scrollTo(element: string) {
-    let e = document.getElementById(element).parentElement;
-    e.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+  async scrollTo(elementId: string) {
+    let e = document.getElementById(elementId).parentElement;
+    if(e!=null) {
+      e.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+    }
   }
 
   async fabActionButtonClicked(fab: FabContainer, action: string) {
