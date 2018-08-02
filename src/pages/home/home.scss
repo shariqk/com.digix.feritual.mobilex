@@ -24,6 +24,22 @@ page-home {
 
   }
 
+  ion-badge {
+    font-family: 'Roboto','sans-serif';
+
+  }
+
+  ion-scroll {
+    height: auto;
+    padding:0px;
+    margin:0px;
+    .scroll-content {
+          margin:0px !important;
+        padding: 0px !important;
+    }
+  }
+
+
   .filter-button {
       display: inline-block;
       font-size:8pt;
@@ -89,14 +105,4 @@ page-home {
     }
 
 
-      ion-scroll {
-          //min-height: 160px;
-          height: auto;
-          padding:0px;
-          margin:0px;
-          .scroll-content {
-                margin:0px !important;
-              padding: 0px !important;
-          }
-      }
 }

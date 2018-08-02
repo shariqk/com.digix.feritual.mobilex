@@ -340,7 +340,7 @@ export class HomePage {
         for(let loc of this.locations) {
           if(loc.id==r.locationId.id) {
             loc.menuSummary = r;
-            break;
+            //break;
           }
         }
       }
