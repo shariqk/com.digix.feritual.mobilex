@@ -2,7 +2,8 @@
 
 <ion-content>
   <ion-fab bottom left *ngIf="locations!=null" #fab>
-   <button ion-fab color="dark" icon-only>
+   <button ion-fab color="dark">
+     {{locations.length}}
      <ion-icon large name="arrow-forward"></ion-icon>
    </button>
 
@@ -19,7 +20,7 @@
    </ion-fab-list>
  </ion-fab>
 
-  <ion-card *ngIf="currentLocation!=null"  class="floating-address-panel" (click)="addressCardClicked();">
+  <ion-card *ngIf="currentLocation!=null" text-nowrap class="floating-address-panel" (click)="addressCardClicked();">
     {{currentLocation.address}}
   </ion-card>
 

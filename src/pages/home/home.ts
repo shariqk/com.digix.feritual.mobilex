@@ -65,6 +65,7 @@ export class HomePage {
   private default_marker_pin = this.pinSymbol("#f4f4f4");
   private highlight_marker_pin = null;// this.pinSymbol("#488aff");
   private highlightedMarker = null;
+  private using_map_plugIn = true;
 
   ionViewDidLoad() {
     this.initialize();
@@ -183,6 +184,7 @@ export class HomePage {
       if(m.zoom==null)
       {
         this.map = new google.maps.Map(this.mapElement.nativeElement, options);
+        this.using_map_plugIn = false;
       }
 
       this.map.panTo(await this.getCurrentPosition());
@@ -283,7 +285,13 @@ export class HomePage {
         break;
 
       case 'refresh':
-        let pos = this.map.getBounds().getCenter();
+        let pos = null;
+        if(this.using_map_plugIn) {
+          pos = this.map.getCenter();
+        }
+        else {
+          pos = this.map.getBounds().getCenter();
+        }
         console.log('center', pos);
         this.refresh(pos.lat(), pos.lng());
         break;
@@ -323,20 +331,30 @@ export class HomePage {
         let pos = await this.getCurrentPosition();
         lat = pos.lat;
         lng = pos.lng;
-        this.currentLocation = await this.googleApi.getLocationFromLatLng(lat, lng);
       }
       else if(this.currentLocation!=null && lat==this.use_current_lat && lng==this.use_current_lng) {
         lat = this.currentLocation.lat;
         lng = this.currentLocation.lng;
       }
+      this.locations = null;
 
+      this.googleApi.getLocationFromLatLng(lat, lng).then(result => {
+        this.currentLocation = result;
+      })
+
+      this.ferApi.getLocationsAsync(lat, lng, 5).then(locations => {
+        this.locations = locations;
+        this.buildMapMarkers();
+        let p = this.filmScrollContent.nativeElement as HTMLElement;
+        p.scrollTo(0,0);
+      });
+
+      this.map.setZoom(this.zoom_level);
       this.map.panTo(new LatLng(lat, lng));
 
-      this.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
+      //this.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
 
-      this.buildMapMarkers();
-      let p = this.filmScrollContent.nativeElement as HTMLElement;
-      p.scrollTo(0,0);
+      //this.buildMapMarkers();
 
       //this.initialize();
     }
