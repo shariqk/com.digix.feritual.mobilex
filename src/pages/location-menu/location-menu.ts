@@ -15,7 +15,7 @@ import { UserprofileApiProvider } from '../../providers/userprofile-api/userprof
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { FxLocation, FxLocationMenu, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
-import { MenuHelper } from '../../providers/feritual-api/feritual-helper';
+import { MenuHelper, Helper } from '../../providers/feritual-api/feritual-helper';
 import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
 
 @IonicPage()
@@ -56,6 +56,15 @@ export class LocationMenuPage {
       loading.dismiss();
     }
   }
+
+  formatDistance(distance : number) : string {
+    return distance.toFixed(2) + ' mi';
+  }
+
+  concatStrArray(items : string[]) : string {
+    return Helper.concatStrArray(items);
+  }
+
 
   async refreshData(refresher: any) {
     try {

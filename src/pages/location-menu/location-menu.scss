@@ -1,5 +1,57 @@
 page-location-menu {
 
+ion-row{
+  min-height: 0px;
+  ion-card{ width:100% !important; margin-left: 0 !important; margin-right: 0 !important; img{ width:100%; } }
+}
+
+ion-col{
+  padding:0px;
+  margin:0px;
+  border:1px solid yellow;
+}
+
+  ion-card{
+    padding:0px;
+    margin:0px;
+  }
+  ion-card-content {
+    padding:0px;
+    margin:0px;
+  }
+
+  .location-card {
+    font-family: 'Roboto','sans-serif';
+    height:140px;
+    //width: 100%;
+    width: 90% !important;
+    //display: inline-block;
+
+    //margin-left:0 !important;
+    //margin-right:0 !important;
+    //ion-card-content{
+    //    padding: 0 !important;
+    //}
+    //width:220px;
+    //padding:4px;
+    //font-weight:bold;
+  }
+
+  .loc-title {
+    font-family: 'Roboto','sans-serif';
+
+    font-size: 11pt;
+    font-weight: bold;
+    color: black;
+    background-color: primary;
+  }
+
+  .loc-details {
+    font-family: 'Roboto','sans-serif';
+
+    font-size: 8pt;
+  }
+
     .item-avatar {
         width:64px;
         height: 64px;

@@ -209,11 +209,13 @@ export class HomePage {
       lng = -73.984472;
     }
 
-    return Promise.resolve(new LatLng(lat, lng));
+    let pos = new LatLng(lat, lng);
+    console.log('position', pos);
+    return Promise.resolve(pos);
   }
 
-  async buildMapMarkers() {
-    let pos = new LatLng(this.currentLocation.lat, this.currentLocation.lng);
+  async buildMapMarkers(pos: LatLng) {
+    //let pos = new LatLng(this.currentLocation.lat, this.currentLocation.lng);
 
     if(this.markers!=null)
     {
@@ -268,6 +270,11 @@ export class HomePage {
         //}, 5000);
       });
 
+    }
+
+    let p = this.filmScrollContent.nativeElement as HTMLElement;
+    if(p!=null) {
+      p.scrollTo(0,0);
     }
   }
 
@@ -344,10 +351,11 @@ export class HomePage {
           }
         }
       }
-    }).catch(err => {
+    },
+    (err => {
       console.log('refreshMenusSummary', err);
       this.presentAlert('Error', 'An unexpected error occured during refreshing menu summary data. Please wait a few minutes and retry.')
-    });
+    }));
   }
 
   async refresh(lat: number, lng: number) {
@@ -375,12 +383,14 @@ export class HomePage {
 
       this.googleApi.getLocationFromLatLng(lat, lng).then(result => {
         this.currentLocation = result;
-      })
+      },
+      (err => {
+        console.log('getLocationFromLatLng', err);
+        this.presentAlert('Error', 'An unexpected error occured during fetching location details. Please wait a few minutes and retry.')
+      }));
 
       this.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
-      this.buildMapMarkers();
-      let p = this.filmScrollContent.nativeElement as HTMLElement;
-      p.scrollTo(0,0);
+      this.buildMapMarkers(new LatLng(lat, lng));
 
       // refersh the menu summary for the locations
       this.refreshMenusSummary();

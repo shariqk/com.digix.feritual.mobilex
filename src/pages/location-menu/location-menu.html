@@ -1,26 +1,52 @@
 
 <ion-header>
-
   <ion-navbar>
-    <ion-title *ngIf="menu!=null">{{location.name}}</ion-title>
+    <ion-title *ngIf="location!=null">{{location.name}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
   <ion-refresher (ionRefresh)="refreshData($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <div *ngIf="menu!=null">
+  <ion-card class="location-card" *ngIf="location!=null">
+    <ion-grid>
+      <ion-row nowrap>
+        <ion-col col-5>
+          <img [src]="location.logoUrl">
+        </ion-col>
+        <ion-col>
+          <ion-row>
+            <ion-col text-wrap>
+              <span class="loc-title">{{location.name}}</span><br>
+              <span class="loc-details" *ngIf="location.foodTypes!=null">{{concatStrArray(location.foodTypes)}}</span>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col class="loc-details" text-wrap>
+              <p *ngIf="location.description!=null" [innerHtml]="location.description"></p>
+              {{location.street}}, {{location.city}} ({{formatDistance(location.distance)}})
+
+            </ion-col>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+
+
+  <ion-grid *ngIf="menu!=null" fixed>
     <div *ngFor="let c of menu.categories">
-      <ion-row>
+      <ion-row *ngIf="c.name!=null">
         <ion-col>
           <h4>{{c.name}}</h4>
         </ion-col>
       </ion-row>
 
+      <!--
       <ion-row *ngFor="let m of c.items" align-items-start>
         <ion-col col-2>
           <img [src]="m.photoUrl">
@@ -43,6 +69,17 @@
           </ion-row>
         </ion-col>
       </ion-row>
+    -->
+
+    <ion-row *ngFor="let m of c.items" no-padding>
+      <ion-col>
+        <ion-item>
+            {{m.name}}
+          </ion-item>
+      </ion-col>
+    </ion-row>
+
+
     </div>
-  </div>
+  </ion-grid>
 </ion-content>

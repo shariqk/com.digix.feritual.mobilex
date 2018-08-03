@@ -202,7 +202,9 @@ export class FitbitApiProvider {
 
   private openWithInAppBrowser(url : string) : any {
         let target = "_blank";
-        return this.iab.create(url,target,this._options);
+        let options = 'location=yes,closebuttoncaption=Cancel';
+        //return this.iab.create(url,target,this._options);
+        return this.iab.create(url,target,options);
     }
 
   private openWithCordovaBrowser(url : string) : any {
