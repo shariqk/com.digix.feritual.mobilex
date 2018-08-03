@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
@@ -32,6 +32,7 @@ export class LocationMenuPage {
     private ferApi : FeritualApiProvider,
     private loadingCtrl : LoadingController,
     private profileApi: UserprofileApiProvider,
+    private alertCtrl: AlertController,
     public navParams: NavParams) {
   }
 
@@ -47,10 +48,12 @@ export class LocationMenuPage {
       MenuHelper.fixMenuPhotoUrl(menu);
       this.menu = menu;
       this.location = loc;
-      //console.log('menu', this.menu);
+      console.log('menu', this.menu);
     }
     catch(err) {
-      alert('Error in loading menu:' + JSON.stringify(err));
+      console.log(err);
+      this.presentAlert("Error", "An expected error has occured while loading the location menu. Please wait a few minutes and try again.")
+      this.navCtrl.pop();
     }
     finally {
       loading.dismiss();
@@ -86,6 +89,15 @@ export class LocationMenuPage {
       this.refreshData(null);
     }
 
+  }
+
+  presentAlert(title: string, text: string) {
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: text,
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 }

@@ -73,7 +73,7 @@
 
     <ion-row *ngFor="let m of c.items" no-padding align-items-start no-padding>
       <ion-col>
-          <ion-icon style="padding-top:2px;padding-left:2px;" small name="leaf"></ion-icon>
+          <ion-icon style="padding-top:2px;padding-left:2px;" small [name]="m.isEatAble ? 'leaf' : 'menu'"></ion-icon>
       </ion-col>
 
       <ion-col col-11 align-items-start class="menu-item">
