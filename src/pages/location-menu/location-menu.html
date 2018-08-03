@@ -1,5 +1,5 @@
 
-<ion-header>
+<ion-header (click)="content.scrollTo(0,0);">
   <ion-toolbar>
     <ion-buttons start>
       <button ion-button icon-only (click)="navCtrl.pop()">
@@ -49,6 +49,12 @@
     </ion-grid>
   </ion-card>
 
+  <ion-searchbar
+    [(ngModel)]="searchTerm"
+    (ionInput)="lookupAddress()"
+    (search)="searchEntered($event)"
+    placeholder='Search menu items'>
+  </ion-searchbar>
 
   <ion-grid *ngIf="menu!=null" fixed>
     <div *ngFor="let c of menu.categories">

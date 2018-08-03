@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { Component, ViewChild  } from '@angular/core';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, Content } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
@@ -25,9 +25,11 @@ import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
 })
 export class LocationMenuPage {
 
+  searchTerm: string;
   menu : FxLocationMenu;
   location : FxLocation;
   showAllItems: false;
+  @ViewChild(Content) content: Content;
 
   constructor(public navCtrl: NavController,
     private ferApi : FeritualApiProvider,
@@ -63,6 +65,10 @@ export class LocationMenuPage {
 
   formatDistance(distance : number) : string {
     return distance.toFixed(2) + ' mi';
+  }
+
+  scrollToTop() {
+    this.content.scrollTo(0,0);
   }
 
   concatStrArray(items : string[]) : string {

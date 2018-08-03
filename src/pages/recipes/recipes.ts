@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, ToastController, Content } from 'ionic-angular';
 //import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
@@ -24,6 +24,7 @@ export class RecipesPage {
   //hits : Hit[];
   view : string = 'grid';
   recommendations : Recommendations;
+  @ViewChild(Content) content: Content;
 
   constructor(public navCtrl: NavController,
     private loadingCtrl: LoadingController,
