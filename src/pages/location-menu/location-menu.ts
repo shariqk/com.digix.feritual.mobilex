@@ -27,6 +27,7 @@ export class LocationMenuPage {
 
   menu : FxLocationMenu;
   location : FxLocation;
+  showAllItems: false;
 
   constructor(public navCtrl: NavController,
     private ferApi : FeritualApiProvider,

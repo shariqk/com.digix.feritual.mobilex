@@ -1,8 +1,20 @@
 
 <ion-header>
-  <ion-navbar>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="navCtrl.pop()">
+        <ion-icon large name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+
     <ion-title *ngIf="location!=null">{{location.name}}</ion-title>
-  </ion-navbar>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="showAllItems = !showAllItems">
+        <ion-icon large [name]="showAllItems ? 'leaf-outline' : 'leaf'"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
 
 </ion-header>
 
@@ -46,52 +58,28 @@
         </ion-col>
       </ion-row>
 
-      <!--
-      <ion-row *ngFor="let m of c.items" align-items-start>
-        <ion-col col-2>
-          <img [src]="m.photoUrl">
-        </ion-col>
-        <ion-col>
-          <ion-row>
-            <ion-col>
-              <p class="item-name" text-wrap>{{m.name}}</p>
-              <p *ngIf="m.description!=null" class="item-description" text-wrap>{{m.description}}</p>
-              <p *ngIf="m.calories!=null" class="item-detail">
-                calories: {{m.calories}},
-                sodium: {{m.sodium}},
-                carbs: {{m.total_carbohydrate}},
-                fat: {{m.total_fat}},
-                sugars: {{m.sugars}},
-                protein: {{m.protein}}
-              </p>
-              <p *ngIf="m.avoid!=null && m.avoid" class="item-detail">Avoid: {{m.avoidReason}}</p>
-            </ion-col>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-    -->
+      <div *ngFor="let m of c.items">
+        <ion-row *ngIf="m.isEatAble || showAllItems" no-padding align-items-start no-padding>
+          <ion-col>
+              <ion-icon style="padding-top:2px;padding-left:2px;" small [name]="m.isEatAble ? 'leaf' : 'menu'"></ion-icon>
+          </ion-col>
 
-    <ion-row *ngFor="let m of c.items" no-padding align-items-start no-padding>
-      <ion-col>
-          <ion-icon style="padding-top:2px;padding-left:2px;" small [name]="m.isEatAble ? 'leaf' : 'menu'"></ion-icon>
-      </ion-col>
+          <ion-col col-11 align-items-start class="menu-item">
+            <span class="item-name">{{m.name}}</span>
+            <br/>
+            <span text-wrap class="item-detail">
+              calories: {{m.calories}},
+              sodium: {{m.sodium}},
+              carbs: {{m.total_carbohydrate}},
+              fat: {{m.total_fat}}g,
+              <br/>
+              sugars: {{m.sugars}}g,
+              protein: {{m.protein}}
+            </span>
+          </ion-col>
 
-      <ion-col col-11 align-items-start class="menu-item">
-        <span class="item-name">{{m.name}}</span>
-        <br/>
-        <span text-wrap class="item-detail">
-          calories: {{m.calories}},
-          sodium: {{m.sodium}},
-          carbs: {{m.total_carbohydrate}},
-          fat: {{m.total_fat}}g,
-          <br/>
-          sugars: {{m.sugars}}g,
-          protein: {{m.protein}}
-        </span>
-      </ion-col>
-
-    </ion-row>
-
+        </ion-row>
+      </div>
 
     </div>
   </ion-grid>
