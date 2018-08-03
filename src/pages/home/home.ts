@@ -15,6 +15,7 @@ import { UserProfile, UserProfileHelper, FoodFilters, FoodFilterItem } from '../
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
+import { ProfilePage } from '../../pages/profile/profile';
 
 declare var google;
 
@@ -313,6 +314,10 @@ export class HomePage {
         this.refresh(null,null);
         break;
 
+      case 'profile':
+        this.editUserProfile();
+        break;
+
       default:
         break;
     }
@@ -436,6 +441,31 @@ export class HomePage {
         strokeWeight: 2,
         scale: 1,
    };
+}
+
+editUserProfile() {
+  let dialog = this.modalCtrl.create(ProfilePage,
+    {
+      profile: this.profile
+    },
+    {
+      showBackdrop : true
+    });
+
+  dialog.onDidDismiss(async profile =>  {
+    if(profile != null) {
+      if(JSON.stringify(this.profile)==JSON.stringify(profile))
+      {
+        return;
+      }
+
+      await this.profileApi.saveUserProfile(profile);
+      this.refreshMenusSummary();
+      this.profile = profile;
+    }
+  });
+
+  dialog.present();
 }
 
   presentAlert(title: string, text: string) {

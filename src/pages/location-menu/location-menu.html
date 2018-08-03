@@ -71,12 +71,25 @@
       </ion-row>
     -->
 
-    <ion-row *ngFor="let m of c.items" no-padding>
+    <ion-row *ngFor="let m of c.items" no-padding align-items-start no-padding>
       <ion-col>
-        <ion-item>
-            {{m.name}}
-          </ion-item>
+          <ion-icon style="padding-top:2px;padding-left:2px;" small name="leaf"></ion-icon>
       </ion-col>
+
+      <ion-col col-11 align-items-start class="menu-item">
+        <span class="item-name">{{m.name}}</span>
+        <br/>
+        <span text-wrap class="item-detail">
+          calories: {{m.calories}},
+          sodium: {{m.sodium}},
+          carbs: {{m.total_carbohydrate}},
+          fat: {{m.total_fat}}g,
+          <br/>
+          sugars: {{m.sugars}}g,
+          protein: {{m.protein}}
+        </span>
+      </ion-col>
+
     </ion-row>
 
 

@@ -17,8 +17,12 @@
      <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'restaurant')">
        <ion-icon large name="restaurant"></ion-icon>
      </button>
+     <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'profile')">
+       <ion-icon large name="settings"></ion-icon>
+     </button>
    </ion-fab-list>
  </ion-fab>
+
 
   <ion-card *ngIf="currentLocation!=null" text-nowrap class="floating-address-panel" (click)="addressCardClicked();">
     {{currentLocation.address}}
