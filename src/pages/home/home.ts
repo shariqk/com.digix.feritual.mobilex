@@ -60,6 +60,7 @@ export class HomePage {
 
   }
 
+  private refreshingInBackground = false;
   private film_scrolling = false;
   private zoom_level = 11;
   private street_zoom_level = 15;
@@ -346,6 +347,7 @@ export class HomePage {
       });
     }
 
+    this.refreshingInBackground = true;
     this.ferApi.getLocationMenusSummaryAsync(this.profile, locationIdList).then(results => {
       console.log('getLocationMenusSummaryAsync', results)
       for(let r of results) {
@@ -356,9 +358,11 @@ export class HomePage {
           }
         }
       }
+      this.refreshingInBackground = false;
     },
     (err => {
       console.log('refreshMenusSummary', err);
+      this.refreshingInBackground = false;
       this.presentAlert('Error', 'An unexpected error occured during refreshing menu summary data. Please wait a few minutes and retry.')
     }));
   }

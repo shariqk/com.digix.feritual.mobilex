@@ -63,6 +63,19 @@ export class LocationMenuPage {
     }
   }
 
+  searchMenuItems() {
+    let term = this.searchTerm.toLowerCase();
+    //console.log('term', term);
+
+    for(let c of this.menu.categories) {
+      for(let i of c.items)
+      {
+        i.hidden = !(i.name.toLowerCase().indexOf(term) >= 0);
+      }
+    }
+
+  }
+
   formatDistance(distance : number) : string {
     return distance.toFixed(2) + ' mi';
   }

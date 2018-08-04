@@ -216,6 +216,8 @@ export class FxLocationMenuItem {
   public total_carbohydrate : number;
   public total_fat : number;
 
+  public hidden: boolean = false;
+
   /*
   public allergen_contains_milk : boolean;
   public allergen_contains_soybeans : boolean;

@@ -23,6 +23,9 @@
    </ion-fab-list>
  </ion-fab>
 
+ <ion-fab bottom right *ngIf="refreshingInBackground">
+   <ion-spinner name="crescent"></ion-spinner>
+  </ion-fab>
 
   <ion-card *ngIf="currentLocation!=null" text-nowrap class="floating-address-panel" (click)="addressCardClicked();">
     {{currentLocation.address}}

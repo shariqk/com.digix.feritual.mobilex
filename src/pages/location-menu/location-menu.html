@@ -49,10 +49,14 @@
     </ion-grid>
   </ion-card>
 
+
   <ion-searchbar
     [(ngModel)]="searchTerm"
-    (ionInput)="lookupAddress()"
-    (search)="searchEntered($event)"
+    autocorrect="on"
+    type="search"
+    spellcheck="true"
+    (ionInput)="searchMenuItems()"
+    (search)="searchMenuItems()"
     placeholder='Search menu items'>
   </ion-searchbar>
 
@@ -65,7 +69,7 @@
       </ion-row>
 
       <div *ngFor="let m of c.items">
-        <ion-row *ngIf="m.isEatAble || showAllItems" no-padding align-items-start no-padding>
+        <ion-row *ngIf="!m.hidden && (m.isEatAble || showAllItems)" no-padding align-items-start no-padding>
           <ion-col>
               <ion-icon style="padding-top:2px;padding-left:2px;" small [name]="m.isEatAble ? 'leaf' : 'menu'"></ion-icon>
           </ion-col>
@@ -75,12 +79,12 @@
             <br/>
             <span text-wrap class="item-detail">
               calories: {{m.calories}},
-              sodium: {{m.sodium}},
-              carbs: {{m.total_carbohydrate}},
+              sodium: {{m.sodium}}mg,
+              carbs: {{m.total_carbohydrate}}g,
               fat: {{m.total_fat}}g,
               <br/>
               sugars: {{m.sugars}}g,
-              protein: {{m.protein}}
+              protein: {{m.protein}}g
             </span>
           </ion-col>
 
