@@ -11,7 +11,20 @@ page-profile {
   .item-analysis {
     font-family: monospace;
   }
-  
+
+  .item-cuisine
+  {
+    font-size:10pt;
+  }
+
+  ion-range {
+    height:30px;
+  }
+
+  ion-col {
+    //border:1px solid black;
+  }
+
   button {
     font-size:10pt;
   }

@@ -38,7 +38,7 @@ export class UserProfileHelper {
     if(p.recipeSearches == null) { p.recipeSearches = [] }
     if(p.foodSearches == null) { p.foodSearches = [] }
     if(p.foodFilters==null) { p.foodFilters = new FoodFilters() }
-
+    if(p.nuitrionFilters==null) { p.nuitrionFilters = [] }
     return p;
   }
 
@@ -59,7 +59,42 @@ export class UserProfile {
   public recipeSearches : string[] = [];
   public foodSearches : string[] = [];
 
-  public foodFilters: FoodFilters;
+  public foodFilters: FoodFilters
+  public nuitrionFilters: NuitrionFilterItem[] = [];
+}
+
+export class NuitrionFilter {
+  public static keys() : string[] {
+    var keys = [
+      'Fat',
+      'Sodium',
+      'Sugar',
+      'Carb',
+      'Calories',
+      'Protein'
+    ];
+    return keys;
+  }
+
+  public static objects() : NuitrionFilterItem[] {
+    var list: NuitrionFilterItem[] = [];
+    for(let key of NuitrionFilter.keys()) {
+      list.push({
+        selected: false,
+        key: key,
+        minValue: 0,
+        maxValue: 0
+      });
+    }
+    return list;
+  }
+}
+
+export class NuitrionFilterItem {
+  public selected: boolean;
+  public key: string;
+  public minValue: number;
+  public maxValue: number;
 }
 
 export class FoodFilters {
@@ -70,13 +105,14 @@ export class FoodFilters {
     { title: 'Low Carb', selected: false },
     { title: 'Low Calories', selected: false },
     { title: 'High Protein', selected: false },
-    { title: 'Gluten Free', selected: false },
+    { title: 'Gluten Free', selected: false},
   ];
 }
 
 export interface FoodFilterItem {
   title : string;
   selected : boolean;
+
 }
 
 

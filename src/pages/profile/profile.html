@@ -19,11 +19,11 @@
       <ion-segment-button value="avoids">
         Avoids
       </ion-segment-button>
-      <!--
+
       <ion-segment-button value="cuisines">
         Cuisines
       </ion-segment-button>
-    -->
+
       <ion-segment-button value="diets">
         Diets
       </ion-segment-button>
@@ -35,7 +35,7 @@
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
   <div *ngIf="initialized" [ngSwitch]="pref">
     <ion-row *ngSwitchCase="'avoids'">
       <ion-col>
@@ -49,18 +49,35 @@
       </ion-col>
     </ion-row>
 
-    <!--
+
     <ion-row *ngSwitchCase="'cuisines'">
       <ion-col>
         <h4>Cuisines</h4>
+          <ion-row *ngFor="let f of nuitrionFilters" class="item-cuisine" align-items-center>
+            <ion-col col-1>
+              <ion-checkbox [(ngModel)]="f.selected"></ion-checkbox>
+            </ion-col>
+            <ion-col col-4>
+              {{f.key}}
+            </ion-col>
+            <ion-col>
+              <ion-range [disabled]="!f.selected" min="0" max="2000" step="20" snaps="true" [(ngModel)]="f.maxValue" color="secondary">
+                <ion-label range-left>0</ion-label>
+                <ion-label range-right>2,000</ion-label>
+              </ion-range>
+            </ion-col>
+          </ion-row>
+
+        <!--
         <ion-list no-lines reorder="true" (ionItemReorder)="reorderItems(profile.cuisines, $event)">
             <ion-item class='item-name' *ngFor="let c of profile.cuisines">
               {{c}}
             </ion-item>
         </ion-list>
+      -->
       </ion-col>
     </ion-row>
-  -->
+
 
     <ion-row *ngSwitchCase="'diets'">
       <ion-col>

@@ -3,7 +3,7 @@ import { Platform, IonicPage, NavController, NavParams, ViewController, LoadingC
 import { HttpClient } from '@angular/common/http';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
-import { UserProfile, UserProfileOptions, KeyValueItem } from '../../providers/userprofile-api/userprofile.model';
+import { UserProfile, UserProfileOptions, KeyValueItem, NuitrionFilter, NuitrionFilterItem } from '../../providers/userprofile-api/userprofile.model';
 
 import { FitbitApiProvider } from '../../providers/fitbit-api/fitbit-api';
 import { FitBitAccessTokenModel } from '../../providers/fitbit-api/fitbit-api.model';
@@ -25,6 +25,7 @@ export class ProfilePage {
   pref = 'avoids';
 
   token_fitbit : FitBitAccessTokenModel = null;
+  nuitrionFilters: NuitrionFilterItem[] = [];
 
   constructor(public navCtrl: NavController,
     public http : HttpClient,
@@ -80,6 +81,19 @@ export class ProfilePage {
       this.options = await promise; // this.profileApi.getUserProfileOptionsAsync();
       //console.log('user profile options', this.options);
 
+      this.nuitrionFilters = NuitrionFilter.objects();
+      for(let n of this.profile.nuitrionFilters) {
+        if(n.selected) {
+          for(let nf of this.nuitrionFilters) {
+            if(nf.key==n.key) {
+              nf.selected = true;
+              nf.minValue = n.minValue;
+              nf.maxValue = n.maxValue;
+              break;
+            }
+          }
+        }
+      }
 
       this.mergeArrays(this.options.cuisines, this.profile.cuisines);
 
@@ -179,7 +193,14 @@ export class ProfilePage {
     this.profile.diets = this.getSelectedKeys(this.diets);
     this.profile.avoids = this.getSelectedKeys(this.avoids);
 
-    //console.log('profile to save', this.profile);
+    this.profile.nuitrionFilters = [];
+    for(let nf of this.nuitrionFilters) {
+      if(nf.selected && nf.maxValue>0) {
+        this.profile.nuitrionFilters.push(nf);
+      }
+    }
+
+    console.log('profile to save', this.profile);
 
     this.viewCtrl.dismiss(this.profile);
   }
