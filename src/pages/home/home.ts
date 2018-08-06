@@ -109,7 +109,13 @@ export class HomePage {
     let locId = null;
 
     for(let m of this.markers) {
-      let e = document.getElementById(m.locationId).parentElement;
+      let e = document.getElementById(m.locationId);
+      if(e==null) {
+        continue;
+      }
+      else {
+        e = e.parentElement;
+      }
       if(e.offsetLeft+(e.clientWidth/2)>p.scrollLeft)
       {
         if(this.highlightedMarker==m) {
