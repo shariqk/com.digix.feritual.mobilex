@@ -3,7 +3,7 @@ import { Platform, IonicPage, NavController, NavParams, ViewController, LoadingC
 import { HttpClient } from '@angular/common/http';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
-import { UserProfile, UserProfileOptions, KeyValueItem, NuitrionFilter, NuitrionFilterItem } from '../../providers/userprofile-api/userprofile.model';
+import { UserProfile, UserProfileOptions, KeyValueItem, NutritionFilter, NutritionFilterItem } from '../../providers/userprofile-api/userprofile.model';
 
 import { FitbitApiProvider } from '../../providers/fitbit-api/fitbit-api';
 import { FitBitAccessTokenModel } from '../../providers/fitbit-api/fitbit-api.model';
@@ -25,7 +25,7 @@ export class ProfilePage {
   pref = 'avoids';
 
   token_fitbit : FitBitAccessTokenModel = null;
-  nuitrionFilters: NuitrionFilterItem[] = [];
+  nutritionFilters: NutritionFilterItem[] = [];
 
   constructor(public navCtrl: NavController,
     public http : HttpClient,
@@ -81,10 +81,10 @@ export class ProfilePage {
       this.options = await promise; // this.profileApi.getUserProfileOptionsAsync();
       //console.log('user profile options', this.options);
 
-      this.nuitrionFilters = NuitrionFilter.objects();
-      for(let n of this.profile.nuitrionFilters) {
+      this.nutritionFilters = NutritionFilter.objects();
+      for(let n of this.profile.nutritionFilters) {
         if(n.selected) {
-          for(let nf of this.nuitrionFilters) {
+          for(let nf of this.nutritionFilters) {
             if(nf.key==n.key) {
               nf.selected = true;
               nf.minValue = n.minValue;
@@ -193,10 +193,10 @@ export class ProfilePage {
     this.profile.diets = this.getSelectedKeys(this.diets);
     this.profile.avoids = this.getSelectedKeys(this.avoids);
 
-    this.profile.nuitrionFilters = [];
-    for(let nf of this.nuitrionFilters) {
+    this.profile.nutritionFilters = [];
+    for(let nf of this.nutritionFilters) {
       if(nf.selected && nf.maxValue>0) {
-        this.profile.nuitrionFilters.push(nf);
+        this.profile.nutritionFilters.push(nf);
       }
     }
 

@@ -53,7 +53,7 @@
     <ion-row *ngSwitchCase="'cuisines'">
       <ion-col>
         <h4>Cuisines</h4>
-          <ion-row *ngFor="let f of nuitrionFilters" class="item-cuisine" align-items-center>
+          <ion-row *ngFor="let f of nutritionFilters" class="item-cuisine" align-items-center>
             <ion-col col-1>
               <ion-checkbox [(ngModel)]="f.selected"></ion-checkbox>
             </ion-col>

@@ -38,7 +38,7 @@ export class UserProfileHelper {
     if(p.recipeSearches == null) { p.recipeSearches = [] }
     if(p.foodSearches == null) { p.foodSearches = [] }
     if(p.foodFilters==null) { p.foodFilters = new FoodFilters() }
-    if(p.nuitrionFilters==null) { p.nuitrionFilters = [] }
+    if(p.nutritionFilters==null) { p.nutritionFilters = [] }
     return p;
   }
 
@@ -60,10 +60,10 @@ export class UserProfile {
   public foodSearches : string[] = [];
 
   public foodFilters: FoodFilters
-  public nuitrionFilters: NuitrionFilterItem[] = [];
+  public nutritionFilters: NutritionFilterItem[] = [];
 }
 
-export class NuitrionFilter {
+export class NutritionFilter {
   public static keys() : string[] {
     var keys = [
       'Fat',
@@ -76,9 +76,9 @@ export class NuitrionFilter {
     return keys;
   }
 
-  public static objects() : NuitrionFilterItem[] {
-    var list: NuitrionFilterItem[] = [];
-    for(let key of NuitrionFilter.keys()) {
+  public static objects() : NutritionFilterItem[] {
+    var list: NutritionFilterItem[] = [];
+    for(let key of NutritionFilter.keys()) {
       list.push({
         selected: false,
         key: key,
@@ -90,7 +90,7 @@ export class NuitrionFilter {
   }
 }
 
-export class NuitrionFilterItem {
+export class NutritionFilterItem {
   public selected: boolean;
   public key: string;
   public minValue: number;

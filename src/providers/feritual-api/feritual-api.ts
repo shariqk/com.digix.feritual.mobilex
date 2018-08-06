@@ -10,8 +10,8 @@ import { UserProfile } from '../userprofile-api/userprofile.model';
 
 @Injectable()
 export class FeritualApiProvider {
-  private baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
-  //baseUrl = 'http://localhost:56893/api/feritual';
+  //private baseUrl = 'https://comdigixferitualwebapi.azurewebsites.net/api/feritual';
+  baseUrl = 'http://localhost:56893/api/feritual';
 
   constructor(public http: HttpClient) {
   }
