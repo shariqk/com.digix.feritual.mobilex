@@ -25,26 +25,47 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <!--
-  <ion-card *ngIf="recommendations==null" >
-    <ion-grid style="padding:20px;">
-      <ion-row align-items-center>
-        <ion-col col-2>
-          <ion-spinner></ion-spinner>
-        </ion-col>
-        <ion-col>
-          <p>
-            It may take a few moments to load recommendations for you.
-          </p>
-            <p>
-            You may continue to use the application while we personalize your experience.
-          </p>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-card>
--->
 
+  <ion-grid *ngIf="recommendations!=null">
+    <ion-row *ngFor="let g of recommendations.items" align-items-start>
+      <ion-col *ngIf="g.recipes!=null">
+        <span class="r-title" (click)="startSearch(g.keywords)">{{g.title}}</span>
+
+        <ion-row>
+          <ion-col>
+            <ion-scroll scrollX="true">
+              <ion-row nowrap>
+                <ion-col *ngFor="let r of g.recipes" text-wrap nomargin col-5 (click)="startSearch(g.keywords)" class="scroll-item">
+                  <img [src]="r.image">
+
+                  <br/>
+                  <span class="r-label">
+                    {{r.label}}
+                  </span>
+
+                  <!--
+                    <ion-row>
+                      <ion-col>
+                        <img [src]="r.image">
+                      </ion-col>
+                    </ion-row>
+                    <ion-row>
+                      <ion-col class="r-label" text-wrap>
+                        {{r.label}}
+                      </ion-col>
+                    </ion-row>
+                  -->
+                </ion-col>
+              </ion-row>
+            </ion-scroll>
+          </ion-col>
+        </ion-row>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!--
   <div *ngIf="recommendations!=null">
     <ion-grid>
       <ion-row *ngFor="let g of recommendations.items" align-items-start>
@@ -64,116 +85,6 @@
       </ion-row>
     </ion-grid>
   </div>
-
-  <!--
-  <ion-grid  *ngIf="hits!=null">
-    <ion-row>
-      <ion-col col-4 text-center>
-        <button *ngIf="view=='grid'" ion-button icon-only clear color="primary">
-          <ion-icon large name="grid-outline"></ion-icon>
-        </button>
-        <button *ngIf="view!='grid'" clear color="dark" ion-button  icon-only (click)="view='grid'">
-          <ion-icon large name="grid-outline"></ion-icon>
-        </button>
-      </ion-col>
-
-      <ion-col col-4 text-center>
-        <button *ngIf="view=='images'" ion-button icon-only clear color="primary">
-          <ion-icon large name="image-outline"></ion-icon>
-        </button>
-        <button *ngIf="view!='images'" clear color="dark" ion-button icon-only (click)="view='images'">
-          <ion-icon large name="image-outline"></ion-icon>
-        </button>
-      </ion-col>
-
-      <ion-col col-4 text-center>
-        <button *ngIf="view=='list'" ion-button icon-only clear color="primary">
-          <ion-icon large name="list-outline"></ion-icon>
-        </button>
-        <button *ngIf="view!='list'" clear color="dark" ion-button icon-only (click)="view='list'">
-          <ion-icon large name="list-outline"></ion-icon>
-        </button>
-      </ion-col>
-
-    </ion-row>
-
-  </ion-grid>
-
-  <div *ngIf="hits!=null && view=='grid'">
-    <ion-row>
-      <ion-col col-4 *ngFor="let h of hits" (click)="navigateToRecipe(h.recipe)" align-items-start>
-        <img [src]="h.recipe.image">
-      </ion-col>
-    </ion-row>
-  </div>
-
-
-  <div *ngIf="hits==null && recommendations!=null">
-    <ion-grid>
-      <ion-row *ngFor="let g of recommendations.items" align-items-start>
-        <ion-col *ngIf="g.recipes!=null">
-          <span class="r-title" (click)="startSearch(g.keywords)">{{g.title}}</span>
-          <ion-row>
-            <ion-col col-4 *ngFor="let r of g.recipes" (click)="navigateToRecipe(r)" align-items-start>
-              <img [src]="r.image">
-            </ion-col>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
-
-  <div *ngIf="hits!=null && view=='images'">
-    <ion-grid>
-      <ion-row>
-        <ion-col col-12  *ngFor="let h of hits" (click)="navigateToRecipe(h.recipe)">
-          <ion-row align-items-start>
-            <ion-col>
-              <span class="r-title">{{h.recipe.label}}</span>
-              <br/>
-              <span class="r-details">Source: {{h.recipe.source}}</span>
-            </ion-col>
-          </ion-row>
-          <ion-row align-items-start>
-            <ion-col>
-              <img [src]="h.recipe.image">
-            </ion-col>
-          </ion-row>
-          <ion-row align-items-start>
-            <ion-col class="r-details">
-              <span [innerHtml]="getDetails(h.recipe)"></span><br/>
-              <span [innerHtml]="concatStrArray(h.recipe.healthLabels)"></span><br/>
-            </ion-col>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
-
-
-  <div *ngIf="hits!=null && view=='list'">
-      <ion-row *ngFor="let h of hits" (click)="navigateToRecipe(h.recipe)" align-items-start>
-        <ion-col col-3>
-          <img style='padding:5px;' [src]="h.recipe.image">
-        </ion-col>
-        <ion-col>
-          <ion-row>
-            <ion-col class="r-title">
-              {{h.recipe.label}}
-              <br/>
-              <span class="r-details">Source: {{h.recipe.source}}</span>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col class="r-details">
-              <li><span [innerHtml]="getDetails(h.recipe)"></span><br/>
-              <li><span [innerHtml]="concatStrArray(h.recipe.healthLabels)"></span><br/>
-            </ion-col>
-          </ion-row>
-        </ion-col>
-      </ion-row>
-  </div>
 -->
-
 
 </ion-content>
