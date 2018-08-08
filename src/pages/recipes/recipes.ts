@@ -41,7 +41,11 @@ export class RecipesPage {
     this.refresh(null);
   }
 
-  async refresh($event : any) {
+  async refresh(refresher : any) {
+    if(refresher != null) {
+      refresher.complete();
+    }
+
     let toast = this.toastCtrl.create({
       message: 'Loading recommendations',
       position: 'top'

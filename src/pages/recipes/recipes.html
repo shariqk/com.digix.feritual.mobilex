@@ -8,6 +8,10 @@
 
 
 <ion-content>
+  <ion-refresher (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
   <ion-toolbar>
     <ion-searchbar
       [(ngModel)]="searchTerm"
@@ -35,7 +39,7 @@
           <ion-col>
             <ion-scroll scrollX="true">
               <ion-row nowrap>
-                <ion-col *ngFor="let r of g.recipes" text-wrap nomargin col-5 (click)="startSearch(g.keywords)" class="scroll-item">
+                <ion-col *ngFor="let r of g.recipes" text-wrap nomargin col-5 (click)="navigateToRecipe(r)" class="scroll-item">
                   <img [src]="r.image">
 
                   <br/>
