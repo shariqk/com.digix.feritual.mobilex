@@ -13,6 +13,7 @@ import { FoodListComponent } from '../components/food-list/food-list';
 import { RecommendedFoodComponent } from '../components/recommended-food/recommended-food';
 import { RecommendedLocationComponent } from '../components/recommended-location/recommended-location';
 import { LocationListComponent } from '../components/location-list/location-list';
+import { EatOutVerticalStripComponent } from '../components/eat-out-vertical-strip/eat-out-vertical-strip';
 
 import { IntroPage } from '../pages/intro/intro';
 import { FoodPage } from '../pages/food/food';
@@ -56,7 +57,8 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     FoodListComponent,
     RecommendedFoodComponent,
     RecommendedLocationComponent,
-    LocationListComponent
+    LocationListComponent,
+    EatOutVerticalStripComponent
   ],
   imports: [
     BrowserModule,
@@ -86,7 +88,8 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     FoodListComponent,
     RecommendedFoodComponent,
     RecommendedLocationComponent,
-    LocationListComponent
+    LocationListComponent,
+    EatOutVerticalStripComponent
   ],
   providers: [
     StatusBar,

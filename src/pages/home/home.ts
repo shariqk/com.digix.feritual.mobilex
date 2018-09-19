@@ -16,6 +16,8 @@ import { UserprofileApiProvider } from '../../providers/userprofile-api/userprof
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { ProfilePage } from '../../pages/profile/profile';
+import { AnalyzePage } from '../../pages/analyze/analyze';
+import { EatOutVerticalStripComponent } from '../../components/eat-out-vertical-strip/eat-out-vertical-strip';
 
 declare var google;
 
@@ -28,13 +30,13 @@ export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
   @ViewChild('filmStrip') filmStrip: any;
   @ViewChild(Content) content: Content;
+  @ViewChild('eatOutLocations') eatOutLocations: EatOutVerticalStripComponent;
   filmScrollContent: ElementRef;
 
   map: any;
   markers: any = [];
   profile: UserProfile;
   currentLocation: GoogleLocation;
-  locations: FxLocation[];
   //recommendations: Recommendations;
 
   //directionsService = new google.maps.DirectionsService;
@@ -74,9 +76,16 @@ export class HomePage {
 
   }
 
+
+
   async initialize() {
     this.createMap(null,null);
     this.profile = await this.profileApi.loadUserProfile();
+
+    this.eatOutLocations.setCallBackOnScroll(e => {
+
+    });
+
     this.filmScrollContent =  this.filmStrip._scrollContent;
 
     this.filmStrip.addScrollEventListener(($event: any) => {
@@ -101,6 +110,43 @@ export class HomePage {
         }
       }
     }
+  }
+
+  async selectMapMarkerOnScrollEvent(p: HTMLElement) {
+    let topOffset = p.scrollTop;
+    let locId = null;
+
+    for(let m of this.markers) {
+      let e = document.getElementById(m.locationId);
+      if(e==null) {
+        continue;
+      }
+      else {
+        e = e.parentElement;
+      }
+      if(e.offsetTop+(e.clientHeight/2)>p.scrollLeft)
+      {
+        if(this.highlightedMarker==m) {
+          break;
+        }
+        if(this.highlightedMarker!=null) {
+          this.highlightedMarker.setIcon(this.default_marker_pin);
+          this.highlightedMarker.zIndex = google.maps.Marker.MAX_ZINDEX + 1;
+        }
+        locId = m.locationId;
+        m.setIcon(this.highlight_marker_pin);
+        //m.map.setZoom(this.street_zoom_level);
+        m.map.panTo(m.getPosition());
+        m.zIndex = google.maps.Marker.MAX_ZINDEX + 2;
+
+
+        this.highlightedMarker = m;
+        //console.log('marker', m.title);
+        break;
+      }
+    }
+
+    this.setDefaultMarkerIcon(locId);
   }
 
   async autoSelectMapMarker() {
@@ -270,7 +316,8 @@ export class HomePage {
         //
         //console.log('clicked', p.name);
         //this.filmStrip.scrollElement.scrollTo(0, 500);
-        ctx.scrollTo(p.id);
+        ctx.eatOutLocations.scrollTo(p.id);
+        //ctx.scrollTo(p.id);
 
         //infowindow.open(marker.get('map'), marker);
         //window.setTimeout(() => {
@@ -286,12 +333,14 @@ export class HomePage {
     }
   }
 
+  /*
   async scrollTo(elementId: string) {
     let e = document.getElementById(elementId).parentElement;
     if(e!=null) {
       e.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
     }
   }
+  */
 
   async fabActionButtonClicked(fab: FabContainer, action: string) {
     fab.close();
@@ -323,6 +372,10 @@ export class HomePage {
 
       case 'profile':
         this.editUserProfile();
+        break;
+
+      case 'analyze':
+        this.showAnalyzeDialog(null);
         break;
 
       default:
@@ -419,6 +472,17 @@ export class HomePage {
     }
   }
 
+  async showAnalyzeDialog(event: any) {
+    let dialog = this.modalCtrl.create(AnalyzePage,
+      {
+        mode: 'dialog'
+      },
+      {
+        showBackdrop : true
+      });
+
+    dialog.present();
+  }
 
   async addressCardClicked(event : any) {
     let dialog = this.modalCtrl.create(AddressPickerPage,
@@ -451,6 +515,17 @@ export class HomePage {
         strokeWeight: 2,
         scale: 1,
    };
+}
+
+private _locations: FxLocation[];
+set locations(locations: FxLocation[]) {
+  this.eatOutLocations.setLocations(locations);
+  //console.log('set', this.eatOutLocations.locations);
+  this._locations = locations;
+}
+
+get locations() : FxLocation[] {
+  return this._locations;
 }
 
 editUserProfile() {

@@ -20,6 +20,9 @@
      <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'profile')">
        <ion-icon large name="settings"></ion-icon>
      </button>
+     <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'analyze')">
+       <ion-icon large name="nutrition"></ion-icon>
+     </button>
    </ion-fab-list>
  </ion-fab>
 
@@ -31,27 +34,15 @@
     {{currentLocation.address}}
   </ion-card>
 
-  <!--
-  <ion-scroll scrollX="true" zoom="false" class="filter-panel">
-    <ion-grid *ngIf="profile!=null && locations!=null">
-      <ion-row nowrap>
-        <ion-col nowrap>
-            <button *ngFor="let f of profile.foodFilters.items" text-wrap (click)="setFoodFilter(f)"
-              class="filter-button" ion-button [color]="f.selected ? 'primary' : 'light'">
-              {{f.title}}
-            </button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-scroll>
--->
+  <eat-out-vertical-strip #eatOutLocations class="eatOutLocations" id="eatOutLocations"></eat-out-vertical-strip>
+
 
   <ion-scroll class="film-strip"  scrollX="true" #filmStrip id="filmStrip">
-    <ion-grid *ngIf="locations!=null">
+    <ion-grid fixed *ngIf="locations!=null">
       <ion-row nowrap>
         <ion-col col-11 text-left no-padding *ngFor="let loc of locations">
             <ion-card class="location-card" (click)="navigateToLocationMenu(loc)" [id]="loc.id">
-              <ion-grid>
+              <ion-grid fixed>
                 <ion-row nowrap>
                   <ion-col col-5>
                     <img style="width:100%;height:100%;" [src]="loc.logoUrl">

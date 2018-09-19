@@ -1,0 +1,37 @@
+
+<ion-scroll class="scroll-panel" scrollY="true" #scrollPanel id="scrollPanel">
+  <ion-grid fixed *ngIf="locations!=null">
+    <ion-row *ngFor="let loc of locations">
+      <ion-col class="location-panel" (click)="navigateToLocationMenu(loc)" [id]="loc.id">
+        <ion-row>
+          <ion-col col-3>
+            <img style="width:96px;height:64px;" [src]="loc.logoUrl">
+          </ion-col>
+          <ion-col>
+            <ion-row>
+              <ion-col text-wrap>
+                <span class="loc-title">{{loc.name}}</span><br>
+                <span class="loc-details" *ngIf="loc.foodTypes!=null">{{concatStrArray(loc.foodTypes)}}</span>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col class="loc-details" text-wrap>
+                <p *ngIf="loc.description!=null" [innerHtml]="loc.description"></p>
+                {{loc.street}}, {{loc.city}} <!-- ({{formatDistance(loc.distance)}})-->
+                <span *ngIf="loc.menuSummary!=null">
+                  <br/>
+                  <ion-icon name="leaf">
+                    <ion-badge id="notifications-badge" color="secondary">{{loc.menuSummary.count}}</ion-badge>
+                  </ion-icon>
+                  <ion-icon name="menu">
+                    <ion-badge id="notifications-badge" color="secondary">{{loc.menuSummary.totalCount}}</ion-badge>
+                  </ion-icon>
+                </span>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-scroll>

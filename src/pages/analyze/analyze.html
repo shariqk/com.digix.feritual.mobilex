@@ -3,6 +3,11 @@
 
   <ion-toolbar>
     <ion-title>Analyze</ion-title>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="cancelClicked()">
+        <ion-icon large name="close-circle"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-buttons end>
       <button ion-button icon-only (click)="takeAndDisplayImage()">
         <ion-icon large name="camera"></ion-icon>

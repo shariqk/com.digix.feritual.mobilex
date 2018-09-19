@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, ViewController } from 'ionic-angular';
 
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { MsvisionApiProvider } from '../../providers/msvision-api/msvision-api';
@@ -25,6 +25,7 @@ export class AnalyzePage {
     public nxApi : FoodApiProvider,
     public toastCtrl: ToastController,
     public msvisionApi : MsvisionApiProvider,
+    private viewCtrl: ViewController,
     public camera : Camera) {
   }
 
@@ -180,4 +181,9 @@ export class AnalyzePage {
         });
       });
   }
+
+  cancelClicked() {
+    this.viewCtrl.dismiss(null);
+  }
+
 }
