@@ -4,6 +4,7 @@ import { RecommendedFoodComponent } from './recommended-food/recommended-food';
 import { RecommendedLocationComponent } from './recommended-location/recommended-location';
 import { LocationListComponent } from './location-list/location-list';
 import { EatOutVerticalStripComponent } from './eat-out-vertical-strip/eat-out-vertical-strip';
+import { EatOutMapComponent } from './eat-out-map/eat-out-map';
 
 @NgModule({
 	declarations: [FoodListComponent,
@@ -11,6 +12,7 @@ import { EatOutVerticalStripComponent } from './eat-out-vertical-strip/eat-out-v
     RecommendedLocationComponent,
     LocationListComponent,
     EatOutVerticalStripComponent,
+    EatOutMapComponent,
     ],
 	imports: [],
 	exports: [FoodListComponent,
@@ -18,6 +20,7 @@ import { EatOutVerticalStripComponent } from './eat-out-vertical-strip/eat-out-v
     RecommendedLocationComponent,
     LocationListComponent,
     EatOutVerticalStripComponent,
+    EatOutMapComponent,
     ]
 })
 export class ComponentsModule {}

@@ -14,6 +14,7 @@ import { RecommendedFoodComponent } from '../components/recommended-food/recomme
 import { RecommendedLocationComponent } from '../components/recommended-location/recommended-location';
 import { LocationListComponent } from '../components/location-list/location-list';
 import { EatOutVerticalStripComponent } from '../components/eat-out-vertical-strip/eat-out-vertical-strip';
+import { EatOutMapComponent } from '../components/eat-out-map/eat-out-map';
 
 import { IntroPage } from '../pages/intro/intro';
 import { FoodPage } from '../pages/food/food';
@@ -27,6 +28,7 @@ import { RecipesPage } from '../pages/recipes/recipes';
 import { RecipeDetailPage } from '../pages/recipe-detail/recipe-detail';
 import { StartPage } from '../pages/start/start';
 import { RecipeSearchResultPage } from '../pages/recipe-search-result/recipe-search-result';
+import { ExplorePage } from '../pages/explore/explore';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -54,11 +56,13 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     IntroPage,
     StartPage,
     RecipeSearchResultPage,
+    ExplorePage,
     FoodListComponent,
     RecommendedFoodComponent,
     RecommendedLocationComponent,
     LocationListComponent,
-    EatOutVerticalStripComponent
+    EatOutVerticalStripComponent,
+    EatOutMapComponent
   ],
   imports: [
     BrowserModule,
@@ -85,11 +89,13 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
     IntroPage,
     StartPage,
     RecipeSearchResultPage,
+    ExplorePage,
     FoodListComponent,
     RecommendedFoodComponent,
     RecommendedLocationComponent,
     LocationListComponent,
-    EatOutVerticalStripComponent
+    EatOutVerticalStripComponent,
+    EatOutMapComponent
   ],
   providers: [
     StatusBar,

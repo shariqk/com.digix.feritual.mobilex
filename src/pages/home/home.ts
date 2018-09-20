@@ -6,7 +6,7 @@ import { AddressPickerPage } from '../../pages/address-picker/address-picker';
 import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 import { Helper } from '../../providers/feritual-api/feritual-helper';
-import { FxLocation, FxLocationMenuItem, FxLocationIdType } from '../../providers/feritual-api/feritual-api.model';
+import { FxLocation, FxLocationMenuItem, FxLocationIdType, FxLocationMenuSummary } from '../../providers/feritual-api/feritual-api.model';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';

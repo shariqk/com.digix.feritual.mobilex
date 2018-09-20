@@ -1,0 +1,33 @@
+
+<ion-content>
+
+  <ion-fab bottom left *ngIf="locations!=null" #fab>
+    <button ion-fab *ngIf="refreshingCounter<=0" color="dark">
+      {{locations.length}}
+      <ion-icon large name="arrow-forward"></ion-icon>
+    </button>
+    <ion-spinner *ngIf="refreshingCounter>0" name="crescent"></ion-spinner>
+
+
+    <ion-fab-list side="right">
+      <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'refresh')">
+        <ion-icon large name="refresh"></ion-icon>
+      </button>
+      <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'locate')">
+        <ion-icon large name="navigate"></ion-icon>
+      </button>
+      <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'restaurant')">
+        <ion-icon large name="restaurant"></ion-icon>
+      </button>
+      <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'profile')">
+        <ion-icon large name="settings"></ion-icon>
+      </button>
+      <button ion-fab icon-only color="dark" (click)="fabActionButtonClicked(fab, 'analyze')">
+        <ion-icon large name="nutrition"></ion-icon>
+      </button>
+    </ion-fab-list>
+  </ion-fab>
+
+  <eat-out-map #map id="map"></eat-out-map>
+
+</ion-content>
