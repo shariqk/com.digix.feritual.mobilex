@@ -1,6 +1,5 @@
 import { Component, ViewChild  } from '@angular/core';
 import { IonicPage, NavController, NavParams, LoadingController, AlertController, Content } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
 
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 
@@ -14,7 +13,7 @@ import { UserprofileApiProvider } from '../../providers/userprofile-api/userprof
 //import { FoodItem } from '../../providers/food-api/food-api.model';
 
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
-import { FxLocation, FxLocationMenu, FxLocationMenuItem } from '../../providers/feritual-api/feritual-api.model';
+import { FxLocation, FxLocationMenu } from '../../providers/feritual-api/feritual-api.model';
 import { MenuHelper, Helper } from '../../providers/feritual-api/feritual-helper';
 import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
 

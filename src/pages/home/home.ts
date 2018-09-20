@@ -1,17 +1,14 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Content, IonicPage, NavController, NavParams, ModalController, AlertController, LoadingController, ToastController, FabContainer, Scroll } from 'ionic-angular';
+import { Content, IonicPage, NavController, NavParams, ModalController, AlertController, LoadingController, FabContainer, Scroll } from 'ionic-angular';
 import { GoogleMaps, GoogleMap, CameraPosition, LatLng, GoogleMapsEvent } from '@ionic-native/google-maps';
 
-//import { Recommendations } from '../../providers/recommendation-api/recommendation-api.model';
 import { AddressPickerPage } from '../../pages/address-picker/address-picker';
-//import { FxLocation, FxLocationMenu, FxIcons } from '../../providers/feritual-api/feritual-api.model';
 import { PlaceAddress, GoogleLocation } from '../../providers/google-api/google-api.model';
-//import { RecommendationApiProvider } from '../../providers/recommendation-api/recommendation-api';
 import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 import { Helper } from '../../providers/feritual-api/feritual-helper';
-import { FxLocation, FxLocationMenuItem, FxLocationIdType, FxLocationMenuSummary } from '../../providers/feritual-api/feritual-api.model';
+import { FxLocation, FxLocationMenuItem, FxLocationIdType } from '../../providers/feritual-api/feritual-api.model';
 import { Geolocation } from '@ionic-native/geolocation';
-import { UserProfile, UserProfileHelper, FoodFilters, FoodFilterItem } from '../../providers/userprofile-api/userprofile.model';
+import { UserProfile } from '../../providers/userprofile-api/userprofile.model';
 import { UserprofileApiProvider } from '../../providers/userprofile-api/userprofile-api';
 import { FeritualApiProvider } from '../../providers/feritual-api/feritual-api';
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
@@ -49,7 +46,6 @@ export class HomePage {
     private geo: Geolocation,
     private profileApi: UserprofileApiProvider,
     private googleApi: GoogleApiProvider,
-    private toastCtrl: ToastController,
     private ferApi: FeritualApiProvider,
     //private recommendApi: RecommendationApiProvider,
     public navParams: NavParams) {
@@ -91,18 +87,20 @@ export class HomePage {
       this.maximize_vertical_strip = maximized;
     });
 
-    this.filmScrollContent =  this.filmStrip._scrollContent;
+    if(this.filmStrip != null) {
+      this.filmScrollContent =  this.filmStrip._scrollContent;
 
-    this.filmStrip.addScrollEventListener(($event: any) => {
-      //console.log('$event', event);
-      if(!this.film_scrolling) {
-        window.setTimeout(() => {
-          this.autoSelectMapMarker();
-          this.film_scrolling = false;
-        }, 1000);
-        this.film_scrolling = true;
-      }
-    });
+      this.filmStrip.addScrollEventListener(($event: any) => {
+        //console.log('$event', event);
+        if(!this.film_scrolling) {
+          window.setTimeout(() => {
+            this.autoSelectMapMarker();
+            this.film_scrolling = false;
+          }, 1000);
+          this.film_scrolling = true;
+        }
+      });
+    }
 
     this.refresh(null, null);
   }
@@ -154,6 +152,8 @@ export class HomePage {
   }
 
   async autoSelectMapMarker() {
+    if(this.filmScrollContent==null) { return; }
+
     let p = this.filmScrollContent.nativeElement as HTMLElement;
     let offset = p.scrollLeft;
     let locId = null;
@@ -191,13 +191,13 @@ export class HomePage {
     this.setDefaultMarkerIcon(locId);
   }
 
+  /*
   async setFoodFilter(filter: FoodFilterItem) {
     filter.selected = !filter.selected;
     await this.profileApi.saveUserProfile(this.profile);
     this.refreshMenusSummary();
   }
 
-  /*
   async initialize() {
 
     if(Recommendations.instance!=null) {
@@ -331,9 +331,12 @@ export class HomePage {
 
     }
 
-    let p = this.filmScrollContent.nativeElement as HTMLElement;
-    if(p!=null) {
-      p.scrollTo(0,0);
+    if(this.filmScrollContent != null) {
+
+      let p = this.filmScrollContent.nativeElement as HTMLElement;
+      if(p!=null) {
+        p.scrollTo(0,0);
+      }
     }
   }
 
@@ -518,44 +521,44 @@ export class HomePage {
         strokeColor: '#000',
         strokeWeight: 2,
         scale: 1,
-   };
-}
+      };
+  }
 
-private _locations: FxLocation[];
-set locations(locations: FxLocation[]) {
-  this.eatOutLocations.setLocations(locations);
-  //console.log('set', this.eatOutLocations.locations);
-  this._locations = locations;
-}
+  private _locations: FxLocation[];
+  set locations(locations: FxLocation[]) {
+    this.eatOutLocations.setLocations(locations);
+    //console.log('set', this.eatOutLocations.locations);
+    this._locations = locations;
+  }
 
-get locations() : FxLocation[] {
-  return this._locations;
-}
+  get locations() : FxLocation[] {
+    return this._locations;
+  }
 
-editUserProfile() {
-  let dialog = this.modalCtrl.create(ProfilePage,
-    {
-      profile: this.profile
-    },
-    {
-      showBackdrop : true
+  editUserProfile() {
+    let dialog = this.modalCtrl.create(ProfilePage,
+      {
+        profile: this.profile
+      },
+      {
+        showBackdrop : true
+      });
+
+    dialog.onDidDismiss(async profile =>  {
+      if(profile != null) {
+        if(JSON.stringify(this.profile)==JSON.stringify(profile))
+        {
+          return;
+        }
+
+        await this.profileApi.saveUserProfile(profile);
+        this.refreshMenusSummary();
+        this.profile = profile;
+      }
     });
 
-  dialog.onDidDismiss(async profile =>  {
-    if(profile != null) {
-      if(JSON.stringify(this.profile)==JSON.stringify(profile))
-      {
-        return;
-      }
-
-      await this.profileApi.saveUserProfile(profile);
-      this.refreshMenusSummary();
-      this.profile = profile;
-    }
-  });
-
-  dialog.present();
-}
+    dialog.present();
+  }
 
   presentAlert(title: string, text: string) {
     let alert = this.alertCtrl.create({
@@ -565,4 +568,5 @@ editUserProfile() {
     });
     alert.present();
   }
+
 }

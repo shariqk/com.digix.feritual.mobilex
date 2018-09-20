@@ -34,11 +34,12 @@
     {{currentLocation.address}}
   </ion-card>
 
+
   <eat-out-vertical-strip #eatOutLocations  id="eatOutLocations"
     [class]="maximize_vertical_strip ? 'eatOutLocationsMax' : 'eatOutLocations'">
   </eat-out-vertical-strip>
 
-
+<!--
   <ion-scroll class="film-strip"  scrollX="true" #filmStrip id="filmStrip">
     <ion-grid fixed *ngIf="locations!=null">
       <ion-row nowrap>
@@ -78,6 +79,7 @@
         </ion-row>
     </ion-grid>
   </ion-scroll>
+-->
 
   <div #map id="map"></div>
 

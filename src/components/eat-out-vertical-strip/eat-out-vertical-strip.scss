@@ -11,10 +11,12 @@ eat-out-vertical-strip {
     margin: auto;
     background-color: white;
     text-align: center;
-    height:34px;
+    height:40px;
     font-weight: bold;
     font-size: 14pt;
 
+    border-radius: 15px 15px 0px 0px;
+    border: 0px solid white;
   }
 
   .footer {
@@ -30,6 +32,7 @@ eat-out-vertical-strip {
   }
 
   .location-panel {
+    background-color: white;
 
     border:0px outset #999;
         -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.4);

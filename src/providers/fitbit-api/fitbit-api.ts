@@ -8,7 +8,7 @@ import { Storage } from '@ionic/storage';
 export class FitbitApiProvider {
 
   private _fitBitClientId : string = '2289CP';
-  private _fitBitAuthCodeFlowUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight';
+  //private _fitBitAuthCodeFlowUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=code&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight';
   private _fitBitImplicitGrantUrl = 'https://www.fitbit.com/oauth2/authorize?response_type=token&scope=activity%20nutrition%20heartrate%20location%20nutrition%20profile%20settings%20sleep%20social%20weight';
   private _fitBitRedirectUrl = 'http://localhost/callback';
 
@@ -195,19 +195,19 @@ export class FitbitApiProvider {
   }
 
 
-  private openWithSystemBrowser(url : string) : any {
+  openWithSystemBrowser(url : string) : any {
         let target = "_system";
         return this.iab.create(url,target,this._options);
     }
 
-  private openWithInAppBrowser(url : string) : any {
+  openWithInAppBrowser(url : string) : any {
         let target = "_blank";
         return this.iab.create(url,target,this._options);
         //let options = 'location=yes,closebuttoncaption=Cancel';
         //return this.iab.create(url,target,options);
     }
 
-  private openWithCordovaBrowser(url : string) : any {
+  openWithCordovaBrowser(url : string) : any {
         let target = "_self";
         return this.iab.create(url,target,this._options);
     }
