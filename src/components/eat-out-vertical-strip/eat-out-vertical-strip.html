@@ -1,4 +1,11 @@
 
+<div class="header" (tap)="tapEvent($event)">
+  <div style="height:5px;"></div>
+  <div class="top-handle"></div>
+
+  Explore around you
+</div>
+
 <ion-scroll class="scroll-panel" scrollY="true" #scrollPanel id="scrollPanel">
   <ion-grid fixed *ngIf="locations!=null">
     <ion-row *ngFor="let loc of locations">
@@ -35,3 +42,5 @@
     </ion-row>
   </ion-grid>
 </ion-scroll>
+
+<!-- <div class="footer"></div> -->

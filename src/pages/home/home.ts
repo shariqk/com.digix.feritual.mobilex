@@ -70,6 +70,7 @@ export class HomePage {
   private highlight_marker_pin = null;// this.pinSymbol("#488aff");
   private highlightedMarker = null;
   private using_map_plugIn = true;
+  private maximize_vertical_strip = false;
 
   ionViewDidLoad() {
     this.initialize();
@@ -81,9 +82,13 @@ export class HomePage {
   async initialize() {
     this.createMap(null,null);
     this.profile = await this.profileApi.loadUserProfile();
+    var ctx = this;
 
-    this.eatOutLocations.setCallBackOnScroll(e => {
-
+    this.eatOutLocations.setCallBackOnScroll(offsetTop => {
+      this.selectMapMarkerOnScrollEvent(offsetTop);
+    });
+    this.eatOutLocations.setCallBackOnTopClick(maximized => {
+      this.maximize_vertical_strip = maximized;
     });
 
     this.filmScrollContent =  this.filmStrip._scrollContent;
@@ -112,9 +117,8 @@ export class HomePage {
     }
   }
 
-  async selectMapMarkerOnScrollEvent(p: HTMLElement) {
-    let topOffset = p.scrollTop;
-    let locId = null;
+  async selectMapMarkerOnScrollEvent(offsetTop: number) {
+    var locId: string = null;
 
     for(let m of this.markers) {
       let e = document.getElementById(m.locationId);
@@ -124,7 +128,7 @@ export class HomePage {
       else {
         e = e.parentElement;
       }
-      if(e.offsetTop+(e.clientHeight/2)>p.scrollLeft)
+      if(e.offsetTop+(e.clientHeight/2)>offsetTop)
       {
         if(this.highlightedMarker==m) {
           break;
@@ -155,7 +159,7 @@ export class HomePage {
     let locId = null;
 
     for(let m of this.markers) {
-      let e = document.getElementById(m.locationId);
+      let e = this.eatOutLocations.getElementById(m.locationId);// document.getElementById(m.locationId);
       if(e==null) {
         continue;
       }

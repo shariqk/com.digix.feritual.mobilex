@@ -1,18 +1,43 @@
 eat-out-vertical-strip {
+  font-family: 'Roboto','sans-serif';
+
+  .top-handle {
+    margin: auto;
+    width: 20%;
+    border: 2px solid grey;
+  }
+
+  .header{
+    margin: auto;
+    background-color: white;
+    text-align: center;
+    height:34px;
+    font-weight: bold;
+    font-size: 14pt;
+
+  }
+
+  .footer {
+    height:10px;
+    background-color: green;
+
+  }
+
   .scroll-panel {
     height:100%;
+    background-color: white;
+    opacity: 1.0;
   }
 
   .location-panel {
-    font-family: 'Roboto','sans-serif';
-    background-color:white;
 
-    border:1px outset #999;
+    border:0px outset #999;
         -webkit-box-shadow: 1px 1px 5px rgba(0,0,0,0.4);
         -moz-box-shadow: 1px 1px 5px rgba(0,0,0,0.4);
 
     margin-top:5px;
     margin-bottom:5px;
+    opacity: 1.0;
   }
 
   .loc-title {
