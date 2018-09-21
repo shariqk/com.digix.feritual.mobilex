@@ -1,9 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, LoadingController, AlertController, FabContainer, ModalController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { LatLng } from '@ionic-native/google-maps';
 
 import { EatOutMapComponent } from '../../components/eat-out-map/eat-out-map';
+import { ProfilePage } from '../../pages/profile/profile';
+import { AnalyzePage } from '../../pages/analyze/analyze';
+import { EatOutVerticalStripComponent } from '../../components/eat-out-vertical-strip/eat-out-vertical-strip';
+
 import { FxLocation, FxLocationIdType } from '../../providers/feritual-api/feritual-api.model';
 import { GoogleApiProvider } from '../../providers/google-api/google-api';
 import { GoogleLocation } from '../../providers/google-api/google-api.model';
@@ -19,12 +23,14 @@ import { UserprofileApiProvider } from '../../providers/userprofile-api/userprof
 })
 export class ExplorePage {
   @ViewChild('map') map: EatOutMapComponent;
+  @ViewChild('eatOutLocations') eatOutLocations: EatOutVerticalStripComponent;
+
   private locations: FxLocation[];
   private currentLocation: GoogleLocation;
   private refreshingInBackground = false;
   private profile: UserProfile;
   private refreshingCounter: number = 0;
-
+  private maximize_vertical_strip = false;
 
   private use_current_lat=-9999;
   private use_current_lng=-9999;
@@ -36,6 +42,7 @@ export class ExplorePage {
     private alertCtrl: AlertController,
     private ferApi: FeritualApiProvider,
     private profileApi: UserprofileApiProvider,
+    private modalCtrl: ModalController,
     public navParams: NavParams) {
   }
 
@@ -44,10 +51,21 @@ export class ExplorePage {
   }
 
   async initialize() {
+    let ctx = this;
+
     this.map.Initialize(null, null);
     this.map.markerSelectedCallBack = function(locationId: string) {
-      console.log('selected', locationId);
+      ctx.eatOutLocations.scrollTo(locationId);
+      //console.log('selected', locationId);
     };
+
+    this.eatOutLocations.callBackOnScroll = function(locationId: string) {
+      ctx.map.SelectLocation(locationId);
+    };
+    this.eatOutLocations.callBackOnTopClick = function(maximized: boolean) {
+      ctx.maximize_vertical_strip = maximized;
+    };
+
 
     this.profile = await this.profileApi.loadUserProfile();
 
@@ -83,6 +101,7 @@ export class ExplorePage {
 
       this.locations = await this.ferApi.getLocationsAsync(lat, lng, 5);
       this.map.MarkLocations(this.locations);
+      this.eatOutLocations.setLocations(this.locations);
 
       // refersh the menu summary for the locations
       this.refreshMenusSummary();
@@ -126,6 +145,74 @@ export class ExplorePage {
     }));
   }
 
+  async fabActionButtonClicked(fab: FabContainer, action: string) {
+    fab.close();
+    console.log('action', action, fab);
+
+    switch(action) {
+      case 'restaurant':
+        this.map.CenterMapTo(this.currentLocation.lat, this.currentLocation.lng);
+        break;
+
+      case 'refresh':
+        let pos = this.map.GetMapCenter();
+        this.refresh(pos.lat, pos.lng);
+        break;
+
+      case 'locate':
+        this.refresh(null,null);
+        break;
+
+      case 'profile':
+        this.editUserProfile();
+        break;
+
+      case 'analyze':
+        this.showAnalyzeDialog(null);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  editUserProfile() {
+    let dialog = this.modalCtrl.create(ProfilePage,
+      {
+        profile: this.profile
+      },
+      {
+        showBackdrop : true
+      });
+
+    dialog.onDidDismiss(async profile =>  {
+      if(profile != null) {
+        if(JSON.stringify(this.profile)==JSON.stringify(profile))
+        {
+          return;
+        }
+
+        await this.profileApi.saveUserProfile(profile);
+        this.refreshMenusSummary();
+        this.profile = profile;
+      }
+    });
+
+    dialog.present();
+  }
+
+  async showAnalyzeDialog(event: any) {
+    let dialog = this.modalCtrl.create(AnalyzePage,
+      {
+        mode: 'dialog'
+      },
+      {
+        showBackdrop : true
+      });
+
+    dialog.present();
+  }
+
   async getCurrentPosition(): Promise<LatLng> {
     let lat = 0;
     let lng = 0;
@@ -136,9 +223,9 @@ export class ExplorePage {
       lng = pos.coords.longitude;
     }
     catch(err) {
-      // default to time square
-      lat = 40.759011;
-      lng = -73.984472;
+      // default to bryn mawr
+      lat = 40.034804; // 40.759011 Time Square;
+      lng = -75.301198;// -73.984472 Time Square;
     }
 
     let pos = new LatLng(lat, lng);

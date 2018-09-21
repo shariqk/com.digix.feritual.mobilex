@@ -14,8 +14,8 @@ import { LocationMenuPage } from '../../pages/location-menu/location-menu';
 export class EatOutVerticalStripComponent implements OnChanges, AfterViewInit {
 
   private locations: FxLocation[];
-  private callBackOnScroll: any;
-  private callBackOnTopClick: any;
+  public callBackOnScroll: any;
+  public callBackOnTopClick: any;
 
   private panel_scrolling: boolean;
   private maximized: boolean = false;
@@ -26,7 +26,7 @@ export class EatOutVerticalStripComponent implements OnChanges, AfterViewInit {
 
   }
 
-  tapEvent(event: Gesture) {
+  private tapEvent(event: Gesture) {
     if(this.callBackOnTopClick!=null) {
       this.maximized = !this.maximized;
       this.callBackOnTopClick(this.maximized);
@@ -34,18 +34,18 @@ export class EatOutVerticalStripComponent implements OnChanges, AfterViewInit {
     console.log('event', event);
   }
 
-  concatStrArray(items : string[]) : string {
+  private concatStrArray(items : string[]) : string {
     return Helper.concatStrArray(items);
   }
 
-  navigateToLocationMenu(loc: FxLocation) {
+  private navigateToLocationMenu(loc: FxLocation) {
     this.navCtrl.push(LocationMenuPage,
       {
         location: loc
       });
   }
 
-  formatDistance(distance : number) : string {
+  private formatDistance(distance : number) : string {
     return distance.toFixed(2) + ' mi';
   }
 
@@ -63,19 +63,33 @@ export class EatOutVerticalStripComponent implements OnChanges, AfterViewInit {
   {
     this.callBackOnTopClick = func;
   }
-  
+
   ngAfterViewInit() {
+    let ctx = this;
+
     this.scrollPanelContent = this.scrollPanel._scrollContent;
 
     this.scrollPanel.addScrollEventListener(($event: any) => {
       //console.log('$callBackOnScroll', this.callBackOnScroll);
-      if(!this.panel_scrolling && this.callBackOnScroll != null) {
+      if(!ctx.panel_scrolling && ctx.callBackOnScroll != null) {
         window.setTimeout(() => {
-          let p = this.scrollPanelContent.nativeElement as HTMLElement;
+          let p = ctx.scrollPanelContent.nativeElement as HTMLElement;
           let offset = p.scrollTop;
           let locId = null;
 
-          this.callBackOnScroll(offset);
+          let list = document.getElementsByClassName("location-panel");
+          for(let i=0; i<list.length; i++) {
+            let e = list[i] as HTMLElement;
+            if(e.offsetTop>offset) {
+              let locationId = e['id'];
+              ctx.callBackOnScroll(locationId);
+
+              //console.log('found', locationId);
+              break;
+            }
+          }
+          //console.log('elements', list);
+
           this.panel_scrolling = false;
         }, 1000);
         this.panel_scrolling = true;

@@ -28,6 +28,10 @@
     </ion-fab-list>
   </ion-fab>
 
+  <eat-out-vertical-strip #eatOutLocations  id="eatOutLocations"
+    [class]="maximize_vertical_strip ? 'eatOutLocationsMax' : 'eatOutLocations'">
+  </eat-out-vertical-strip>
+
   <eat-out-map #map id="map"></eat-out-map>
 
 </ion-content>

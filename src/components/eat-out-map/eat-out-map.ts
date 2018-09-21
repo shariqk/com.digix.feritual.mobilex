@@ -41,6 +41,17 @@ export class EatOutMapComponent implements AfterViewInit {
 
   }
 
+  public GetMapCenter(): LatLng {
+    if(this.using_map_plugIn) {
+      let pos = this.map.getCenter();
+      return new LatLng(pos.lat(), pos.lng());
+    }
+    else {
+      let pos = this.map.getBounds().getCenter();
+      return new LatLng(pos.lat(), pos.lng());
+    }
+  }
+
   public async CenterMapTo(lat: number, lng: number) {
     this.map.setZoom(this.zoom_level);
     this.map.panTo(new LatLng(lat, lng));
@@ -50,6 +61,31 @@ export class EatOutMapComponent implements AfterViewInit {
   public async MarkLocations(locations: FxLocation[]) {
     this.locations = locations;
     this.buildMapMarkers();
+  }
+
+  public async SelectLocation(locationId: string) {
+    for(let m of this.markers) {
+      if(m.locationId==locationId) {
+        if(this.highlightedMarker==m) {
+          break;
+        }
+
+        if(this.highlightedMarker!=null) {
+          this.highlightedMarker.setIcon(this.default_marker_pin);
+          this.highlightedMarker.zIndex = google.maps.Marker.MAX_ZINDEX + 1;
+        }
+
+        m.setIcon(this.highlight_marker_pin);
+        m.map.panTo(m.getPosition());
+        m.zIndex = google.maps.Marker.MAX_ZINDEX + 2;
+        this.highlightedMarker = m;
+
+        this.setDefaultMarkerIcon(locationId);
+
+        break;
+      }
+    }
+
   }
 
   private async clearLocations() {
