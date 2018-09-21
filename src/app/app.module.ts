@@ -17,7 +17,6 @@ import { EatOutVerticalStripComponent } from '../components/eat-out-vertical-str
 import { EatOutMapComponent } from '../components/eat-out-map/eat-out-map';
 
 import { IntroPage } from '../pages/intro/intro';
-import { FoodPage } from '../pages/food/food';
 import { HomePage } from '../pages/home/home';
 import { ProfilePage } from '../pages/profile/profile';
 import { AnalyzePage } from '../pages/analyze/analyze';
@@ -44,7 +43,6 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
 @NgModule({
   declarations: [
     MyApp,
-    FoodPage,
     HomePage,
     ProfilePage,
     AnalyzePage,
@@ -77,7 +75,6 @@ import { RecommendationApiProvider } from '../providers/recommendation-api/recom
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    FoodPage,
     HomePage,
     ProfilePage,
     AnalyzePage,

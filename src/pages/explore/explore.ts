@@ -151,10 +151,6 @@ export class ExplorePage {
     console.log('action', action, fab);
 
     switch(action) {
-      case 'restaurant':
-        this.map.CenterMapTo(this.currentLocation.lat, this.currentLocation.lng);
-        break;
-
       case 'refresh':
         let pos = this.map.GetMapCenter();
         this.refresh(pos.lat, pos.lng);
