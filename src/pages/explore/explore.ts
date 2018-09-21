@@ -6,6 +6,7 @@ import { LatLng } from '@ionic-native/google-maps';
 import { EatOutMapComponent } from '../../components/eat-out-map/eat-out-map';
 import { ProfilePage } from '../../pages/profile/profile';
 import { AnalyzePage } from '../../pages/analyze/analyze';
+import { AddressPickerPage } from '../../pages/address-picker/address-picker';
 import { EatOutVerticalStripComponent } from '../../components/eat-out-vertical-strip/eat-out-vertical-strip';
 
 import { FxLocation, FxLocationIdType } from '../../providers/feritual-api/feritual-api.model';
@@ -174,6 +175,24 @@ export class ExplorePage {
       default:
         break;
     }
+  }
+
+  async addressCardClicked(event : any) {
+    let dialog = this.modalCtrl.create(AddressPickerPage,
+      {
+        address: this.currentLocation.address
+      },
+      {
+        showBackdrop : true
+      });
+
+    dialog.onDidDismiss(async loc =>  {
+      if(loc != null) {
+        this.refresh(loc.lat, loc.lng);
+      }
+    });
+
+    dialog.present();
   }
 
   editUserProfile() {

@@ -1,20 +1,32 @@
 page-explore {
+  font-family: 'Roboto','sans-serif';
+
   .eatOutLocations {
     position: absolute;
-    top: 350px;
+    bottom: 0;
     width:100%;
     height:200px;
-    z-index: 25;
+    z-index: 1;
     transition:height normal;
   }
 
   .eatOutLocationsMax {
     position: absolute;
-    top: 80px;
+    bottom: 0;
     width:100%;
-    vertical-align: bottom;
-    transition:height 1s reverse; 
-    height:550px;
-    z-index: 25;
+    transition:height 1s reverse;
+    height:440px;
+    z-index: 1;
+  }
+
+
+  .address-panel {
+    position:absolute;
+    padding:5px;
+    height:40px;
+    top:20px;
+    z-index: 1;
+    line-height: 30px;
+
   }
 }
