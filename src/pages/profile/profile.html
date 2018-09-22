@@ -14,33 +14,38 @@
     </ion-buttons>
   </ion-toolbar>
 
-  <div padding>
-    <ion-segment [(ngModel)]="pref">
-      <ion-segment-button value="avoids">
-        Avoids
-      </ion-segment-button>
 
-      <ion-segment-button value="cuisines">
-        Cuisines
-      </ion-segment-button>
-
-      <ion-segment-button value="diets">
-        Diets
-      </ion-segment-button>
-      <ion-segment-button value="connect">
-        Connections
-      </ion-segment-button>
-    </ion-segment>
-  </div>
 </ion-header>
 
 
-<ion-content>
-  <div *ngIf="initialized" [ngSwitch]="pref">
+<ion-content padding>
+  <ion-segment [(ngModel)]="pref">
+    <ion-segment-button value="avoids">
+      Avoids
+    </ion-segment-button>
+
+    <ion-segment-button value="diets">
+      Diets
+    </ion-segment-button>
+
+    <ion-segment-button value="cuisines">
+      Plan
+    </ion-segment-button>
+
+    <ion-segment-button value="connect">
+      Connect
+    </ion-segment-button>
+  </ion-segment>
+
+  <ion-grid fixed *ngIf="initialized" [ngSwitch]="pref">
     <ion-row *ngSwitchCase="'avoids'">
       <ion-col>
-        <h4>Avoids</h4>
-        <ion-list no-lines>
+        <span class="header-text">Select all the ingridients you would like to avoid.  We will identity
+          menu items and recipes that contain these items and automatically filter them out:
+        </span>
+        <br/>
+        <br/>
+        <ion-list>
           <ion-item class='item-name' *ngFor="let a of this.avoids">
             <ion-label>{{a.key}}</ion-label>
             <ion-checkbox [(ngModel)]="a.value"></ion-checkbox>
@@ -52,7 +57,10 @@
 
     <ion-row *ngSwitchCase="'cuisines'">
       <ion-col>
-        <h4>Cuisines</h4>
+        <span class="header-text">Select typical thresholds of your dietary plan. We will suggest menu items and recipes based on these settings:</span>
+        <br/>
+        <br/>
+
           <ion-row *ngFor="let f of nutritionFilters" class="item-cuisine" align-items-center>
             <ion-col col-1>
               <ion-checkbox [(ngModel)]="f.selected"></ion-checkbox>
@@ -81,8 +89,10 @@
 
     <ion-row *ngSwitchCase="'diets'">
       <ion-col>
-        <h4>Diets</h4>
-        <ion-list no-lines>
+        <span class="header-text">Select diets you are following; we will adjust the menu items and recipes based on these diets:</span>
+        <br/>
+        <br/>
+        <ion-list>
             <ion-item class='item-name' *ngFor="let d of diets">
               <ion-label>{{d.key}}</ion-label>
               <ion-checkbox [(ngModel)]="d.value"></ion-checkbox>
@@ -117,7 +127,7 @@
 
 
 
-  </div>
+  </ion-grid>
 
 
 

@@ -6,6 +6,15 @@ import { FxLocation } from '../../providers/feritual-api/feritual-api.model';
 
 declare var google;
 
+export enum GoogleMapZoomLevel {
+  world = 1,
+  continent = 5,
+  city = 10,
+  streets = 15,
+  buildings = 20
+}
+
+
 @Component({
   selector: 'eat-out-map',
   templateUrl: 'eat-out-map.html'
@@ -16,16 +25,18 @@ export class EatOutMapComponent implements AfterViewInit {
   private map: any;
   private markers: any = [];
 
-  private zoom_level = 11;
-  private street_zoom_level = 15;
+  private zoom_level = GoogleMapZoomLevel.city + 2;
+  //private street_zoom_level = 15;
   private default_marker_pin = this.pinSymbol("#f4f4f4");
   private highlight_marker_pin = null;// this.pinSymbol("#488aff");
+  private current_location_pin = "https://www.robotwoods.com/dev/misc/bluecircle.png";
   private highlightedMarker = null;
   private using_map_plugIn = true;
 
   private _locations: FxLocation[];
 
   public markerSelectedCallBack: any;
+
 
   constructor() {
   }
@@ -54,8 +65,13 @@ export class EatOutMapComponent implements AfterViewInit {
 
   public async CenterMapTo(lat: number, lng: number) {
     this.map.setZoom(this.zoom_level);
-    this.map.panTo(new LatLng(lat, lng));
-    this.map.setCenter(new LatLng(lat, lng));
+    let pos = new LatLng(lat, lng);
+    this.map.panTo(pos);
+    this.map.setCenter(pos);
+
+
+    //
+
   }
 
   public async MarkLocations(locations: FxLocation[]) {
@@ -103,6 +119,18 @@ export class EatOutMapComponent implements AfterViewInit {
     this.clearLocations();
 
     this.markers = [];
+
+    // current location
+    let centerPos = this.GetMapCenter();
+    let marker = new google.maps.Marker({
+      position: centerPos,
+      //animation: google.maps.Animation.DROP,
+      map: this.map,
+      icon: this.current_location_pin,
+      zIndex: google.maps.Marker.MAX_ZINDEX + 1,
+    });
+    this.markers.push(marker);
+
     for(let p of this.locations)
     {
       let pos = new LatLng(p.lat, p.lng);
@@ -150,7 +178,7 @@ export class EatOutMapComponent implements AfterViewInit {
 
       let pos = new LatLng(lat, lng);
       let options = {
-        zoom: this.zoom_level,
+        zoom: GoogleMapZoomLevel.continent,
         tilt: 10,
         center: pos,
         fullscreenControl: false

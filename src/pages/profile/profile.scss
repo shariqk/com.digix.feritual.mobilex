@@ -1,29 +1,36 @@
 page-profile {
+
+  font-family: 'Roboto','sans-serif';
+
+  .header {
+    font-size:11pt;
+    margin:0px;
+    padding:0px;
+  }
+
+  ion-row {
+    margin:0px;
+    padding:0px;
+  }
+
+  ion-col {
+    margin:0px;
+    padding:0px;
+  }
+
   .item-name {
-    font-size: 12pt;
-    color:black;
-    width: 100%;
-    background: white;
-    //padding: 0px;
-    margin: 0px;
+    font-size: 11pt;
   }
 
   .item-analysis {
     font-family: monospace;
   }
 
-  .item-cuisine
-  {
-    font-size:10pt;
-  }
 
   ion-range {
     height:30px;
   }
 
-  ion-col {
-    //border:1px solid black;
-  }
 
   button {
     font-size:10pt;
