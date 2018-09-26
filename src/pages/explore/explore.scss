@@ -1,6 +1,10 @@
 page-explore {
   font-family: 'Roboto','sans-serif';
 
+  .hidden-element {
+    display:none;
+  }
+
   .eatOutLocations {
     position: absolute;
     bottom: 0;

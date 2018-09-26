@@ -51,7 +51,7 @@ export class EatOutVerticalStripComponent implements OnChanges, AfterViewInit {
 
   public setLocations(locations: FxLocation[]) {
     this.locations = locations;
-    console.log('setLocations', this.locations);
+    //console.log('setLocations', this.locations);
   }
 
   public setCallBackOnScroll(func: any)
