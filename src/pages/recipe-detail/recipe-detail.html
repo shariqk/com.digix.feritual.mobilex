@@ -1,8 +1,14 @@
 <ion-header>
 
-  <ion-navbar>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button icon-only (click)="navCtrl.pop()">
+        <ion-icon large name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+
     <ion-title>{{recipe.label}}</ion-title>
-  </ion-navbar>
+  </ion-toolbar>
 
 </ion-header>
 
